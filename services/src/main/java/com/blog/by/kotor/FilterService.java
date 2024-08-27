@@ -1,7 +1,7 @@
 package com.blog.by.kotor;
 
-import com.telegram.by.me.PostCategory.PostCategory;
-import com.telegram.by.me.PostTag.PostTag;
+import com.blog.by.kotor.PostCategory.PostCategory;
+import com.blog.by.kotor.PostTag.PostTag;
 
 import java.util.ArrayList;
 import java.util.List;
