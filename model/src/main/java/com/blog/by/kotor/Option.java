@@ -20,7 +20,7 @@ public class Option {
     private String optionText;
 
     @OneToMany(mappedBy = "option", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Option> options;
+    private List<Vote> votes;
 
     public Option() {
     }
@@ -49,12 +49,12 @@ public class Option {
         this.question = question;
     }
 
-    public List<Option> getOptions() {
-        return options;
+    public List<Vote> getVotes() {
+        return votes;
     }
 
-    public void setOptions(List<Option> options) {
-        this.options = options;
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class Option {
                 "id=" + id +
                 ", question=" + question +
                 ", optionText='" + optionText + '\'' +
-                ", options=" + options +
+                ", votes=" + votes +
                 '}';
     }
 

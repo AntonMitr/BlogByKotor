@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+@Entity(name = "question")
 public class Question {
 
     @Id
@@ -15,7 +16,7 @@ public class Question {
     private Poll poll;
     @Column(name = "question_text")
     private String questionText;
-    @OneToMany(mappedBy = "option", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Option> options;
 
     public Question() {
