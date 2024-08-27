@@ -10,9 +10,9 @@ public class PostService {
         postDAO.insert(post);
     }
 
-    public void updatePost(Post post) {
+    public void updatePost(Post oldPost, Post newPost) {
         PostDAO postDAO = new PostDAOImpl();
-        postDAO.update(post);
+        postDAO.update(oldPost, newPost);
     }
 
     public void publishPost(Post post) {
