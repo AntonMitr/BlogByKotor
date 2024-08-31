@@ -1,7 +1,8 @@
 package com.blog.by.kotor.role;
 
+import com.blog.by.kotor.PremiumSubscription;
 import com.blog.by.kotor.Role;
-import com.blog.by.kotor.Util;
+import com.blog.by.kotor.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,24 +17,32 @@ public class RoleDAOImpl implements RoleDAO {
     private static final String FIND_ALL = "SELECT * FROM roles ORDER BY id";
     private static final String FIND_BY_ID = "SELECT * FROM roles WHERE id = ?";
     private static final String INSERT = "INSERT INTO roles (name) VALUES (?)";
-    private static final String UPDATE = "UPDATE roles set name = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE roles SET name = ? WHERE id = ?";
+
+    private Connection conn;
+
+    private PreparedStatement ps;
+
+    private ResultSet rs;
+
+    private final Role role;
+
+    private List<Role> roleList;
+
+    public RoleDAOImpl() {
+        role = new Role();
+    }
 
     @Override
     public Role findById(int id) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Role role = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_ID);
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                role = new Role();
                 role.setId(rs.getInt("id"));
                 role.setName(rs.getString("name"));
             }
@@ -41,26 +50,22 @@ public class RoleDAOImpl implements RoleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return role;
     }
 
     @Override
     public List<Role> getAll() {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Role> roleList = new ArrayList<>();
+        roleList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_ALL);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                Role role = new Role();
                 role.setId(rs.getInt("id"));
                 role.setName(rs.getString("name"));
                 roleList.add(role);
@@ -69,18 +74,15 @@ public class RoleDAOImpl implements RoleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return roleList;
     }
 
     @Override
     public int insert(Role role) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
             ps.setString(1, role.getName());
@@ -90,19 +92,16 @@ public class RoleDAOImpl implements RoleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int update(Role oldRole, Role newRole) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(UPDATE);
 
@@ -114,19 +113,16 @@ public class RoleDAOImpl implements RoleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int delete(Role role) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(DELETE);
             ps.setInt(1, role.getId());
@@ -136,8 +132,8 @@ public class RoleDAOImpl implements RoleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }

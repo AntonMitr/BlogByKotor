@@ -1,6 +1,6 @@
 package com.blog.by.kotor.category;
 
-import com.blog.by.kotor.Util;
+import com.blog.by.kotor.DatabaseConnection;
 import com.blog.by.kotor.Category;
 
 import java.sql.Connection;
@@ -17,50 +17,55 @@ public class CategoryDAOImpl implements CategoryDAO {
     private static final String FIND_BY_ID = "SELECT * FROM categories WHERE id = ?";
     private static final String FIND_BY_NAME = "SELECT * FROM categories WHERE name = ?";
     private static final String INSERT = "INSERT INTO categories (name) VALUES (?)";
-    private static final String UPDATE = "UPDATE categories set name = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE categories SET name = ? WHERE id = ?";
+
+    private Connection conn;
+
+    private PreparedStatement ps;
+
+    private ResultSet rs;
+
+    private final Category category;
+
+    private List<Category> categoryList;
+
+    public CategoryDAOImpl() {
+        category = new Category();
+    }
 
     @Override
     public Category findById(int id) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Category category = null;
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_ID);
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                category = new Category();
                 category.setId(rs.getInt("id"));
                 category.setName(rs.getString("name"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return category;
     }
 
     @Override
     public List<Category> getAll() {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Category> categoryList = new ArrayList<>();
+        categoryList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_ALL);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                Category category = new Category();
                 category.setId(rs.getInt("id"));
                 category.setName(rs.getString("name"));
                 categoryList.add(category);
@@ -69,18 +74,16 @@ public class CategoryDAOImpl implements CategoryDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return categoryList;
     }
 
     @Override
     public int insert(Category category) {
-        Connection conn = null;
-        PreparedStatement ps = null;
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
             ps.setString(1, category.getName());
@@ -90,19 +93,17 @@ public class CategoryDAOImpl implements CategoryDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int update(Category oldCategory, Category newCategory) {
-        Connection conn = null;
-        PreparedStatement ps = null;
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(UPDATE);
             ps.setString(1, newCategory.getName());
@@ -113,18 +114,17 @@ public class CategoryDAOImpl implements CategoryDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int delete(Category category) {
-        Connection conn = null;
-        PreparedStatement ps = null;
+
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(DELETE);
             ps.setInt(1, category.getId());
@@ -134,28 +134,23 @@ public class CategoryDAOImpl implements CategoryDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public Category findByName(String name) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Category category = null;
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_NAME);
             ps.setString(1, name);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                category = new Category();
                 category.setId(rs.getInt("id"));
                 category.setName(rs.getString("name"));
             }
@@ -163,7 +158,7 @@ public class CategoryDAOImpl implements CategoryDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return category;
     }

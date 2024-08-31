@@ -1,7 +1,8 @@
 package com.blog.by.kotor.post;
 
+import com.blog.by.kotor.Comment;
 import com.blog.by.kotor.Post;
-import com.blog.by.kotor.Util;
+import com.blog.by.kotor.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,25 +20,33 @@ public class PostDAOImpl implements PostDAO {
     private static final String FIND_BY_TITLE = "SELECT * FROM posts WHERE title = ?";
     private static final String IS_PREMIUM = "SELECT * FROM posts WHERE id = ?";
     private static final String INSERT = "INSERT INTO posts (user_id, title, content, date_published, is_premium, is_published) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE posts set (user_id = ?, title = ?, content = ?, date_published = ?, is_premium = ?, is_published = ? WHERE id = ?";
-    private static final String PUBLISH = "UPDATE posts set is_published = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE posts SET (user_id = ?, title = ?, content = ?, date_published = ?, is_premium = ?, is_published = ? WHERE id = ?";
+    private static final String PUBLISH = "UPDATE posts SET is_published = ? WHERE id = ?";
+
+    private Connection conn;
+
+    private PreparedStatement ps;
+
+    private ResultSet rs;
+
+    private final Post post;
+
+    private List<Post> postList;
+
+    public PostDAOImpl() {
+        post = new Post();
+    }
 
     @Override
     public Post findById(int id) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Post post = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_ID);
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                post = new Post();
                 post.setId(rs.getInt("id"));
                 post.setUserId(rs.getInt("user_id"));
                 post.setTitle(rs.getString("title"));
@@ -49,20 +58,17 @@ public class PostDAOImpl implements PostDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return post;
     }
 
     @Override
     public List<Post> getAll() {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Post> postList = new ArrayList<>();
+        postList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_ALL);
 
@@ -82,19 +88,15 @@ public class PostDAOImpl implements PostDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return postList;
     }
 
     @Override
     public int insert(Post post) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
             ps.setInt(1, post.getUserId());
@@ -109,18 +111,15 @@ public class PostDAOImpl implements PostDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return 0;
     }
 
     @Override
     public int update(Post oldPost, Post newPost) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(UPDATE);
             ps.setInt(1, newPost.getUserId());
@@ -136,19 +135,16 @@ public class PostDAOImpl implements PostDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int delete(Post post) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(DELETE);
             ps.setInt(1, post.getId());
@@ -158,28 +154,24 @@ public class PostDAOImpl implements PostDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public List<Post> findByUserId(int userId) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Post> postList = new ArrayList<>();
+        postList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_USER_ID);
             ps.setInt(1, userId);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                Post post = new Post();
                 post.setId(rs.getInt("id"));
                 post.setUserId(rs.getInt("user_id"));
                 post.setTitle(rs.getString("title"));
@@ -193,27 +185,23 @@ public class PostDAOImpl implements PostDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return postList;
     }
 
     @Override
     public List<Post> findByTitle(String title) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Post> postList = new ArrayList<>();
+        postList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_TITLE);
             ps.setString(1, title);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                Post post = new Post();
                 post.setId(rs.getInt("id"));
                 post.setUserId(rs.getInt("user_id"));
                 post.setTitle(rs.getString("title"));
@@ -227,18 +215,15 @@ public class PostDAOImpl implements PostDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return postList;
     }
 
     @Override
     public int publishPost(Post post) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
             ps = conn.prepareStatement(PUBLISH);
 
             ps.setBoolean(1, true);
@@ -249,8 +234,8 @@ public class PostDAOImpl implements PostDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
@@ -258,12 +243,9 @@ public class PostDAOImpl implements PostDAO {
     @Override
     public boolean isPremium(int postId) {
         boolean isPremium = false;
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(IS_PREMIUM);
             ps.setInt(1, postId);
@@ -276,7 +258,7 @@ public class PostDAOImpl implements PostDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return isPremium;
     }

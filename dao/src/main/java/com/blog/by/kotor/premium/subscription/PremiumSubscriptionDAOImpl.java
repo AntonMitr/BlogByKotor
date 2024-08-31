@@ -1,7 +1,8 @@
 package com.blog.by.kotor.premium.subscription;
 
+import com.blog.by.kotor.Comment;
 import com.blog.by.kotor.PremiumSubscription;
-import com.blog.by.kotor.Util;
+import com.blog.by.kotor.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,24 +19,34 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
     private static final String IS_PREMIUM = "SELECT * FROM premium_subscriptions WHERE id = ?";
     private static final String FIND_BY_USER_ID = "SELECT * FROM premium_subscriptions WHERE user_id = ?";
     private static final String INSERT = "INSERT INTO premium_subscriptions (user_id, start_date, end_date) VALUES (?, ?, ?)";
-    private static final String UPDATE = "UPDATE premium_subscriptions set user_id = ?, start_date = ?, end_date = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE premium_subscriptions SET user_id = ?, start_date = ?, end_date = ? WHERE id = ?";
+
+    private Connection conn;
+
+    private PreparedStatement ps;
+
+    private ResultSet rs;
+
+    private final PremiumSubscription premiumSubscription;
+
+    private List<PremiumSubscription> premiumSubscriptionList;
+
+    private boolean isPremiumSubscription;
+
+    public PremiumSubscriptionDAOImpl() {
+        premiumSubscription = new PremiumSubscription();
+    }
 
     @Override
     public PremiumSubscription findById(int id) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        PremiumSubscription premiumSubscription = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_ID);
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                premiumSubscription = new PremiumSubscription();
                 premiumSubscription.setId(rs.getInt("id"));
                 premiumSubscription.setUserId(rs.getInt("user_id"));
                 premiumSubscription.setStartDate(rs.getDate("start_date"));
@@ -45,7 +56,7 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return premiumSubscription;
     }
@@ -53,19 +64,15 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
 
     @Override
     public List<PremiumSubscription> getAll() {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<PremiumSubscription> premiumSubscriptionList = new ArrayList<>();
+        premiumSubscriptionList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_ALL);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                PremiumSubscription premiumSubscription = new PremiumSubscription();
                 premiumSubscription.setId(rs.getInt("id"));
                 premiumSubscription.setUserId(rs.getInt("user_id"));
                 premiumSubscription.setStartDate(rs.getDate("start_date"));
@@ -76,18 +83,15 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return premiumSubscriptionList;
     }
 
     @Override
     public int insert(PremiumSubscription premiumSubscription) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
             ps.setInt(1, premiumSubscription.getUserId());
@@ -99,19 +103,16 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int update(PremiumSubscription oldPremiumSubscription, PremiumSubscription newPremiumSubscription) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
             ps = conn.prepareStatement(UPDATE);
 
             ps.setInt(1, newPremiumSubscription.getUserId());
@@ -124,19 +125,16 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int delete(PremiumSubscription premiumSubscription) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(DELETE);
             ps.setInt(1, premiumSubscription.getId());
@@ -146,8 +144,8 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
@@ -155,20 +153,16 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
 
     @Override
     public List<PremiumSubscription> findByUserId(int userId) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<PremiumSubscription> premiumSubscriptionList = new ArrayList<>();
+        premiumSubscriptionList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_USER_ID);
             ps.setInt(1, userId);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                PremiumSubscription premiumSubscription = new PremiumSubscription();
                 premiumSubscription.setId(rs.getInt("id"));
                 premiumSubscription.setUserId(rs.getInt("user_id"));
                 premiumSubscription.setStartDate(rs.getDate("start_date"));
@@ -179,20 +173,17 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return premiumSubscriptionList;
     }
 
     @Override
     public boolean isPremiumSubscription(int userId) {
-        boolean isPremiumSubscription = false;
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        isPremiumSubscription = false;
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(IS_PREMIUM);
             ps.setInt(1, userId);
@@ -205,7 +196,7 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return isPremiumSubscription;
     }

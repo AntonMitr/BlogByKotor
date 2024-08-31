@@ -19,6 +19,8 @@
         <module>model</module>
         <module>services</module>
         <module>util</module>
+        <module>starter</module>
+        <module>exception</module>
     </modules>
 
     <properties>

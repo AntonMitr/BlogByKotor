@@ -1,7 +1,8 @@
 package com.blog.by.kotor.poll;
 
+import com.blog.by.kotor.Comment;
 import com.blog.by.kotor.Poll;
-import com.blog.by.kotor.Util;
+import com.blog.by.kotor.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,24 +17,32 @@ public class PollDAOImpl implements PollDAO {
     private static final String FIND_ALL = "SELECT * FROM polls ORDER BY id";
     private static final String FIND_BY_ID = "SELECT * FROM polls WHERE id = ?";
     private static final String INSERT = "INSERT INTO polls (user_id, title, description, created_at) VALUES (?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE polls set user_id = ?, title = ?, description = ?, created_at = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE polls SET user_id = ?, title = ?, description = ?, created_at = ? WHERE id = ?";
+
+    private Connection conn;
+
+    private PreparedStatement ps;
+
+    private ResultSet rs;
+
+    private final Poll poll;
+
+    private List<Poll> pollList;
+
+    public PollDAOImpl() {
+        poll = new Poll();
+    }
 
     @Override
     public Poll findById(int id) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Poll poll = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_ID);
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                poll = new Poll();
                 poll.setId(rs.getInt("id"));
                 poll.setUserId(rs.getInt("user_id"));
                 poll.setTitle(rs.getString("title"));
@@ -44,26 +53,22 @@ public class PollDAOImpl implements PollDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return poll;
     }
 
     @Override
     public List<Poll> getAll() {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Poll> pollList = new ArrayList<>();
+        pollList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_ALL);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                Poll poll = new Poll();
                 poll.setId(rs.getInt("id"));
                 poll.setUserId(rs.getInt("user_id"));
                 poll.setTitle(rs.getString("title"));
@@ -75,18 +80,15 @@ public class PollDAOImpl implements PollDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return pollList;
     }
 
     @Override
     public int insert(Poll poll) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
             ps.setInt(1, poll.getUserId());
@@ -98,19 +100,16 @@ public class PollDAOImpl implements PollDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int update(Poll oldPoll, Poll newPoll) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(UPDATE);
             ps.setInt(1, newPoll.getUserId());
@@ -124,19 +123,16 @@ public class PollDAOImpl implements PollDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int delete(Poll poll) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(DELETE);
             ps.setInt(1, poll.getId());
@@ -146,8 +142,8 @@ public class PollDAOImpl implements PollDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }

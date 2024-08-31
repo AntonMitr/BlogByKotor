@@ -1,7 +1,8 @@
 package com.blog.by.kotor.filter;
 
+import com.blog.by.kotor.Comment;
 import com.blog.by.kotor.Filter;
-import com.blog.by.kotor.Util;
+import com.blog.by.kotor.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,24 +18,33 @@ public class FilterDAOImpl implements FilterDAO {
     private static final String FIND_BY_ID = "SELECT * FROM filters WHERE id = ?";
     private static final String FIND_BY_CRITERIA = "SELECT * FROM filters WHERE criteria = ?";
     private static final String INSERT = "INSERT INTO filters (name, criteria) VALUES (?, ?)";
-    private static final String UPDATE = "UPDATE filters set name = ?, criteria = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE filters SET name = ?, criteria = ? WHERE id = ?";
+
+    private Connection conn;
+
+    private PreparedStatement ps;
+
+    private ResultSet rs;
+
+    private final Filter filter;
+
+    private List<Filter> filterList;
+
+    public FilterDAOImpl() {
+        filter = new Filter();
+    }
 
     @Override
     public Filter findById(int id) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Filter filter = null;
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
             ps = conn.prepareStatement(FIND_BY_ID);
 
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                filter = new Filter();
                 filter.setId(rs.getInt("id"));
                 filter.setName(rs.getString("name"));
                 filter.setCriteria(rs.getString("criteria"));
@@ -42,20 +52,17 @@ public class FilterDAOImpl implements FilterDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return filter;
     }
 
     @Override
     public List<Filter> getAll() {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Filter> filterList = new ArrayList<>();
+        filterList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_ALL);
 
@@ -71,18 +78,15 @@ public class FilterDAOImpl implements FilterDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return filterList;
     }
 
     @Override
     public int insert(Filter filter) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
             ps.setString(1, filter.getName());
@@ -93,19 +97,16 @@ public class FilterDAOImpl implements FilterDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int update(Filter oldFilter, Filter newFilter) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(UPDATE);
             ps.setString(1, newFilter.getName());
@@ -117,19 +118,16 @@ public class FilterDAOImpl implements FilterDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int delete(Filter filter) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(DELETE);
             ps.setInt(1, filter.getId());
@@ -138,21 +136,16 @@ public class FilterDAOImpl implements FilterDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public Filter findByCriteria(String criteria) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Filter filter = new Filter();
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_CRITERIA);
             ps.setString(1, criteria);
@@ -167,7 +160,7 @@ public class FilterDAOImpl implements FilterDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return filter;
     }

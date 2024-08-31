@@ -1,7 +1,8 @@
 package com.blog.by.kotor.tag;
 
+import com.blog.by.kotor.PremiumSubscription;
 import com.blog.by.kotor.Tag;
-import com.blog.by.kotor.Util;
+import com.blog.by.kotor.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,24 +17,32 @@ public class TagDAOImpl implements TagDAO {
     private static final String FIND_BY_ID = "SELECT * FROM tags WHERE id = ?";
     private static final String FIND_BY_NAME = "SELECT * FROM tags WHERE name = ?";
     private static final String INSERT = "INSERT INTO tags (name) VALUES (?)";
-    private static final String UPDATE = "UPDATE tags set name = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE tags SET name = ? WHERE id = ?";
+
+    private Connection conn;
+
+    private PreparedStatement ps;
+
+    private ResultSet rs;
+
+    private final Tag tag;
+
+    private List<Tag> tagList;
+
+    public TagDAOImpl() {
+        tag = new Tag();
+    }
 
     @Override
     public Tag findById(int id) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Tag tag = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_ID);
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                tag = new Tag();
                 tag.setId(rs.getInt("id"));
                 tag.setName(rs.getString("name"));
             }
@@ -41,26 +50,22 @@ public class TagDAOImpl implements TagDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return tag;
     }
 
     @Override
     public List<Tag> getAll() {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Tag> tagList = new ArrayList<>();
+        tagList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_ALL);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                Tag tag = new Tag();
                 tag.setId(rs.getInt("id"));
                 tag.setName(rs.getString("name"));
                 tagList.add(tag);
@@ -69,18 +74,15 @@ public class TagDAOImpl implements TagDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return tagList;
     }
 
     @Override
     public int insert(Tag tag) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
             ps.setString(1, tag.getName());
@@ -90,19 +92,16 @@ public class TagDAOImpl implements TagDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int update(Tag oldTag, Tag newTag) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(UPDATE);
             ps.setString(1, newTag.getName());
@@ -113,19 +112,16 @@ public class TagDAOImpl implements TagDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int delete(Tag tag) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(DELETE);
             ps.setInt(1, tag.getId());
@@ -135,28 +131,22 @@ public class TagDAOImpl implements TagDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public Tag findByName(String name) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Tag tag = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_NAME);
             ps.setString(1, name);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                tag = new Tag();
                 tag.setId(rs.getInt("id"));
                 tag.setName(rs.getString("name"));
             }
@@ -164,7 +154,7 @@ public class TagDAOImpl implements TagDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return tag;
     }

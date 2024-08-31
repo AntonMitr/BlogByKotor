@@ -1,7 +1,8 @@
 package com.blog.by.kotor.user;
 
+import com.blog.by.kotor.PremiumSubscription;
 import com.blog.by.kotor.User;
-import com.blog.by.kotor.Util;
+import com.blog.by.kotor.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,24 +19,34 @@ public class UserDAOImpl implements UserDAO {
     private static final String FIND_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
     private static final String FIND_BY_PASSWORD = "SELECT * FROM users WHERE password = ?";
     private static final String INSERT = "INSERT INTO users(name, email, password, createdAt) VALUES (?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE users set name = ?, email = ?, password = ?, created_at = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE users SET name = ?, email = ?, password = ?, created_at = ? WHERE id = ?";
+
+    private Connection conn;
+
+    private boolean result;
+
+    private PreparedStatement ps;
+
+    private ResultSet rs;
+
+    private final User user;
+
+    private List<User> userList;
+
+    public UserDAOImpl() {
+        user = new User();
+    }
 
     @Override
     public User findById(int id) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        User user = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_ID);
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                user = new User();
                 user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
@@ -45,26 +56,22 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return user;
     }
 
     @Override
     public List<User> getAll() {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<User> userList = new ArrayList<>();
+        userList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_ALL);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                User user = new User();
                 user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
@@ -76,19 +83,15 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return userList;
     }
 
     @Override
     public int insert(User user) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
             ps.setString(1, user.getName());
@@ -101,18 +104,15 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return 0;
     }
 
     @Override
     public int update(User oldUser, User newUser) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(UPDATE);
             ps.setString(1, newUser.getName());
@@ -126,19 +126,16 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int delete(User user) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(DELETE);
             ps.setInt(1, user.getId());
@@ -148,21 +145,18 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public boolean findByEmail(String email) {
-        boolean result = false;
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        result = false;
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_EMAIL);
             ps.setString(1, email);
@@ -173,20 +167,17 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return result;
     }
 
     @Override
     public boolean findByPassword(String password) {
-        boolean result = false;
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        result = false;
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_PASSWORD);
             ps.setString(1, password);
@@ -197,7 +188,7 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return result;
     }

@@ -1,8 +1,9 @@
 package com.blog.by.kotor.post_category;
 
+import com.blog.by.kotor.Comment;
 import com.blog.by.kotor.Post;
 import com.blog.by.kotor.PostCategory;
-import com.blog.by.kotor.Util;
+import com.blog.by.kotor.DatabaseConnection;
 import com.blog.by.kotor.post.PostDAO;
 import com.blog.by.kotor.post.PostDAOImpl;
 
@@ -19,7 +20,29 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
     private static final String FIND_ALL = "SELECT * FROM posts_categories ORDER BY post_id";
     private static final String FIND_BY_CATEGORY_ID = "SELECT * FROM posts_categories WHERE categories_id = ?";
     private static final String INSERT = "INSERT INTO posts_categories (post_id, categories_id) VALUES (?, ?)";
-    private static final String UPDATE = "UPDATE posts_categories set post_id = ?, categories_id = ? WHERE post_id = ? AND categories_id = ?";
+    private static final String UPDATE = "UPDATE posts_categories SET post_id = ?, categories_id = ? WHERE post_id = ? AND categories_id = ?";
+
+    private Connection conn;
+
+    private PreparedStatement ps;
+
+    private ResultSet rs;
+
+    private final PostCategory postCategory;
+
+    private Post post;
+
+    private final PostDAO postDAO;
+
+    private List<PostCategory> postCategoryList;
+
+    private List<Post> postList;
+
+    public PostCategoryDAOImpl() {
+        postCategory = new PostCategory();
+        post = new Post();
+        postDAO = new PostDAOImpl();
+    }
 
     @Override
     public PostCategory findById(int postId) {
@@ -28,13 +51,10 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
 
     @Override
     public List<PostCategory> getAll() {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<PostCategory> postCategoryList = new ArrayList<>();
+        postCategoryList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_ALL);
 
@@ -49,18 +69,15 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return postCategoryList;
     }
 
     @Override
     public int insert(PostCategory postCategory) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
             ps.setInt(1, postCategory.getPostId());
@@ -70,19 +87,16 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int update(PostCategory oldPostCategory, PostCategory newPostCategory) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
             ps = conn.prepareStatement(UPDATE);
 
             ps.setInt(1, newPostCategory.getPostId());
@@ -94,19 +108,16 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int delete(PostCategory postCategory) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
             ps = conn.prepareStatement(DELETE);
 
             ps.setInt(1, postCategory.getPostId());
@@ -116,8 +127,8 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
@@ -125,29 +136,24 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
 
     @Override
     public List<Post> findPostsByCategoryId(int categoryId) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Post> postList = new ArrayList<>();
+        postList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_CATEGORY_ID);
             ps.setInt(1, categoryId);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                ;
-                PostDAO postDAO = new PostDAOImpl();
-                Post post = postDAO.findById(rs.getInt("post_id"));
+                post = postDAO.findById(rs.getInt("post_id"));
                 postList.add(post);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return postList;
     }

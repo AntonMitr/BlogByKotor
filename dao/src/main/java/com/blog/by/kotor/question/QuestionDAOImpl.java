@@ -1,7 +1,8 @@
 package com.blog.by.kotor.question;
 
+import com.blog.by.kotor.PremiumSubscription;
 import com.blog.by.kotor.Question;
-import com.blog.by.kotor.Util;
+import com.blog.by.kotor.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,24 +17,32 @@ public class QuestionDAOImpl implements QuestionDAO {
     private static final String FIND_BY_ID = "SELECT * FROM questions WHERE id = ?";
     private static final String FIND_BY_POLL_ID = "SELECT * FROM questions WHERE poll_id = ?";
     private static final String INSERT = "INSERT INTO questions (poll_id, question_text) VALUES (?, ?)";
-    private static final String UPDATE = "UPDATE questions set poll_id = ?, question_text = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE questions SET poll_id = ?, question_text = ? WHERE id = ?";
+
+    private Connection conn;
+
+    private PreparedStatement ps;
+
+    private ResultSet rs;
+
+    private final Question question;
+
+    private List<Question> questionList;
+
+    public QuestionDAOImpl() {
+        question = new Question();
+    }
 
     @Override
     public Question findById(int id) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Question question = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_ID);
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                question = new Question();
                 question.setId(rs.getInt("id"));
                 question.setPollId(rs.getInt("poll_id"));
                 question.setQuestionText(rs.getString("question_text"));
@@ -42,26 +51,22 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return question;
     }
 
     @Override
     public List<Question> getAll() {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Question> questionList = new ArrayList<>();
+        questionList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_ALL);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                Question question = new Question();
                 question.setId(rs.getInt("id"));
                 question.setPollId(rs.getInt("poll_id"));
                 question.setQuestionText(rs.getString("question_text"));
@@ -71,18 +76,15 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return questionList;
     }
 
     @Override
     public int insert(Question question) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
             ps.setInt(1, question.getPollId());
@@ -92,19 +94,16 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int update(Question oldQuestion, Question newQuestion) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(UPDATE);
             ps.setInt(1, newQuestion.getPollId());
@@ -116,19 +115,16 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public int delete(Question question) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(DELETE);
             ps.setInt(1, question.getId());
@@ -138,28 +134,24 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeConnection(conn);
-            Util.closePreparedStatement(ps);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
         return 0;
     }
 
     @Override
     public List<Question> findByPollId(int pollId) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Question> questionList = new ArrayList<>();
+        questionList = new ArrayList<>();
 
         try {
-            conn = Util.getConnection();
+            conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_BY_POLL_ID);
             ps.setInt(1, pollId);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                Question question = new Question();
                 question.setId(rs.getInt("id"));
                 question.setPollId(rs.getInt("poll_id"));
                 question.setQuestionText(rs.getString("question_text"));
@@ -169,7 +161,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Util.closeAll(conn, ps, rs);
+            DatabaseConnection.closeAll(conn, ps, rs);
         }
         return questionList;
     }
