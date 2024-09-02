@@ -10,7 +10,7 @@ public class UserDAO extends AbstractHibernateDao<User> {
     }
 
     public boolean findByEmail(String email) {
-        String hql = "from User where email = :email";
+        String hql = "from User u where u.email = :email";
         try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery(hql, User.class);
             query.setParameter("email", email);
@@ -19,7 +19,7 @@ public class UserDAO extends AbstractHibernateDao<User> {
     }
 
     public boolean findByPassword(String password) {
-        String hql = "from User where passwoord = :password";
+        String hql = "from User u where u.password = :password";
         try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery(hql, User.class);
             query.setParameter("password", password);

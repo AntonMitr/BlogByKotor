@@ -1,0 +1,38 @@
+package com.blog.by.kotor.registration.service;
+
+import com.blog.by.kotor.User;
+import com.blog.by.kotor.UserDAO;
+
+public class RegistrationService implements ImplRegistrationService {
+
+    private UserDAO userDAO;
+
+    private boolean result;
+
+    public RegistrationService() {
+        userDAO = new UserDAO();
+        result = true;
+    }
+
+    @Override
+    public boolean register(User user) {
+        if (user.getEmail() == null || user.getPassword() == null) {
+            System.out.println("Пароль не может быть нулевым!");
+            return false;
+        }
+
+        if (user.getPassword().length() < 6) {
+            System.out.println("Пароль должен содержать менее 6 символов!");
+            return false;
+        }
+
+        if (userDAO.findByEmail(user.getEmail())) {
+            System.out.println("Данный пользователь уже существует!");
+            return false;
+        }
+
+        userDAO.create(user);
+        return result;
+    }
+
+}

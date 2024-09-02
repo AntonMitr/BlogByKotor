@@ -10,7 +10,7 @@ public class QuestionDAO extends AbstractHibernateDao<Question> {
     }
 
     public Question findByPollId(int pollId) {
-        String hql = "from Question where pollId = :pollId";
+        String hql = "from Question where poll.id = :pollId";
         try (Session session = sessionFactory.openSession()) {
             Query<Question> query = session.createQuery(hql, Question.class);
             query.setParameter("pollId", pollId);

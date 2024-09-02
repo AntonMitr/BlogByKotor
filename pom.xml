@@ -17,7 +17,7 @@
         <module>daoHibernate</module>
         <module>model</module>
         <module>util</module>
-        <module>services</module>
+        <module>service</module>
         <module>model</module>
     </modules>
 

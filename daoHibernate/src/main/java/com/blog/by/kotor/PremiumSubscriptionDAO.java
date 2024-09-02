@@ -12,7 +12,7 @@ public class PremiumSubscriptionDAO extends AbstractHibernateDao<PremiumSubscrip
     }
 
     public List<PremiumSubscription> findByUserId(int userId) {
-        String hql = "from PremiumSubscription where userId = :userId";
+        String hql = "from PremiumSubscription where user.id = :userId";
         try (Session session = sessionFactory.openSession()) {
             Query<PremiumSubscription> query = session.createQuery(hql, PremiumSubscription.class);
             query.setParameter("userId", userId);

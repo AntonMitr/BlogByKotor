@@ -13,7 +13,7 @@ public class PostTagDAO extends AbstractHibernateDao<PostTag> {
     }
 
     public List<PostTag> findPostTagByTagId(int tagId) {
-        String hql = "from UserRole where tagId=:tagId";
+        String hql = "from PostTag where id.tagId = :tagId";
         try (Session session = sessionFactory.openSession()) {
             Query<PostTag> query = session.createQuery(hql, PostTag.class);
             query.setParameter("tagId", tagId);

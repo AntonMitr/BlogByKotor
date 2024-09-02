@@ -14,7 +14,7 @@ public class PostCategoryDAO extends AbstractHibernateDao<PostCategory> {
     }
 
     public List<PostCategory> findPostsAndCategoriesByCategoryId(int categoryId) {
-        String hql = "from PostCategory where categoryId = :categoryId";
+        String hql = "from PostCategory where id.categoryId = :categoryId";
         try (Session session = sessionFactory.openSession()) {
             Query<PostCategory> query = session.createQuery(hql, PostCategory.class);
             query.setParameter("categoryId", categoryId);

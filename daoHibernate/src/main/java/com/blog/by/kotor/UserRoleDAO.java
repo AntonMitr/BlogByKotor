@@ -11,7 +11,7 @@ public class UserRoleDAO extends AbstractHibernateDao<UserRole> {
     }
 
     public UserRole findUserAndRoleByUserId(int userId) {
-        String hql = "from UserRole where userId = :userId";
+        String hql = "from UserRole where id.userId = :userId";
         try (Session session = sessionFactory.openSession()) {
             Query<UserRole> query = session.createQuery(hql, UserRole.class);
             query.setParameter("userId", userId);

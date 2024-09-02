@@ -12,7 +12,7 @@ public class UserAnswerDAO extends AbstractHibernateDao<UserAnswer> {
     }
 
     public List<UserAnswer> findByQuestionId(int questionId) {
-        String hql = "from UserAnswer where questionId = :questionId";
+        String hql = "from UserAnswer where question.id = :questionId";
         try (Session session = sessionFactory.openSession()) {
             Query<UserAnswer> query = session.createQuery(hql, UserAnswer.class);
             query.setParameter("questionId", questionId);
