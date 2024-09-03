@@ -3,6 +3,9 @@ package com.blog.by.kotor;
 import java.sql.*;
 import java.util.ResourceBundle;
 
+import static com.blog.by.kotor.DBException.DB_NOT_CONNECTED;
+import static com.blog.by.kotor.DBException.DB_NOT_CONNECTED_TEXT;
+
 public class DatabaseConnection {
 
     private static final String DB_DRIVER;
@@ -29,8 +32,9 @@ public class DatabaseConnection {
         try {
             Class.forName(DB_DRIVER);
             conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            throw new DBException(DB_NOT_CONNECTED);
+        } catch (ClassNotFoundException | SQLException | DBException ex) {
+            ex.getMessage(DB_NOT_CONNECTED);
         }
         return conn;
     }

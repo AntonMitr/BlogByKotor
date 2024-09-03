@@ -8,8 +8,8 @@ public class CategoryService implements ImplCategoryService {
 
     private final CategoryDAO categoryDAO;
 
-    public CategoryService() {
-        categoryDAO = new CategoryDAOImpl();
+    public CategoryService(CategoryDAOImpl categoryDAOImpl) {
+        this.categoryDAO = categoryDAOImpl;
     }
 
     @Override

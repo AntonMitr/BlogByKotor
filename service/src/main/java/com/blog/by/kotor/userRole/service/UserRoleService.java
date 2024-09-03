@@ -13,9 +13,9 @@ public class UserRoleService implements ImplUserRoleService {
 
     private final UserRoleDAO userRoleDAO;
 
-    public UserRoleService() {
-        roleDAO = new RoleDAOImpl();
-        userRoleDAO = new UserRoleDAOImpl();
+    public UserRoleService(RoleDAOImpl roleDAOImpl, UserRoleDAOImpl userRoleDAOImpl) {
+        roleDAO = roleDAOImpl;
+        userRoleDAO = userRoleDAOImpl;
     }
 
     @Override

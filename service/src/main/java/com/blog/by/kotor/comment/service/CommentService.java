@@ -10,8 +10,8 @@ public class CommentService implements ImplCommentService {
 
     private final CommentDAO commentDAO;
 
-    public CommentService() {
-        commentDAO = new CommentDAOImpl();
+    public CommentService(CommentDAOImpl commentDAOImpl) {
+        commentDAO = commentDAOImpl;
     }
 
     @Override

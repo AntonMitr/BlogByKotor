@@ -33,7 +33,7 @@
 
         <dependency>
             <groupId>com.blog.by.kotor</groupId>
-            <artifactId>services</artifactId>
+            <artifactId>service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

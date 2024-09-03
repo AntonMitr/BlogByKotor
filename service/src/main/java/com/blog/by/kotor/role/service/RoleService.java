@@ -8,8 +8,8 @@ public class RoleService implements ImplRoleService {
 
     private final UserRoleDAO userRoleDAO;
 
-    public RoleService() {
-        userRoleDAO = new UserRoleDAOImpl();
+    public RoleService(UserRoleDAOImpl userRoleDAOImpl) {
+        userRoleDAO = userRoleDAOImpl;
     }
 
     @Override

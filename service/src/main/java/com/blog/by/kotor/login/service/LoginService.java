@@ -7,8 +7,8 @@ public class LoginService implements ImplLoginService {
 
     private final UserDAO userDAO;
 
-    public LoginService() {
-        userDAO = new UserDAOImpl();
+    public LoginService(UserDAOImpl userDAOImpl) {
+        userDAO = userDAOImpl;
     }
 
     @Override

@@ -8,8 +8,8 @@ public class UserAnswerService implements ImplUserAnswerService {
 
     private final UserAnswerDAO userAnswerDAO;
 
-    public UserAnswerService() {
-        userAnswerDAO = new UserAnswerDAOImpl();
+    public UserAnswerService(UserAnswerDAOImpl userAnswerDAOImpl) {
+        userAnswerDAO = userAnswerDAOImpl;
     }
 
     @Override

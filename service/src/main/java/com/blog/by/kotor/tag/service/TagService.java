@@ -8,8 +8,8 @@ public class TagService implements ImplTagService {
 
     private final TagDAO tagDAO;
 
-    public TagService() {
-        tagDAO = new TagDAOImpl();
+    public TagService(TagDAOImpl tagDAOImpl) {
+        tagDAO = tagDAOImpl;
     }
 
     @Override

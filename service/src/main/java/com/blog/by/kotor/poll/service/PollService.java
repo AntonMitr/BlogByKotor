@@ -8,8 +8,8 @@ public class PollService implements ImplPollService {
 
     private final PollDAO pollDAO;
 
-    public PollService() {
-        pollDAO = new PollDAOImpl();
+    public PollService(PollDAOImpl pollDAOImpl) {
+        pollDAO = pollDAOImpl;
     }
 
     @Override

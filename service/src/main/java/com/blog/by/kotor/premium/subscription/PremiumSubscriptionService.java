@@ -6,8 +6,8 @@ public class PremiumSubscriptionService implements ImplPremiumSubscription {
 
     private final PremiumSubscriptionDAO premiumSubscriptionDAO;
 
-    public PremiumSubscriptionService() {
-        premiumSubscriptionDAO = new PremiumSubscriptionDAOImpl();
+    public PremiumSubscriptionService(PremiumSubscriptionDAOImpl premiumSubscriptionDAOImpl) {
+        premiumSubscriptionDAO = premiumSubscriptionDAOImpl;
     }
 
     @Override

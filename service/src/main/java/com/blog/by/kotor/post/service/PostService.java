@@ -8,8 +8,8 @@ public class PostService implements ImplPostService{
 
     private final PostDAO postDAO;
 
-    public PostService() {
-        postDAO = new PostDAOImpl();
+    public PostService(PostDAOImpl postDAOImpl) {
+        postDAO = postDAOImpl;
     }
 
     @Override

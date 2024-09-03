@@ -18,6 +18,8 @@ import java.util.List;
 
 public class FilterService implements ImplFilterService {
 
+    private List<Post> postList;
+
     private final FilterDAO filterDAO;
 
     private final TagDAO tagDAO;
@@ -26,16 +28,15 @@ public class FilterService implements ImplFilterService {
 
     private final CategoryDAO categoryDAO;
 
-    public FilterService() {
-        filterDAO = new FilterDAOImpl();
-        tagDAO = new TagDAOImpl();
-        postTagDAO = new PostTagDAOImpl();
-        categoryDAO = new CategoryDAOImpl();
+    public FilterService(FilterDAOImpl filterDAOImpl, TagDAOImpl tagDAOImpl, PostTagDAOImpl postTagDAOImpl, CategoryDAOImpl categoryDAOImpl) {
+        filterDAO = filterDAOImpl;
+        tagDAO = tagDAOImpl;
+        postTagDAO =  postTagDAOImpl;
+        categoryDAO = categoryDAOImpl;
     }
 
     @Override
     public List<Post> findByTagCriteria(String criteria) {
-        List<Post> postList = new ArrayList<>();
 
         Filter filter = filterDAO.findByCriteria(criteria);
 
@@ -47,7 +48,6 @@ public class FilterService implements ImplFilterService {
 
     @Override
     public List<Post> findByCategoryCriteria(String criteria) {
-        List<Post> postList = new ArrayList<>();
 
         Filter filter = filterDAO.findByCriteria(criteria);
 

@@ -8,8 +8,8 @@ public class RegistrationService implements ImplRegistrationService {
 
     private final UserDAO userDAO;
 
-    public RegistrationService() {
-        userDAO = new UserDAOImpl();
+    public RegistrationService(UserDAOImpl userDAOImpl) {
+        userDAO = userDAOImpl;
     }
 
     @Override

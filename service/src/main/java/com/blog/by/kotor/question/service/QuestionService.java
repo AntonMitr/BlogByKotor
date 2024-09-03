@@ -8,8 +8,8 @@ public class QuestionService implements ImplQuestionService {
 
     private final QuestionDAO questionDAO;
 
-    public QuestionService() {
-        questionDAO = new QuestionDAOImpl();
+    public QuestionService(QuestionDAOImpl questionDAOImpl) {
+        questionDAO = questionDAOImpl;
     }
 
     @Override
