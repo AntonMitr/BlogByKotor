@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface PostCategoryDAO extends DAO<PostCategory> {
 
-    List<Post> findPostsByCategoryId(int categoryId, PostDAO postDAO);
+    List<Post> findPostsByCategoryId(int categoryId);
 
 }

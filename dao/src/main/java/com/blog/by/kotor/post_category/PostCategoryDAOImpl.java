@@ -28,7 +28,10 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
 
     private ResultSet rs;
 
-    public PostCategoryDAOImpl() {
+    private final PostDAO postDAO;
+
+    public PostCategoryDAOImpl(PostDAO postDAO) {
+        this.postDAO = postDAO;
     }
 
     @Override
@@ -138,7 +141,7 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
 
 
     @Override
-    public List<Post> findPostsByCategoryId(int categoryId, PostDAO postDAO) {
+    public List<Post> findPostsByCategoryId(int categoryId) {
         List<Post> postList = new ArrayList<>();
 
         try {

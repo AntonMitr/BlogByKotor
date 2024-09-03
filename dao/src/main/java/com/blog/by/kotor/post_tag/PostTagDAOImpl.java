@@ -30,8 +30,11 @@ public class PostTagDAOImpl implements PostTagDAO {
 
     private final PostTag postTag;
 
-    public PostTagDAOImpl(PostTag postTag) {
+    private final PostDAO postDAO;
+
+    public PostTagDAOImpl(PostTag postTag, PostDAO postDAO) {
         this.postTag = postTag;
+        this.postDAO = postDAO;
     }
 
     @Override
@@ -142,7 +145,7 @@ public class PostTagDAOImpl implements PostTagDAO {
     }
 
     @Override
-    public List<Post> findPostsByTagId(int tagId, PostDAO postDAO) {
+    public List<Post> findPostsByTagId(int tagId) {
         List<Post> postList = new ArrayList<>();
 
 

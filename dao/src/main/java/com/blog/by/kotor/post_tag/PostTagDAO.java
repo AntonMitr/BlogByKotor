@@ -8,5 +8,5 @@ import com.blog.by.kotor.post.PostDAO;
 import java.util.List;
 
 public interface PostTagDAO extends DAO<PostTag> {
-    List<Post> findPostsByTagId(int tagId, PostDAO postDAO);
+    List<Post> findPostsByTagId(int tagId);
 }
