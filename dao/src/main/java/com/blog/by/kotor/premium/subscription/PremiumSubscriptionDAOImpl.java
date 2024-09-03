@@ -1,6 +1,7 @@
 package com.blog.by.kotor.premium.subscription;
 
 import com.blog.by.kotor.Comment;
+import com.blog.by.kotor.DAOException;
 import com.blog.by.kotor.PremiumSubscription;
 import com.blog.by.kotor.DatabaseConnection;
 
@@ -10,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.blog.by.kotor.DAOException.POST_TAG_DAO_EXCEPTION;
+import static com.blog.by.kotor.DAOException.PREMIUM_SUBSCRIPTION_DAO_EXCEPTION;
 
 public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
 
@@ -29,12 +33,10 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
 
     private final PremiumSubscription premiumSubscription;
 
-    private List<PremiumSubscription> premiumSubscriptionList;
-
     private boolean isPremiumSubscription;
 
-    public PremiumSubscriptionDAOImpl() {
-        premiumSubscription = new PremiumSubscription();
+    public PremiumSubscriptionDAOImpl(PremiumSubscription premiumSubscription) {
+        this.premiumSubscription = premiumSubscription;
     }
 
     @Override
@@ -54,7 +56,11 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -64,7 +70,7 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
 
     @Override
     public List<PremiumSubscription> getAll() {
-        premiumSubscriptionList = new ArrayList<>();
+        List<PremiumSubscription> premiumSubscriptionList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -81,7 +87,11 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -101,7 +111,11 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -123,7 +137,11 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -142,7 +160,11 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -153,7 +175,7 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
 
     @Override
     public List<PremiumSubscription> findByUserId(int userId) {
-        premiumSubscriptionList = new ArrayList<>();
+        List<PremiumSubscription> premiumSubscriptionList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -171,7 +193,11 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -194,7 +220,11 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

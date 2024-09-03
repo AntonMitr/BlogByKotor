@@ -1,6 +1,7 @@
 package com.blog.by.kotor.poll;
 
 import com.blog.by.kotor.Comment;
+import com.blog.by.kotor.DAOException;
 import com.blog.by.kotor.Poll;
 import com.blog.by.kotor.DatabaseConnection;
 
@@ -10,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.blog.by.kotor.DAOException.FILTER_DAO_EXCEPTION;
+import static com.blog.by.kotor.DAOException.POLL_DAO_EXCEPTION;
 
 public class PollDAOImpl implements PollDAO {
 
@@ -27,10 +31,8 @@ public class PollDAOImpl implements PollDAO {
 
     private final Poll poll;
 
-    private List<Poll> pollList;
-
-    public PollDAOImpl() {
-        poll = new Poll();
+    public PollDAOImpl(Poll poll) {
+        this.poll = poll;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class PollDAOImpl implements PollDAO {
 
     @Override
     public List<Poll> getAll() {
-        pollList = new ArrayList<>();
+        List<Poll> pollList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -78,7 +80,11 @@ public class PollDAOImpl implements PollDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POLL_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -98,7 +104,11 @@ public class PollDAOImpl implements PollDAO {
 
             return ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POLL_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -121,7 +131,11 @@ public class PollDAOImpl implements PollDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POLL_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -140,7 +154,11 @@ public class PollDAOImpl implements PollDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POLL_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);

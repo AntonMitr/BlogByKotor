@@ -1,9 +1,6 @@
 package com.blog.by.kotor.post_tag;
 
-import com.blog.by.kotor.Comment;
-import com.blog.by.kotor.Post;
-import com.blog.by.kotor.PostTag;
-import com.blog.by.kotor.DatabaseConnection;
+import com.blog.by.kotor.*;
 import com.blog.by.kotor.post.PostDAO;
 import com.blog.by.kotor.post.PostDAOImpl;
 
@@ -13,6 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.blog.by.kotor.DAOException.POST_CATEGORY_DAO_EXCEPTION;
+import static com.blog.by.kotor.DAOException.POST_TAG_DAO_EXCEPTION;
 
 public class PostTagDAOImpl implements PostTagDAO {
 
@@ -30,18 +30,8 @@ public class PostTagDAOImpl implements PostTagDAO {
 
     private final PostTag postTag;
 
-    private final PostDAO postDAO;
-
-    private Post post;
-
-    private List<PostTag> postTagList;
-
-    private List<Post> postList;
-
-    public PostTagDAOImpl() {
-        postTag = new PostTag();
-        post = new Post();
-        postDAO = new PostDAOImpl();
+    public PostTagDAOImpl(PostTag postTag) {
+        this.postTag = postTag;
     }
 
     @Override
@@ -51,7 +41,7 @@ public class PostTagDAOImpl implements PostTagDAO {
 
     @Override
     public List<PostTag> getAll() {
-        postTagList = new ArrayList<>();
+        List<PostTag> postTagList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -66,7 +56,11 @@ public class PostTagDAOImpl implements PostTagDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POST_TAG_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -85,7 +79,11 @@ public class PostTagDAOImpl implements PostTagDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POST_TAG_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -107,7 +105,11 @@ public class PostTagDAOImpl implements PostTagDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POST_TAG_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -127,7 +129,11 @@ public class PostTagDAOImpl implements PostTagDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POST_TAG_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -136,8 +142,9 @@ public class PostTagDAOImpl implements PostTagDAO {
     }
 
     @Override
-    public List<Post> findPostsByTagId(int tagId) {
-        postList = new ArrayList<>();
+    public List<Post> findPostsByTagId(int tagId, PostDAO postDAO) {
+        List<Post> postList = new ArrayList<>();
+
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -147,12 +154,16 @@ public class PostTagDAOImpl implements PostTagDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                post = postDAO.findById(rs.getInt("post_id"));
+                Post post = postDAO.findById(rs.getInt("post_id"));
                 postList.add(post);
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POST_TAG_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

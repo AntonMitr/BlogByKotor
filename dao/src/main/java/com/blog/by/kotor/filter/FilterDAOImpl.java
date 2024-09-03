@@ -1,6 +1,7 @@
 package com.blog.by.kotor.filter;
 
 import com.blog.by.kotor.Comment;
+import com.blog.by.kotor.DAOException;
 import com.blog.by.kotor.Filter;
 import com.blog.by.kotor.DatabaseConnection;
 
@@ -10,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.blog.by.kotor.DAOException.COMMENT_DAO_EXCEPTION;
+import static com.blog.by.kotor.DAOException.FILTER_DAO_EXCEPTION;
 
 public class FilterDAOImpl implements FilterDAO {
 
@@ -28,10 +32,8 @@ public class FilterDAOImpl implements FilterDAO {
 
     private final Filter filter;
 
-    private List<Filter> filterList;
-
-    public FilterDAOImpl() {
-        filter = new Filter();
+    public FilterDAOImpl(Filter filter) {
+         this.filter = filter;
     }
 
     @Override
@@ -50,7 +52,11 @@ public class FilterDAOImpl implements FilterDAO {
                 filter.setCriteria(rs.getString("criteria"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(FILTER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -59,7 +65,7 @@ public class FilterDAOImpl implements FilterDAO {
 
     @Override
     public List<Filter> getAll() {
-        filterList = new ArrayList<>();
+        List<Filter> filterList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -68,7 +74,6 @@ public class FilterDAOImpl implements FilterDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                Filter filter = new Filter();
                 filter.setId(rs.getInt("id"));
                 filter.setName(rs.getString("name"));
                 filter.setCriteria(rs.getString("criteria"));
@@ -76,7 +81,11 @@ public class FilterDAOImpl implements FilterDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(FILTER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -95,7 +104,11 @@ public class FilterDAOImpl implements FilterDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(FILTER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -116,7 +129,11 @@ public class FilterDAOImpl implements FilterDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(FILTER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -134,7 +151,11 @@ public class FilterDAOImpl implements FilterDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(FILTER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -158,7 +179,11 @@ public class FilterDAOImpl implements FilterDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(FILTER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

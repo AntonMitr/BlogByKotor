@@ -1,5 +1,6 @@
 package com.blog.by.kotor.tag;
 
+import com.blog.by.kotor.DAOException;
 import com.blog.by.kotor.PremiumSubscription;
 import com.blog.by.kotor.Tag;
 import com.blog.by.kotor.DatabaseConnection;
@@ -10,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.blog.by.kotor.DAOException.ROLE_DAO_EXCEPTION;
+import static com.blog.by.kotor.DAOException.TAG_DAO_EXCEPTION;
 
 public class TagDAOImpl implements TagDAO {
     private static final String DELETE = "DELETE FROM tags WHERE id = ?";
@@ -27,10 +31,8 @@ public class TagDAOImpl implements TagDAO {
 
     private final Tag tag;
 
-    private List<Tag> tagList;
-
-    public TagDAOImpl() {
-        tag = new Tag();
+    public TagDAOImpl(Tag tag) {
+        this.tag = tag;
     }
 
     @Override
@@ -48,7 +50,11 @@ public class TagDAOImpl implements TagDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(TAG_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -57,7 +63,7 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public List<Tag> getAll() {
-        tagList = new ArrayList<>();
+        List<Tag> tagList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -72,7 +78,11 @@ public class TagDAOImpl implements TagDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(TAG_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -90,7 +100,11 @@ public class TagDAOImpl implements TagDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(TAG_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -110,7 +124,11 @@ public class TagDAOImpl implements TagDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(TAG_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -129,7 +147,11 @@ public class TagDAOImpl implements TagDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(TAG_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -152,7 +174,11 @@ public class TagDAOImpl implements TagDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(TAG_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

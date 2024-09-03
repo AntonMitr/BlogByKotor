@@ -1,5 +1,6 @@
 package com.blog.by.kotor.user;
 
+import com.blog.by.kotor.DAOException;
 import com.blog.by.kotor.PremiumSubscription;
 import com.blog.by.kotor.User;
 import com.blog.by.kotor.DatabaseConnection;
@@ -10,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.blog.by.kotor.DAOException.TAG_DAO_EXCEPTION;
+import static com.blog.by.kotor.DAOException.USER_DAO_EXCEPTION;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -31,10 +35,8 @@ public class UserDAOImpl implements UserDAO {
 
     private final User user;
 
-    private List<User> userList;
-
-    public UserDAOImpl() {
-        user = new User();
+    public UserDAOImpl(User user) {
+        this.user = user;
     }
 
     @Override
@@ -63,7 +65,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> getAll() {
-        userList = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -81,7 +83,11 @@ public class UserDAOImpl implements UserDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -102,7 +108,11 @@ public class UserDAOImpl implements UserDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -124,7 +134,11 @@ public class UserDAOImpl implements UserDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -143,7 +157,11 @@ public class UserDAOImpl implements UserDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -165,7 +183,11 @@ public class UserDAOImpl implements UserDAO {
             result = rs.next();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -186,7 +208,11 @@ public class UserDAOImpl implements UserDAO {
             result = rs.next();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

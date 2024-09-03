@@ -1,5 +1,6 @@
 package com.blog.by.kotor.role;
 
+import com.blog.by.kotor.DAOException;
 import com.blog.by.kotor.PremiumSubscription;
 import com.blog.by.kotor.Role;
 import com.blog.by.kotor.DatabaseConnection;
@@ -10,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.blog.by.kotor.DAOException.QUESTION_DAO_EXCEPTION;
+import static com.blog.by.kotor.DAOException.ROLE_DAO_EXCEPTION;
 
 public class RoleDAOImpl implements RoleDAO {
 
@@ -27,10 +31,8 @@ public class RoleDAOImpl implements RoleDAO {
 
     private final Role role;
 
-    private List<Role> roleList;
-
-    public RoleDAOImpl() {
-        role = new Role();
+    public RoleDAOImpl(Role role) {
+        this.role = role;
     }
 
     @Override
@@ -48,7 +50,11 @@ public class RoleDAOImpl implements RoleDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(ROLE_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -57,7 +63,7 @@ public class RoleDAOImpl implements RoleDAO {
 
     @Override
     public List<Role> getAll() {
-        roleList = new ArrayList<>();
+        List<Role> roleList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -72,7 +78,11 @@ public class RoleDAOImpl implements RoleDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(ROLE_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -90,7 +100,11 @@ public class RoleDAOImpl implements RoleDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(ROLE_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -111,7 +125,11 @@ public class RoleDAOImpl implements RoleDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(ROLE_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -130,7 +148,11 @@ public class RoleDAOImpl implements RoleDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(ROLE_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);

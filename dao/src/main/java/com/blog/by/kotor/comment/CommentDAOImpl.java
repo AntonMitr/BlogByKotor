@@ -1,5 +1,6 @@
 package com.blog.by.kotor.comment;
 
+import com.blog.by.kotor.DAOException;
 import com.blog.by.kotor.DatabaseConnection;
 import com.blog.by.kotor.Comment;
 
@@ -9,6 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.blog.by.kotor.DAOException.CATEGORY_DAO_EXCEPTION;
+import static com.blog.by.kotor.DAOException.COMMENT_DAO_EXCEPTION;
 
 public class CommentDAOImpl implements CommentDAO {
 
@@ -27,10 +31,8 @@ public class CommentDAOImpl implements CommentDAO {
 
     private final Comment comment;
 
-    private List<Comment> commentList;
-
-    public CommentDAOImpl() {
-        comment = new Comment();
+    public CommentDAOImpl(Comment comment) {
+        this.comment = comment;
     }
 
     @Override
@@ -52,7 +54,11 @@ public class CommentDAOImpl implements CommentDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(COMMENT_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -61,7 +67,7 @@ public class CommentDAOImpl implements CommentDAO {
 
     @Override
     public List<Comment> getAll() {
-        commentList = new ArrayList<>();
+        List<Comment> commentList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -79,7 +85,11 @@ public class CommentDAOImpl implements CommentDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(COMMENT_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -88,7 +98,7 @@ public class CommentDAOImpl implements CommentDAO {
 
     @Override
     public List<Comment> findByPostId(int postId) {
-        commentList = new ArrayList<>();
+        List<Comment> commentList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -107,7 +117,11 @@ public class CommentDAOImpl implements CommentDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(COMMENT_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -129,7 +143,11 @@ public class CommentDAOImpl implements CommentDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(COMMENT_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -153,7 +171,11 @@ public class CommentDAOImpl implements CommentDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(COMMENT_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -173,7 +195,11 @@ public class CommentDAOImpl implements CommentDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(COMMENT_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);

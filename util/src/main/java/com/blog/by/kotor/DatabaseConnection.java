@@ -3,8 +3,7 @@ package com.blog.by.kotor;
 import java.sql.*;
 import java.util.ResourceBundle;
 
-import static com.blog.by.kotor.DBException.DB_NOT_CONNECTED;
-import static com.blog.by.kotor.DBException.DB_NOT_CONNECTED_TEXT;
+import static com.blog.by.kotor.DBException.*;
 
 public class DatabaseConnection {
 
@@ -32,9 +31,12 @@ public class DatabaseConnection {
         try {
             Class.forName(DB_DRIVER);
             conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-            throw new DBException(DB_NOT_CONNECTED);
-        } catch (ClassNotFoundException | SQLException | DBException ex) {
-            ex.getMessage(DB_NOT_CONNECTED);
+        } catch (ClassNotFoundException | SQLException ex) {
+            try {
+                throw new DBException(DB_NOT_CONNECTED);
+            } catch (DBException e) {
+                e.getMessage();
+            }
         }
         return conn;
     }
@@ -44,7 +46,11 @@ public class DatabaseConnection {
             try {
                 conn.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                try {
+                    throw new DBException(CLOSE_CONN_ERROR);
+                } catch (DBException ex) {
+                    ex.getMessage();
+                }
             }
         }
     }
@@ -54,7 +60,11 @@ public class DatabaseConnection {
             try {
                 ps.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                try {
+                    throw new DBException(CLOSE_PS_ERROR);
+                } catch (DBException ex) {
+                    ex.getMessage();
+                }
             }
         }
     }
@@ -64,7 +74,11 @@ public class DatabaseConnection {
             try {
                 rs.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                try {
+                    throw new DBException(CLOSE_RS_ERROR);
+                } catch (DBException ex) {
+                    ex.getMessage();
+                }
             }
         }
     }

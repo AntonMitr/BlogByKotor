@@ -1,5 +1,6 @@
 package com.blog.by.kotor.question;
 
+import com.blog.by.kotor.DAOException;
 import com.blog.by.kotor.PremiumSubscription;
 import com.blog.by.kotor.Question;
 import com.blog.by.kotor.DatabaseConnection;
@@ -10,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.blog.by.kotor.DAOException.PREMIUM_SUBSCRIPTION_DAO_EXCEPTION;
+import static com.blog.by.kotor.DAOException.QUESTION_DAO_EXCEPTION;
 
 public class QuestionDAOImpl implements QuestionDAO {
     private static final String DELETE = "DELETE FROM questions WHERE id = ?";
@@ -27,10 +31,8 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     private final Question question;
 
-    private List<Question> questionList;
-
-    public QuestionDAOImpl() {
-        question = new Question();
+    public QuestionDAOImpl(Question question) {
+        this.question = question;
     }
 
     @Override
@@ -49,7 +51,11 @@ public class QuestionDAOImpl implements QuestionDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(QUESTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -58,7 +64,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public List<Question> getAll() {
-        questionList = new ArrayList<>();
+        List<Question> questionList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -74,7 +80,11 @@ public class QuestionDAOImpl implements QuestionDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(QUESTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -92,7 +102,11 @@ public class QuestionDAOImpl implements QuestionDAO {
 
             return ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(QUESTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -113,7 +127,11 @@ public class QuestionDAOImpl implements QuestionDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(QUESTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -132,7 +150,11 @@ public class QuestionDAOImpl implements QuestionDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(QUESTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -142,7 +164,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public List<Question> findByPollId(int pollId) {
-        questionList = new ArrayList<>();
+        List<Question> questionList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -159,7 +181,11 @@ public class QuestionDAOImpl implements QuestionDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(QUESTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

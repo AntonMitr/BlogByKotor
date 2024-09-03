@@ -1,9 +1,6 @@
 package com.blog.by.kotor.post_category;
 
-import com.blog.by.kotor.Comment;
-import com.blog.by.kotor.Post;
-import com.blog.by.kotor.PostCategory;
-import com.blog.by.kotor.DatabaseConnection;
+import com.blog.by.kotor.*;
 import com.blog.by.kotor.post.PostDAO;
 import com.blog.by.kotor.post.PostDAOImpl;
 
@@ -13,6 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.blog.by.kotor.DAOException.POST_CATEGORY_DAO_EXCEPTION;
+import static com.blog.by.kotor.DAOException.POST_DAO_EXCEPTION;
 
 public class PostCategoryDAOImpl implements PostCategoryDAO {
 
@@ -28,20 +28,7 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
 
     private ResultSet rs;
 
-    private final PostCategory postCategory;
-
-    private Post post;
-
-    private final PostDAO postDAO;
-
-    private List<PostCategory> postCategoryList;
-
-    private List<Post> postList;
-
     public PostCategoryDAOImpl() {
-        postCategory = new PostCategory();
-        post = new Post();
-        postDAO = new PostDAOImpl();
     }
 
     @Override
@@ -51,7 +38,7 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
 
     @Override
     public List<PostCategory> getAll() {
-        postCategoryList = new ArrayList<>();
+        List<PostCategory> postCategoryList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -67,7 +54,11 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
                 postCategoryList.add(postCategory);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POST_CATEGORY_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -85,7 +76,11 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
 
             return ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POST_CATEGORY_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -106,7 +101,11 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
 
             return ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POST_CATEGORY_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -125,7 +124,11 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POST_CATEGORY_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -135,8 +138,8 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
 
 
     @Override
-    public List<Post> findPostsByCategoryId(int categoryId) {
-        postList = new ArrayList<>();
+    public List<Post> findPostsByCategoryId(int categoryId, PostDAO postDAO) {
+        List<Post> postList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -146,12 +149,17 @@ public class PostCategoryDAOImpl implements PostCategoryDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                Post post;
                 post = postDAO.findById(rs.getInt("post_id"));
                 postList.add(post);
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(POST_CATEGORY_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

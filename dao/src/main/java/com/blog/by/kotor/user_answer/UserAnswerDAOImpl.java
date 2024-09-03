@@ -1,8 +1,6 @@
 package com.blog.by.kotor.user_answer;
 
-import com.blog.by.kotor.PremiumSubscription;
-import com.blog.by.kotor.UserAnswer;
-import com.blog.by.kotor.DatabaseConnection;
+import com.blog.by.kotor.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.blog.by.kotor.DAOException.USER_ANSWER_DAO_EXCEPTION;
+import static com.blog.by.kotor.DAOException.USER_DAO_EXCEPTION;
 
 public class UserAnswerDAOImpl implements UserAnswerDAO {
     private static final String DELETE = "DELETE FROM user_answer WHERE id = ?";
@@ -28,10 +29,8 @@ public class UserAnswerDAOImpl implements UserAnswerDAO {
 
     private final UserAnswer userAnswer;
 
-    private List<UserAnswer> userAnswerList;
-
-    public UserAnswerDAOImpl() {
-        userAnswer = new UserAnswer();
+    public UserAnswerDAOImpl(UserAnswer userAnswer) {
+        this.userAnswer = userAnswer;
     }
 
     @Override
@@ -52,7 +51,11 @@ public class UserAnswerDAOImpl implements UserAnswerDAO {
                 userAnswer.setCreatedAt(rs.getDate("created_at"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_ANSWER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -61,7 +64,7 @@ public class UserAnswerDAOImpl implements UserAnswerDAO {
 
     @Override
     public List<UserAnswer> getAll() {
-        userAnswerList = new ArrayList<>();
+         List<UserAnswer> userAnswerList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -80,7 +83,11 @@ public class UserAnswerDAOImpl implements UserAnswerDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_ANSWER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -102,7 +109,11 @@ public class UserAnswerDAOImpl implements UserAnswerDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_ANSWER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -126,7 +137,11 @@ public class UserAnswerDAOImpl implements UserAnswerDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_ANSWER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -145,7 +160,11 @@ public class UserAnswerDAOImpl implements UserAnswerDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_ANSWER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -155,7 +174,7 @@ public class UserAnswerDAOImpl implements UserAnswerDAO {
 
     @Override
     public List<UserAnswer> findByQuestionId(int questionId) {
-        userAnswerList = new ArrayList<>();
+        List <UserAnswer> userAnswerList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -174,7 +193,11 @@ public class UserAnswerDAOImpl implements UserAnswerDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_ANSWER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -183,7 +206,7 @@ public class UserAnswerDAOImpl implements UserAnswerDAO {
 
     @Override
     public List<UserAnswer> findByOptionId(int optionId) {
-        userAnswerList = new ArrayList<>();
+        List<UserAnswer> userAnswerList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -203,7 +226,11 @@ public class UserAnswerDAOImpl implements UserAnswerDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(USER_ANSWER_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

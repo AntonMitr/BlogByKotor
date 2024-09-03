@@ -1,6 +1,7 @@
 package com.blog.by.kotor.option;
 
 import com.blog.by.kotor.Comment;
+import com.blog.by.kotor.DAOException;
 import com.blog.by.kotor.Option;
 import com.blog.by.kotor.DatabaseConnection;
 
@@ -10,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.blog.by.kotor.DAOException.FILTER_DAO_EXCEPTION;
+import static com.blog.by.kotor.DAOException.OPTION_DAO_EXCEPTION;
 
 public class OptionDAOImpl implements OptionDAO {
 
@@ -28,10 +32,8 @@ public class OptionDAOImpl implements OptionDAO {
 
     private final Option option;
 
-    private List<Option> optionList;
-
-    public OptionDAOImpl() {
-        option = new Option();
+    public OptionDAOImpl(Option option) {
+        this.option = option;
     }
 
     @Override
@@ -49,7 +51,11 @@ public class OptionDAOImpl implements OptionDAO {
                 option.setOptionText(rs.getString("option_text"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(OPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -58,7 +64,7 @@ public class OptionDAOImpl implements OptionDAO {
 
     @Override
     public List<Option> getAll() {
-        optionList = new ArrayList<>();
+        List<Option> optionList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -67,7 +73,6 @@ public class OptionDAOImpl implements OptionDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                Option option = new Option();
                 option.setId(rs.getInt("id"));
                 option.setQuestionId(rs.getInt("question_id"));
                 option.setOptionText(rs.getString("option_text"));
@@ -75,7 +80,11 @@ public class OptionDAOImpl implements OptionDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(OPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -95,7 +104,11 @@ public class OptionDAOImpl implements OptionDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(OPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -117,7 +130,11 @@ public class OptionDAOImpl implements OptionDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(OPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -136,7 +153,11 @@ public class OptionDAOImpl implements OptionDAO {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(OPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
@@ -146,7 +167,7 @@ public class OptionDAOImpl implements OptionDAO {
 
     @Override
     public List<Option> findOptionByQuestionId(int questionId) {
-        optionList = new ArrayList<>();
+        List<Option> optionList = new ArrayList<>();
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -163,7 +184,11 @@ public class OptionDAOImpl implements OptionDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                throw new DAOException(OPTION_DAO_EXCEPTION);
+            } catch (DAOException ex) {
+                ex.getMessage();
+            }
         }
         return optionList;
     }
