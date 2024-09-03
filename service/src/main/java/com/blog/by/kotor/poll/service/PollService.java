@@ -5,10 +5,10 @@ import com.blog.by.kotor.PollDAO;
 
 public class PollService implements ImplPollService {
 
-    private PollDAO pollDAO;
+    private final PollDAO pollDAO;
 
-    public PollService() {
-        pollDAO = new PollDAO();
+    public PollService(PollDAO pollDAO) {
+        this.pollDAO = pollDAO;
     }
 
     @Override

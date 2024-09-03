@@ -7,8 +7,8 @@ public class CategoryService implements ImplCategoryService {
 
     private final CategoryDAO categoryDAO;
 
-    public CategoryService() {
-        categoryDAO = new CategoryDAO();
+    public CategoryService(CategoryDAO categoryDAO) {
+        this.categoryDAO = categoryDAO;
     }
 
     @Override

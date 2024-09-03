@@ -5,10 +5,10 @@ import com.blog.by.kotor.QuestionDAO;
 
 public class QuestionService {
 
-    private QuestionDAO questionDAO;
+    private final QuestionDAO questionDAO;
 
-    public QuestionService() {
-        questionDAO = new QuestionDAO();
+    public QuestionService(QuestionDAO questionDAO) {
+        this.questionDAO = questionDAO;
     }
 
     public void createQuestion(Question question) {

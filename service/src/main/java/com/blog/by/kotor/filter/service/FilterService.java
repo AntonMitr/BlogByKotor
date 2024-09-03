@@ -11,45 +11,31 @@ public class FilterService implements ImplFilterService {
 
     private final FilterDAO filterDAO;
 
-    private Filter filter;
-
-    private final TagDAO tagDAO;
-
-    private CategoryDAO categoryDAO;
-
-    private final PostTagDAO postTagDAO;
-
-    private final PostCategoryDAO postCategoryDAO;
+    private final CategoryDAO categoryDAO;
 
     private final PostDAO postDAO;
 
-    private List<Post> posts;
-
-    private List<PostTag> postTagList;
-
-    private List<PostCategory> postCategoryList;
-
-    public FilterService() {
-        filter = new Filter();
-        filterDAO = new FilterDAO();
-        tagDAO = new TagDAO();
-        postTagDAO = new PostTagDAO();
-        postDAO = new PostDAO();
-        categoryDAO = new CategoryDAO();
-        postCategoryDAO = new PostCategoryDAO();
+    public FilterService(FilterDAO filterDAO, CategoryDAO categoryDAO, PostDAO postDAO) {
+        this.filterDAO = filterDAO;
+        this.categoryDAO = categoryDAO;
+        this.postDAO = postDAO;
     }
 
     @Override
     public List<Post> findByTagCriteria(String criteria) {
-        posts = new ArrayList<>();
-        postTagList = new ArrayList<>();
+        List<Post> posts = new ArrayList<>();
+        List<PostTag> postTags;
 
-        filter = filterDAO.findByCriteria(criteria);
+        Filter filter = filterDAO.findByCriteria(criteria);
+
+        TagDAO tagDAO = new TagDAO();
 
         Tag tag = tagDAO.findByName(filter.getName());
 
-        postTagList = postTagDAO.findPostTagByTagId(tag.getId());
-        for (PostTag postTag : postTagList) {
+        PostTagDAO postTagDAO = new PostTagDAO();
+
+        postTags = postTagDAO.findPostTagByTagId(tag.getId());
+        for (PostTag postTag : postTags) {
             posts.add(postDAO.getById(postTag.getId().getPostId()));
         }
         return posts;
@@ -57,15 +43,17 @@ public class FilterService implements ImplFilterService {
 
     @Override
     public List<Post> findByCategoryCriteria(String criteria) {
-        posts = new ArrayList<>();
-        postCategoryList = new ArrayList<>();
+        List<Post> posts = new ArrayList<>();
+        List<PostCategory> postCategories;
 
-        filter = filterDAO.findByCriteria(criteria);
+        Filter filter = filterDAO.findByCriteria(criteria);
 
         Category category = categoryDAO.findByName(filter.getName());
 
-        postCategoryList = postCategoryDAO.findPostsAndCategoriesByCategoryId(category.getId());
-        for (PostCategory postCategory : postCategoryList) {
+        PostCategoryDAO postCategoryDAO = new PostCategoryDAO();
+
+        postCategories = postCategoryDAO.findPostsAndCategoriesByCategoryId(category.getId());
+        for (PostCategory postCategory : postCategories) {
             posts.add(postDAO.getById(postCategory.getId().getCategoryId()));
         }
         return posts;

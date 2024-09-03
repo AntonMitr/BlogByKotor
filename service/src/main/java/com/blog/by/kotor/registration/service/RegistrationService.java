@@ -5,17 +5,16 @@ import com.blog.by.kotor.UserDAO;
 
 public class RegistrationService implements ImplRegistrationService {
 
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
 
-    private boolean result;
-
-    public RegistrationService() {
-        userDAO = new UserDAO();
-        result = true;
+    public RegistrationService(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
     @Override
     public boolean register(User user) {
+        boolean result = true;
+
         if (user.getEmail() == null || user.getPassword() == null) {
             System.out.println("Пароль не может быть нулевым!");
             return false;

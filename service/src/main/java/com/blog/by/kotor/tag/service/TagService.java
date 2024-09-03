@@ -7,8 +7,8 @@ public class TagService implements ImplTagService {
 
     private final TagDAO tagDAO;
 
-    public TagService() {
-        tagDAO = new TagDAO();
+    public TagService(TagDAO tagDAO) {
+        this.tagDAO = tagDAO;
     }
 
     @Override

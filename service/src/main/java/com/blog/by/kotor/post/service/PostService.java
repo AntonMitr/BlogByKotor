@@ -5,10 +5,10 @@ import com.blog.by.kotor.PostDAO;
 
 public class PostService implements ImplPostService {
 
-    private PostDAO postDAO;
+    private final PostDAO postDAO;
 
-    public PostService() {
-        postDAO = new PostDAO();
+    public PostService(PostDAO postDAO) {
+        this.postDAO = postDAO;
     }
 
     @Override

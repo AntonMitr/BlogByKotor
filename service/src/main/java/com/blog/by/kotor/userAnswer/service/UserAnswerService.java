@@ -7,8 +7,8 @@ public class UserAnswerService implements ImplUserAnswerService {
 
     private final UserAnswerDAO userAnswerDAO;
 
-    public UserAnswerService() {
-        userAnswerDAO = new UserAnswerDAO();
+    public UserAnswerService(UserAnswerDAO userAnswerDAO) {
+        this.userAnswerDAO = userAnswerDAO;
     }
 
     @Override
