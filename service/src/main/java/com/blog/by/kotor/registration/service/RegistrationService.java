@@ -2,11 +2,15 @@ package com.blog.by.kotor.registration.service;
 
 import com.blog.by.kotor.User;
 import com.blog.by.kotor.UserDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RegistrationService implements ImplRegistrationService {
 
     private final UserDAO userDAO;
 
+    @Autowired
     public RegistrationService(UserDAO userDAO) {
         this.userDAO = userDAO;
     }

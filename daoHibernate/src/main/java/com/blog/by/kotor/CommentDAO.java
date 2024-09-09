@@ -2,9 +2,11 @@ package com.blog.by.kotor;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class CommentDAO extends AbstractHibernateDao<Comment> {
 
     public CommentDAO() {

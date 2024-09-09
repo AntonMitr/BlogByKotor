@@ -3,10 +3,13 @@ package com.blog.by.kotor.filter.service;
 import com.blog.by.kotor.*;
 import com.blog.by.kotor.PostCategory.PostCategory;
 import com.blog.by.kotor.PostTag.PostTag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class FilterService implements ImplFilterService {
 
     private final FilterDAO filterDAO;
@@ -15,6 +18,7 @@ public class FilterService implements ImplFilterService {
 
     private final PostDAO postDAO;
 
+    @Autowired
     public FilterService(FilterDAO filterDAO, CategoryDAO categoryDAO, PostDAO postDAO) {
         this.filterDAO = filterDAO;
         this.categoryDAO = categoryDAO;

@@ -2,7 +2,9 @@ package com.blog.by.kotor;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class CategoryDAO extends AbstractHibernateDao<Category> {
 
     public CategoryDAO() {

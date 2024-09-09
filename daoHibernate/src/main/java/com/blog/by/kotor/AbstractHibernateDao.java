@@ -7,6 +7,7 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
+
 public abstract class AbstractHibernateDao<T> {
 
     protected final SessionFactory sessionFactory = HibernateSessionsFactoryUtil.getSessionFactory();

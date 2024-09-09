@@ -3,9 +3,11 @@ package com.blog.by.kotor;
 import com.blog.by.kotor.PostTag.PostTag;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class PostTagDAO extends AbstractHibernateDao<PostTag> {
 
     public PostTagDAO() {

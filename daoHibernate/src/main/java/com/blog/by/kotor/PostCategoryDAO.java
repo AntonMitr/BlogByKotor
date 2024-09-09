@@ -3,10 +3,11 @@ package com.blog.by.kotor;
 import com.blog.by.kotor.PostCategory.PostCategory;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
+@Repository
 public class PostCategoryDAO extends AbstractHibernateDao<PostCategory> {
 
     public PostCategoryDAO() {

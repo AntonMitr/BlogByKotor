@@ -1,11 +1,15 @@
 package com.blog.by.kotor;
 
 import jakarta.persistence.*;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 
+@Component
+@Scope("prototype")
 @Entity
 @Table(name = "users")
 public class User {

@@ -1,10 +1,14 @@
 package com.blog.by.kotor.UserRole;
 
 import jakarta.persistence.Embeddable;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Component
+@Scope("prototype")
 @Embeddable
 public class UserRoleId implements Serializable {
 

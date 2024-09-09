@@ -3,9 +3,13 @@ package com.blog.by.kotor.PostTag;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+@Component
+@Scope("prototype")
 @Entity
 @Table(name = "posts_tags")
 public class PostTag {
