@@ -4,13 +4,17 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
+@Repository
 public abstract class AbstractHibernateDao<T> {
 
-    protected final SessionFactory sessionFactory = HibernateSessionsFactoryUtil.getSessionFactory();
+    @Autowired
+    protected SessionFactory sessionFactory;
+
     private Class<T> clazz;
 
     public AbstractHibernateDao(Class<T> clazzToSet) {
