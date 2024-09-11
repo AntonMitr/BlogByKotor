@@ -2,8 +2,11 @@ package com.blog.by.kotor.registration.service;
 
 import com.blog.by.kotor.DAOException;
 import com.blog.by.kotor.DBException;
+import com.blog.by.kotor.RegistrationException;
 import com.blog.by.kotor.User;
 import com.blog.by.kotor.user.UserDAOImpl;
+
+import static com.blog.by.kotor.RegistrationException.*;
 
 public class RegistrationServiceImpl implements RegistrationService {
 
@@ -11,22 +14,23 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public boolean register(User user) throws DAOException, DBException {
+    public boolean register(User user) throws DAOException, DBException, RegistrationException {
         boolean result = true;
 
-        if (user.getEmail() == null || user.getPassword() == null) {
-            System.out.println("Пароль не может быть нулевым!");
-            return false;
+        if (user.getEmail() == null) {
+            throw new RegistrationException(REGISTRATION_NULL_EMAIL);
+        }
+
+        if (user.getPassword() == null) {
+            throw new RegistrationException(REGISTRATION_NULL_PASSWORD);
         }
 
         if (user.getPassword().length() < 6) {
-            System.out.println("Пароль должен содержать менее 6 символов!");
-            return false;
+            throw new RegistrationException(REGISTRATION_SHORT_PASSWORD);
         }
 
         if (UserDAOImpl.getUserDAOImpl().findByEmail(user.getEmail())) {
-            System.out.println("Данный пользователь уже существует!");
-            return false;
+            throw new RegistrationException(REGISTRATION_EXISTING_USER);
         }
 
         UserDAOImpl.getUserDAOImpl().insert(user);
