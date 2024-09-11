@@ -1,9 +1,9 @@
 package com.blog.by.kotor.tag;
 
 import com.blog.by.kotor.DAOException;
-import com.blog.by.kotor.PremiumSubscription;
-import com.blog.by.kotor.Tag;
+import com.blog.by.kotor.DBException;
 import com.blog.by.kotor.DatabaseConnection;
+import com.blog.by.kotor.Tag;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,9 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.blog.by.kotor.DAOException.ROLE_DAO_EXCEPTION;
-import static com.blog.by.kotor.DAOException.TAG_DAO_EXCEPTION;
 
 public class TagDAOImpl implements TagDAO {
     private static final String DELETE = "DELETE FROM tags WHERE id = ?";
@@ -23,20 +20,25 @@ public class TagDAOImpl implements TagDAO {
     private static final String INSERT = "INSERT INTO tags (name) VALUES (?)";
     private static final String UPDATE = "UPDATE tags SET name = ? WHERE id = ?";
 
-    private Connection conn;
+    private static TagDAO tagDAO;
 
-    private PreparedStatement ps;
+    private TagDAOImpl() {
+    }
 
-    private ResultSet rs;
-
-    private final Tag tag;
-
-    public TagDAOImpl(Tag tag) {
-        this.tag = tag;
+    public static TagDAO getTagDAOImpl() {
+        if (tagDAO == null) {
+            tagDAO = new TagDAOImpl();
+        }
+        return tagDAO;
     }
 
     @Override
-    public Tag findById(int id) {
+    public Tag findById(int id) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Tag tag = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -45,16 +47,12 @@ public class TagDAOImpl implements TagDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                tag = new Tag();
                 tag.setId(rs.getInt("id"));
                 tag.setName(rs.getString("name"));
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(TAG_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+        throw new DAOException(DAOException.TAG_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -62,8 +60,12 @@ public class TagDAOImpl implements TagDAO {
     }
 
     @Override
-    public List<Tag> getAll() {
+    public List<Tag> getAll() throws DAOException, DBException {
         List<Tag> tagList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Tag tag = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -72,17 +74,13 @@ public class TagDAOImpl implements TagDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                tag = new Tag();
                 tag.setId(rs.getInt("id"));
                 tag.setName(rs.getString("name"));
                 tagList.add(tag);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(TAG_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.TAG_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -90,7 +88,10 @@ public class TagDAOImpl implements TagDAO {
     }
 
     @Override
-    public int insert(Tag tag) {
+    public int insert(Tag tag) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -98,46 +99,41 @@ public class TagDAOImpl implements TagDAO {
             ps.setString(1, tag.getName());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(TAG_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.TAG_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int update(Tag oldTag, Tag newTag) {
+    public int update(Tag oldTag, Tag newTag) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(UPDATE);
+
             ps.setString(1, newTag.getName());
             ps.setInt(2, oldTag.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(TAG_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.TAG_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int delete(Tag tag) {
+    public int delete(Tag tag) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -145,22 +141,21 @@ public class TagDAOImpl implements TagDAO {
             ps.setInt(1, tag.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(TAG_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.TAG_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public Tag findByName(String name) {
+    public Tag findByName(String name) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Tag tag = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -169,16 +164,12 @@ public class TagDAOImpl implements TagDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                tag = new Tag();
                 tag.setId(rs.getInt("id"));
                 tag.setName(rs.getString("name"));
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(TAG_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.TAG_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

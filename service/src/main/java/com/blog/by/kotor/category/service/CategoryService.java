@@ -1,20 +1,11 @@
 package com.blog.by.kotor.category.service;
 
 import com.blog.by.kotor.Category;
-import com.blog.by.kotor.category.CategoryDAO;
-import com.blog.by.kotor.category.CategoryDAOImpl;
+import com.blog.by.kotor.DAOException;
+import com.blog.by.kotor.DBException;
 
-public class CategoryService implements ImplCategoryService {
+public interface CategoryService {
 
-    private final CategoryDAO categoryDAO;
-
-    public CategoryService(CategoryDAOImpl categoryDAOImpl) {
-        this.categoryDAO = categoryDAOImpl;
-    }
-
-    @Override
-    public void createCategory(Category category) {
-        categoryDAO.insert(category);
-    }
+    void createCategory(Category category) throws DAOException, DBException;
 
 }

@@ -1,9 +1,9 @@
 package com.blog.by.kotor.question;
 
 import com.blog.by.kotor.DAOException;
-import com.blog.by.kotor.PremiumSubscription;
-import com.blog.by.kotor.Question;
+import com.blog.by.kotor.DBException;
 import com.blog.by.kotor.DatabaseConnection;
+import com.blog.by.kotor.Question;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,9 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.blog.by.kotor.DAOException.PREMIUM_SUBSCRIPTION_DAO_EXCEPTION;
-import static com.blog.by.kotor.DAOException.QUESTION_DAO_EXCEPTION;
 
 public class QuestionDAOImpl implements QuestionDAO {
     private static final String DELETE = "DELETE FROM questions WHERE id = ?";
@@ -23,20 +20,25 @@ public class QuestionDAOImpl implements QuestionDAO {
     private static final String INSERT = "INSERT INTO questions (poll_id, question_text) VALUES (?, ?)";
     private static final String UPDATE = "UPDATE questions SET poll_id = ?, question_text = ? WHERE id = ?";
 
-    private Connection conn;
+    private static QuestionDAO questionDAO;
 
-    private PreparedStatement ps;
+    private QuestionDAOImpl() {
+    }
 
-    private ResultSet rs;
-
-    private final Question question;
-
-    public QuestionDAOImpl(Question question) {
-        this.question = question;
+    public static QuestionDAO getQuestionDAOImpl() {
+        if (questionDAO == null) {
+            questionDAO = new QuestionDAOImpl();
+        }
+        return questionDAO;
     }
 
     @Override
-    public Question findById(int id) {
+    public Question findById(int id) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Question question = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -45,17 +47,13 @@ public class QuestionDAOImpl implements QuestionDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                question = new Question();
                 question.setId(rs.getInt("id"));
                 question.setPollId(rs.getInt("poll_id"));
                 question.setQuestionText(rs.getString("question_text"));
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(QUESTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.QUESTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -63,8 +61,12 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public List<Question> getAll() {
+    public List<Question> getAll() throws DAOException, DBException {
         List<Question> questionList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Question question = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -73,18 +75,14 @@ public class QuestionDAOImpl implements QuestionDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                question = new Question();
                 question.setId(rs.getInt("id"));
                 question.setPollId(rs.getInt("poll_id"));
                 question.setQuestionText(rs.getString("question_text"));
                 questionList.add(question);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(QUESTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.QUESTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -92,7 +90,10 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public int insert(Question question) {
+    public int insert(Question question) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -101,21 +102,19 @@ public class QuestionDAOImpl implements QuestionDAO {
             ps.setString(2, question.getQuestionText());
 
             return ps.executeUpdate();
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(QUESTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.QUESTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int update(Question oldQuestion, Question newQuestion) {
+    public int update(Question oldQuestion, Question newQuestion) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -125,22 +124,19 @@ public class QuestionDAOImpl implements QuestionDAO {
             ps.setInt(3, oldQuestion.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(QUESTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.QUESTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int delete(Question question) {
+    public int delete(Question question) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -148,23 +144,21 @@ public class QuestionDAOImpl implements QuestionDAO {
             ps.setInt(1, question.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(QUESTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.QUESTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public List<Question> findByPollId(int pollId) {
+    public List<Question> findByPollId(int pollId) throws DAOException, DBException {
         List<Question> questionList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Question question = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -174,18 +168,14 @@ public class QuestionDAOImpl implements QuestionDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                question = new Question();
                 question.setId(rs.getInt("id"));
                 question.setPollId(rs.getInt("poll_id"));
                 question.setQuestionText(rs.getString("question_text"));
                 questionList.add(question);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(QUESTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.QUESTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

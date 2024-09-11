@@ -1,20 +1,11 @@
 package com.blog.by.kotor.userAnswer.service;
 
+import com.blog.by.kotor.DAOException;
+import com.blog.by.kotor.DBException;
 import com.blog.by.kotor.UserAnswer;
-import com.blog.by.kotor.user_answer.UserAnswerDAO;
-import com.blog.by.kotor.user_answer.UserAnswerDAOImpl;
 
-public class UserAnswerService implements ImplUserAnswerService {
+public interface UserAnswerService {
 
-    private final UserAnswerDAO userAnswerDAO;
-
-    public UserAnswerService(UserAnswerDAOImpl userAnswerDAOImpl) {
-        userAnswerDAO = userAnswerDAOImpl;
-    }
-
-    @Override
-    public void createUserAnswer(UserAnswer userAnswer) {
-        userAnswerDAO.insert(userAnswer);
-    }
+    void createUserAnswer(UserAnswer userAnswer) throws DAOException, DBException;
 
 }

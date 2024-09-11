@@ -1,7 +1,6 @@
 package com.blog.by.kotor.post_tag;
 
 import com.blog.by.kotor.*;
-import com.blog.by.kotor.post.PostDAO;
 import com.blog.by.kotor.post.PostDAOImpl;
 
 import java.sql.Connection;
@@ -11,9 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.blog.by.kotor.DAOException.POST_CATEGORY_DAO_EXCEPTION;
-import static com.blog.by.kotor.DAOException.POST_TAG_DAO_EXCEPTION;
-
 public class PostTagDAOImpl implements PostTagDAO {
 
     private static final String DELETE = "DELETE FROM posts_tags WHERE post_id = ? AND tag_id = ?";
@@ -22,19 +18,16 @@ public class PostTagDAOImpl implements PostTagDAO {
     private static final String INSERT = "INSERT INTO posts_tags (post_id, tag_id) VALUES (?, ?)";
     private static final String UPDATE = "UPDATE posts_tags SET post_id = ?, tag_id = ? WHERE post_id = ? AND tag_id = ?";
 
-    private Connection conn;
+    private static PostTagDAO postTagDAO;
 
-    private PreparedStatement ps;
+    private PostTagDAOImpl() {
+    }
 
-    private ResultSet rs;
-
-    private final PostTag postTag;
-
-    private final PostDAO postDAO;
-
-    public PostTagDAOImpl(PostTag postTag, PostDAO postDAO) {
-        this.postTag = postTag;
-        this.postDAO = postDAO;
+    public static PostTagDAO getPostTagDAOImpl() {
+        if (postTagDAO == null) {
+            postTagDAO = new PostTagDAOImpl();
+        }
+        return postTagDAO;
     }
 
     @Override
@@ -43,8 +36,12 @@ public class PostTagDAOImpl implements PostTagDAO {
     }
 
     @Override
-    public List<PostTag> getAll() {
+    public List<PostTag> getAll() throws DAOException, DBException {
         List<PostTag> postTagList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        PostTag postTag = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -53,17 +50,13 @@ public class PostTagDAOImpl implements PostTagDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                postTag = new PostTag();
                 postTag.setTagId(rs.getInt("tag_id"));
                 postTag.setPostId(rs.getInt("post_id"));
                 postTagList.add(postTag);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_TAG_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_TAG_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -71,82 +64,79 @@ public class PostTagDAOImpl implements PostTagDAO {
     }
 
     @Override
-    public int insert(PostTag postTag) {
+    public int insert(PostTag postTag) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
+
             ps.setInt(1, postTag.getPostId());
             ps.setInt(2, postTag.getTagId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_TAG_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_TAG_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int update(PostTag oldPostTag, PostTag newPostTag) {
+    public int update(PostTag oldPostTag, PostTag newPostTag) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(UPDATE);
+
             ps.setInt(1, newPostTag.getPostId());
             ps.setInt(2, newPostTag.getTagId());
             ps.setInt(3, newPostTag.getPostId());
             ps.setInt(4, oldPostTag.getTagId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_TAG_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_TAG_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int delete(PostTag postTag) {
+    public int delete(PostTag postTag) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(DELETE);
+
             ps.setInt(1, postTag.getPostId());
             ps.setInt(2, postTag.getTagId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_TAG_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_TAG_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public List<Post> findPostsByTagId(int tagId) {
+    public List<Post> findPostsByTagId(int tagId) throws DAOException, DBException {
         List<Post> postList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
 
         try {
@@ -157,16 +147,11 @@ public class PostTagDAOImpl implements PostTagDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                Post post = postDAO.findById(rs.getInt("post_id"));
+                Post post = PostDAOImpl.getPostDAOImpl().findById(rs.getInt("post_id"));
                 postList.add(post);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_TAG_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_TAG_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

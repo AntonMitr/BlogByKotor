@@ -1,9 +1,9 @@
 package com.blog.by.kotor.role;
 
 import com.blog.by.kotor.DAOException;
-import com.blog.by.kotor.PremiumSubscription;
-import com.blog.by.kotor.Role;
+import com.blog.by.kotor.DBException;
 import com.blog.by.kotor.DatabaseConnection;
+import com.blog.by.kotor.Role;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,9 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.blog.by.kotor.DAOException.QUESTION_DAO_EXCEPTION;
-import static com.blog.by.kotor.DAOException.ROLE_DAO_EXCEPTION;
 
 public class RoleDAOImpl implements RoleDAO {
 
@@ -23,20 +20,25 @@ public class RoleDAOImpl implements RoleDAO {
     private static final String INSERT = "INSERT INTO roles (name) VALUES (?)";
     private static final String UPDATE = "UPDATE roles SET name = ? WHERE id = ?";
 
-    private Connection conn;
+    private static RoleDAO roleDAO;
 
-    private PreparedStatement ps;
+    private RoleDAOImpl() {
+    }
 
-    private ResultSet rs;
-
-    private final Role role;
-
-    public RoleDAOImpl(Role role) {
-        this.role = role;
+    public static RoleDAO getRoleDAOImpl() {
+        if (roleDAO == null) {
+            roleDAO = new RoleDAOImpl();
+        }
+        return roleDAO;
     }
 
     @Override
-    public Role findById(int id) {
+    public Role findById(int id) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Role role = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -45,16 +47,12 @@ public class RoleDAOImpl implements RoleDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                role = new Role();
                 role.setId(rs.getInt("id"));
                 role.setName(rs.getString("name"));
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(ROLE_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.ROLE_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -62,27 +60,27 @@ public class RoleDAOImpl implements RoleDAO {
     }
 
     @Override
-    public List<Role> getAll() {
+    public List<Role> getAll() throws DAOException, DBException {
         List<Role> roleList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Role role = null;
 
         try {
             conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(FIND_ALL);
-            rs = ps.executeQuery();
 
+            rs = ps.executeQuery();
             while (rs.next()) {
+                role = new Role();
                 role.setId(rs.getInt("id"));
                 role.setName(rs.getString("name"));
                 roleList.add(role);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(ROLE_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.ROLE_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -90,7 +88,10 @@ public class RoleDAOImpl implements RoleDAO {
     }
 
     @Override
-    public int insert(Role role) {
+    public int insert(Role role) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -98,22 +99,19 @@ public class RoleDAOImpl implements RoleDAO {
             ps.setString(1, role.getName());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(ROLE_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.ROLE_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int update(Role oldRole, Role newRole) {
+    public int update(Role oldRole, Role newRole) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -123,22 +121,19 @@ public class RoleDAOImpl implements RoleDAO {
             ps.setInt(2, oldRole.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(ROLE_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.ROLE_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int delete(Role role) {
+    public int delete(Role role) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -146,18 +141,12 @@ public class RoleDAOImpl implements RoleDAO {
             ps.setInt(1, role.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(ROLE_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.ROLE_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
 }

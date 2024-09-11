@@ -1,27 +1,10 @@
 package com.blog.by.kotor.login.service;
 
-import com.blog.by.kotor.user.UserDAO;
-import com.blog.by.kotor.user.UserDAOImpl;
+import com.blog.by.kotor.DAOException;
+import com.blog.by.kotor.DBException;
 
-public class LoginService implements ImplLoginService {
+public interface LoginService {
 
-    private final UserDAO userDAO;
-
-    public LoginService(UserDAOImpl userDAOImpl) {
-        userDAO = userDAOImpl;
-    }
-
-    @Override
-    public boolean login(String email, String password) {
-        boolean result = true;
-
-        if (userDAO.findByEmail(email) && userDAO.findByPassword(password)) {
-            System.out.println("Добро пожаловать!");
-        } else {
-            System.out.println("Неправильный логин или пароль!");
-            result = false;
-        }
-        return result;
-    }
+    boolean login(String email, String password) throws DAOException, DBException;
 
 }

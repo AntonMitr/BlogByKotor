@@ -1,20 +1,11 @@
 package com.blog.by.kotor.role.service;
 
+import com.blog.by.kotor.DAOException;
+import com.blog.by.kotor.DBException;
 import com.blog.by.kotor.UserRole;
-import com.blog.by.kotor.user_role.UserRoleDAO;
-import com.blog.by.kotor.user_role.UserRoleDAOImpl;
 
-public class RoleService implements ImplRoleService {
+public interface RoleService {
 
-    private final UserRoleDAO userRoleDAO;
-
-    public RoleService(UserRoleDAOImpl userRoleDAOImpl) {
-        userRoleDAO = userRoleDAOImpl;
-    }
-
-    @Override
-    public void addUserRole(UserRole userRole) {
-        userRoleDAO.insert(userRole);
-    }
+    void addUserRole(UserRole userRole) throws DAOException, DBException;
 
 }

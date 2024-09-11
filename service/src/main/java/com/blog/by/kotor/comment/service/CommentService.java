@@ -1,27 +1,15 @@
 package com.blog.by.kotor.comment.service;
 
 import com.blog.by.kotor.Comment;
-import com.blog.by.kotor.comment.CommentDAO;
-import com.blog.by.kotor.comment.CommentDAOImpl;
+import com.blog.by.kotor.DAOException;
+import com.blog.by.kotor.DBException;
 
 import java.util.List;
 
-public class CommentService implements ImplCommentService {
+public interface CommentService {
 
-    private final CommentDAO commentDAO;
+    void createComment(Comment comment) throws DAOException, DBException;
 
-    public CommentService(CommentDAOImpl commentDAOImpl) {
-        commentDAO = commentDAOImpl;
-    }
-
-    @Override
-    public void createComment(Comment comment) {
-        commentDAO.insert(comment);
-    }
-
-    @Override
-    public List<Comment> findCommentByPostId(int postId) {
-        return commentDAO.findByPostId(postId);
-    }
+    public List<Comment> findCommentByPostId(int postId) throws DAOException, DBException;
 
 }

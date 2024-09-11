@@ -1,9 +1,9 @@
 package com.blog.by.kotor.premium.subscription;
 
-import com.blog.by.kotor.Comment;
 import com.blog.by.kotor.DAOException;
-import com.blog.by.kotor.PremiumSubscription;
+import com.blog.by.kotor.DBException;
 import com.blog.by.kotor.DatabaseConnection;
+import com.blog.by.kotor.PremiumSubscription;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,9 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.blog.by.kotor.DAOException.POST_TAG_DAO_EXCEPTION;
-import static com.blog.by.kotor.DAOException.PREMIUM_SUBSCRIPTION_DAO_EXCEPTION;
 
 public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
 
@@ -25,22 +22,25 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
     private static final String INSERT = "INSERT INTO premium_subscriptions (user_id, start_date, end_date) VALUES (?, ?, ?)";
     private static final String UPDATE = "UPDATE premium_subscriptions SET user_id = ?, start_date = ?, end_date = ? WHERE id = ?";
 
-    private Connection conn;
+    private static PremiumSubscriptionDAO premiumSubscriptionDAO;
 
-    private PreparedStatement ps;
+    private PremiumSubscriptionDAOImpl() {
+    }
 
-    private ResultSet rs;
-
-    private final PremiumSubscription premiumSubscription;
-
-    private boolean isPremiumSubscription;
-
-    public PremiumSubscriptionDAOImpl(PremiumSubscription premiumSubscription) {
-        this.premiumSubscription = premiumSubscription;
+    public static PremiumSubscriptionDAO getPremiumSubscriptionDAOImpl() {
+        if (premiumSubscriptionDAO == null) {
+            premiumSubscriptionDAO = new PremiumSubscriptionDAOImpl();
+        }
+        return premiumSubscriptionDAO;
     }
 
     @Override
-    public PremiumSubscription findById(int id) {
+    public PremiumSubscription findById(int id) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        PremiumSubscription premiumSubscription = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -49,18 +49,14 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                premiumSubscription = new PremiumSubscription();
                 premiumSubscription.setId(rs.getInt("id"));
                 premiumSubscription.setUserId(rs.getInt("user_id"));
                 premiumSubscription.setStartDate(rs.getDate("start_date"));
                 premiumSubscription.setEndDate(rs.getDate("end_date"));
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.PREMIUM_SUBSCRIPTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -69,8 +65,12 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
 
 
     @Override
-    public List<PremiumSubscription> getAll() {
+    public List<PremiumSubscription> getAll() throws DAOException, DBException {
         List<PremiumSubscription> premiumSubscriptionList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        PremiumSubscription premiumSubscription = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -79,19 +79,15 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                premiumSubscription = new PremiumSubscription();
                 premiumSubscription.setId(rs.getInt("id"));
                 premiumSubscription.setUserId(rs.getInt("user_id"));
                 premiumSubscription.setStartDate(rs.getDate("start_date"));
                 premiumSubscription.setEndDate(rs.getDate("end_date"));
                 premiumSubscriptionList.add(premiumSubscription);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.PREMIUM_SUBSCRIPTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -99,34 +95,36 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
     }
 
     @Override
-    public int insert(PremiumSubscription premiumSubscription) {
+    public int insert(PremiumSubscription premiumSubscription) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
+
             ps.setInt(1, premiumSubscription.getUserId());
             ps.setDate(2, premiumSubscription.getStartDate());
             ps.setDate(3, premiumSubscription.getEndDate());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.PREMIUM_SUBSCRIPTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int update(PremiumSubscription oldPremiumSubscription, PremiumSubscription newPremiumSubscription) {
+    public int update(PremiumSubscription oldPremiumSubscription, PremiumSubscription newPremiumSubscription) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
+
             ps = conn.prepareStatement(UPDATE);
 
             ps.setInt(1, newPremiumSubscription.getUserId());
@@ -135,22 +133,19 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
             ps.setInt(4, oldPremiumSubscription.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.PREMIUM_SUBSCRIPTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int delete(PremiumSubscription premiumSubscription) {
+    public int delete(PremiumSubscription premiumSubscription) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -158,24 +153,22 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
             ps.setInt(1, premiumSubscription.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.PREMIUM_SUBSCRIPTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
 
     @Override
-    public List<PremiumSubscription> findByUserId(int userId) {
+    public List<PremiumSubscription> findByUserId(int userId) throws DAOException, DBException {
         List<PremiumSubscription> premiumSubscriptionList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        PremiumSubscription premiumSubscription = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -185,19 +178,15 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                premiumSubscription = new PremiumSubscription();
                 premiumSubscription.setId(rs.getInt("id"));
                 premiumSubscription.setUserId(rs.getInt("user_id"));
                 premiumSubscription.setStartDate(rs.getDate("start_date"));
                 premiumSubscription.setEndDate(rs.getDate("end_date"));
                 premiumSubscriptionList.add(premiumSubscription);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.PREMIUM_SUBSCRIPTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -205,8 +194,11 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
     }
 
     @Override
-    public boolean isPremiumSubscription(int userId) {
-        isPremiumSubscription = false;
+    public boolean isPremiumSubscription(int userId) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean isPremiumSubscription = false;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -218,13 +210,8 @@ public class PremiumSubscriptionDAOImpl implements PremiumSubscriptionDAO {
             while (rs.next()) {
                 isPremiumSubscription = rs.getBoolean("is_premium");
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(PREMIUM_SUBSCRIPTION_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.PREMIUM_SUBSCRIPTION_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

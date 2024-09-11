@@ -1,9 +1,9 @@
 package com.blog.by.kotor.user;
 
 import com.blog.by.kotor.DAOException;
-import com.blog.by.kotor.PremiumSubscription;
-import com.blog.by.kotor.User;
+import com.blog.by.kotor.DBException;
 import com.blog.by.kotor.DatabaseConnection;
+import com.blog.by.kotor.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,9 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.blog.by.kotor.DAOException.TAG_DAO_EXCEPTION;
-import static com.blog.by.kotor.DAOException.USER_DAO_EXCEPTION;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -25,22 +22,25 @@ public class UserDAOImpl implements UserDAO {
     private static final String INSERT = "INSERT INTO users(name, email, password, createdAt) VALUES (?, ?, ?, ?)";
     private static final String UPDATE = "UPDATE users SET name = ?, email = ?, password = ?, created_at = ? WHERE id = ?";
 
-    private Connection conn;
+    private static UserDAO userDAO;
 
-    private boolean result;
+    private UserDAOImpl() {
+    }
 
-    private PreparedStatement ps;
-
-    private ResultSet rs;
-
-    private final User user;
-
-    public UserDAOImpl(User user) {
-        this.user = user;
+    public static UserDAO getUserDAOImpl() {
+        if (userDAO == null) {
+            userDAO = new UserDAOImpl();
+        }
+        return userDAO;
     }
 
     @Override
-    public User findById(int id) {
+    public User findById(int id) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        User user = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -49,14 +49,15 @@ public class UserDAOImpl implements UserDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                user = new User();
                 user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
                 user.setCreatedAt(rs.getDate("created_at"));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.USER_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -64,8 +65,12 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll() throws DAOException, DBException {
         List<User> userList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        User user = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -74,6 +79,7 @@ public class UserDAOImpl implements UserDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                user = new User();
                 user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
@@ -81,13 +87,8 @@ public class UserDAOImpl implements UserDAO {
                 user.setCreatedAt(rs.getDate("created_at"));
                 userList.add(user);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(USER_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.USER_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -95,36 +96,39 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public int insert(User user) {
+    public int insert(User user) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
+
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
             ps.setDate(4, user.getCreatedAt());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(USER_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.USER_DAO_EXCEPTION_TEXT, ex);
         } finally {
-            DatabaseConnection.closeAll(conn, ps, rs);
+            DatabaseConnection.closeConnection(conn);
+            DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int update(User oldUser, User newUser) {
+    public int update(User oldUser, User newUser) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(UPDATE);
+
             ps.setString(1, newUser.getName());
             ps.setString(2, newUser.getEmail());
             ps.setString(3, newUser.getPassword());
@@ -132,22 +136,19 @@ public class UserDAOImpl implements UserDAO {
             ps.setInt(5, oldUser.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(USER_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.USER_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int delete(User user) {
+    public int delete(User user) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -155,23 +156,20 @@ public class UserDAOImpl implements UserDAO {
             ps.setInt(1, user.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(USER_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.USER_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public boolean findByEmail(String email) {
-        result = false;
+    public boolean findByEmail(String email) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean result = false;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -181,13 +179,8 @@ public class UserDAOImpl implements UserDAO {
 
             rs = ps.executeQuery();
             result = rs.next();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(USER_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.USER_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -195,8 +188,11 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public boolean findByPassword(String password) {
-        result = false;
+    public boolean findByPassword(String password) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean result = false;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -206,13 +202,8 @@ public class UserDAOImpl implements UserDAO {
 
             rs = ps.executeQuery();
             result = rs.next();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(USER_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.USER_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

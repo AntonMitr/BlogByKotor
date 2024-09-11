@@ -1,8 +1,9 @@
 package com.blog.by.kotor.comment;
 
-import com.blog.by.kotor.DAOException;
-import com.blog.by.kotor.DatabaseConnection;
 import com.blog.by.kotor.Comment;
+import com.blog.by.kotor.DAOException;
+import com.blog.by.kotor.DBException;
+import com.blog.by.kotor.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,9 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.blog.by.kotor.DAOException.CATEGORY_DAO_EXCEPTION;
-import static com.blog.by.kotor.DAOException.COMMENT_DAO_EXCEPTION;
 
 public class CommentDAOImpl implements CommentDAO {
 
@@ -23,20 +21,24 @@ public class CommentDAOImpl implements CommentDAO {
     private static final String INSERT = "INSERT INTO comments (user_id, post_id, content, created_at) VALUES (?, ?, ?, ?)";
     private static final String UPDATE = "UPDATE comments SET user_id = ?, post_id = ?, content = ?, created_at = ? WHERE id = ?";
 
-    private Connection conn;
+    private static CommentDAO commentDAO;
 
-    private PreparedStatement ps;
+    private CommentDAOImpl() {
+    }
 
-    private ResultSet rs;
-
-    private final Comment comment;
-
-    public CommentDAOImpl(Comment comment) {
-        this.comment = comment;
+    public static CommentDAO getCommentDAOImpl() {
+        if (commentDAO == null) {
+            commentDAO = new CommentDAOImpl();
+        }
+        return commentDAO;
     }
 
     @Override
-    public Comment findById(int id) {
+    public Comment findById(int id) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Comment comment = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -46,19 +48,15 @@ public class CommentDAOImpl implements CommentDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                comment = new Comment();
                 comment.setId(rs.getInt("id"));
                 comment.setUserId(rs.getInt("user_id"));
                 comment.setPostId(rs.getInt("post_id"));
                 comment.setContent(rs.getString("content"));
                 comment.setCreatedAt(rs.getDate("created_at"));
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(COMMENT_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.COMMENT_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -66,8 +64,12 @@ public class CommentDAOImpl implements CommentDAO {
     }
 
     @Override
-    public List<Comment> getAll() {
+    public List<Comment> getAll() throws DAOException, DBException {
         List<Comment> commentList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Comment comment = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -76,6 +78,7 @@ public class CommentDAOImpl implements CommentDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                comment = new Comment();
                 comment.setId(rs.getInt("id"));
                 comment.setUserId(rs.getInt("user_id"));
                 comment.setPostId(rs.getInt("post_id"));
@@ -83,13 +86,8 @@ public class CommentDAOImpl implements CommentDAO {
                 comment.setCreatedAt(rs.getDate("created_at"));
                 commentList.add(comment);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(COMMENT_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.COMMENT_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -97,8 +95,12 @@ public class CommentDAOImpl implements CommentDAO {
     }
 
     @Override
-    public List<Comment> findByPostId(int postId) {
+    public List<Comment> findByPostId(int postId) throws DAOException, DBException {
         List<Comment> commentList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Comment comment = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -108,6 +110,7 @@ public class CommentDAOImpl implements CommentDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                comment = new Comment();
                 comment.setId(rs.getInt("id"));
                 comment.setUserId(rs.getInt("user_id"));
                 comment.setPostId(rs.getInt("post_id"));
@@ -115,13 +118,8 @@ public class CommentDAOImpl implements CommentDAO {
                 comment.setCreatedAt(rs.getDate("created_at"));
                 commentList.add(comment);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(COMMENT_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.COMMENT_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -129,37 +127,37 @@ public class CommentDAOImpl implements CommentDAO {
     }
 
     @Override
-    public int insert(Comment comment) {
+    public int insert(Comment comment) throws DAOException, DBException{
+        Connection conn = null;
+        PreparedStatement ps = null;
 
         try {
             conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
+
             ps.setInt(1, comment.getUserId());
             ps.setInt(2, comment.getPostId());
             ps.setString(3, comment.getContent());
             ps.setDate(4, comment.getCreatedAt());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(COMMENT_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.COMMENT_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int update(Comment oldComment, Comment newComment) {
+    public int update(Comment oldComment, Comment newComment) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
 
         try {
             conn = DatabaseConnection.getConnection();
+
             ps = conn.prepareStatement(UPDATE);
 
             ps.setInt(1, newComment.getUserId());
@@ -169,22 +167,18 @@ public class CommentDAOImpl implements CommentDAO {
             ps.setInt(5, oldComment.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(COMMENT_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.COMMENT_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int delete(Comment comment) {
+    public int delete(Comment comment) throws DAOException, DBException{
+        Connection conn = null;
+        PreparedStatement ps = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -193,18 +187,12 @@ public class CommentDAOImpl implements CommentDAO {
             ps.setInt(1, comment.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(COMMENT_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.COMMENT_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
 }

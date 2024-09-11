@@ -1,9 +1,9 @@
 package com.blog.by.kotor.post;
 
-import com.blog.by.kotor.Comment;
 import com.blog.by.kotor.DAOException;
-import com.blog.by.kotor.Post;
+import com.blog.by.kotor.DBException;
 import com.blog.by.kotor.DatabaseConnection;
+import com.blog.by.kotor.Post;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,9 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.blog.by.kotor.DAOException.POLL_DAO_EXCEPTION;
-import static com.blog.by.kotor.DAOException.POST_DAO_EXCEPTION;
 
 public class PostDAOImpl implements PostDAO {
 
@@ -27,20 +24,25 @@ public class PostDAOImpl implements PostDAO {
     private static final String UPDATE = "UPDATE posts SET (user_id = ?, title = ?, content = ?, date_published = ?, is_premium = ?, is_published = ? WHERE id = ?";
     private static final String PUBLISH = "UPDATE posts SET is_published = ? WHERE id = ?";
 
-    private Connection conn;
+    private static PostDAO postDAO;
 
-    private PreparedStatement ps;
+    private PostDAOImpl() {
+    }
 
-    private ResultSet rs;
-
-    private final Post post;
-
-    public PostDAOImpl(Post post) {
-        this.post = post;
+    public static PostDAO getPostDAOImpl() {
+        if (postDAO == null) {
+            postDAO = new PostDAOImpl();
+        }
+        return postDAO;
     }
 
     @Override
-    public Post findById(int id) {
+    public Post findById(int id) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Post post = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -49,6 +51,7 @@ public class PostDAOImpl implements PostDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                post = new Post();
                 post.setId(rs.getInt("id"));
                 post.setUserId(rs.getInt("user_id"));
                 post.setTitle(rs.getString("title"));
@@ -57,12 +60,8 @@ public class PostDAOImpl implements PostDAO {
                 post.setPremium(rs.getBoolean("is_premium"));
                 post.setPublished(rs.getBoolean("is_published"));
             }
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -70,8 +69,12 @@ public class PostDAOImpl implements PostDAO {
     }
 
     @Override
-    public List<Post> getAll() {
+    public List<Post> getAll() throws DAOException, DBException {
         List<Post> postList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Post post = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -80,6 +83,7 @@ public class PostDAOImpl implements PostDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                post = new Post();
                 post.setId(rs.getInt("id"));
                 post.setUserId(rs.getInt("user_id"));
                 post.setTitle(rs.getString("title"));
@@ -89,13 +93,8 @@ public class PostDAOImpl implements PostDAO {
                 post.setPublished(rs.getBoolean("is_published"));
                 postList.add(post);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -103,11 +102,16 @@ public class PostDAOImpl implements PostDAO {
     }
 
     @Override
-    public int insert(Post post) {
+    public int insert(Post post) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(INSERT);
+
             ps.setInt(1, post.getUserId());
             ps.setString(2, post.getTitle());
             ps.setString(3, post.getContent());
@@ -116,25 +120,23 @@ public class PostDAOImpl implements PostDAO {
             ps.setBoolean(6, post.isPublished());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
-        return 0;
     }
 
     @Override
-    public int update(Post oldPost, Post newPost) {
+    public int update(Post oldPost, Post newPost) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
             ps = conn.prepareStatement(UPDATE);
+
             ps.setInt(1, newPost.getUserId());
             ps.setString(2, newPost.getTitle());
             ps.setString(3, newPost.getContent());
@@ -144,22 +146,19 @@ public class PostDAOImpl implements PostDAO {
             ps.setInt(7, oldPost.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public int delete(Post post) {
+    public int delete(Post post) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
 
@@ -167,23 +166,21 @@ public class PostDAOImpl implements PostDAO {
             ps.setInt(1, post.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public List<Post> findByUserId(int userId) {
+    public List<Post> findByUserId(int userId) throws DAOException, DBException {
         List<Post> postList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Post post = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -193,6 +190,7 @@ public class PostDAOImpl implements PostDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                post = new Post();
                 post.setId(rs.getInt("id"));
                 post.setUserId(rs.getInt("user_id"));
                 post.setTitle(rs.getString("title"));
@@ -202,13 +200,8 @@ public class PostDAOImpl implements PostDAO {
                 post.setPublished(rs.getBoolean("is_published"));
                 postList.add(post);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -216,8 +209,12 @@ public class PostDAOImpl implements PostDAO {
     }
 
     @Override
-    public List<Post> findByTitle(String title) {
-        List <Post> postList = new ArrayList<>();
+    public List<Post> findByTitle(String title) throws DAOException, DBException {
+        List<Post> postList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Post post = null;
 
         try {
             conn = DatabaseConnection.getConnection();
@@ -227,6 +224,7 @@ public class PostDAOImpl implements PostDAO {
 
             rs = ps.executeQuery();
             while (rs.next()) {
+                post = new Post();
                 post.setId(rs.getInt("id"));
                 post.setUserId(rs.getInt("user_id"));
                 post.setTitle(rs.getString("title"));
@@ -236,13 +234,8 @@ public class PostDAOImpl implements PostDAO {
                 post.setPublished(rs.getBoolean("is_published"));
                 postList.add(post);
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }
@@ -250,31 +243,32 @@ public class PostDAOImpl implements PostDAO {
     }
 
     @Override
-    public int publishPost(Post post) {
+    public int publishPost(Post post) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
         try {
             conn = DatabaseConnection.getConnection();
+
             ps = conn.prepareStatement(PUBLISH);
 
             ps.setBoolean(1, true);
             ps.setInt(2, post.getId());
 
             return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeConnection(conn);
             DatabaseConnection.closePreparedStatement(ps);
         }
-        return 0;
     }
 
     @Override
-    public boolean isPremium(int postId) {
+    public boolean isPremium(int postId) throws DAOException, DBException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         boolean isPremium = false;
 
         try {
@@ -287,13 +281,8 @@ public class PostDAOImpl implements PostDAO {
             while (rs.next()) {
                 isPremium = rs.getBoolean("is_premium");
             }
-
-        } catch (SQLException e) {
-            try {
-                throw new DAOException(POST_DAO_EXCEPTION);
-            } catch (DAOException ex) {
-                ex.getMessage();
-            }
+        } catch (SQLException ex) {
+            throw new DAOException(DAOException.POST_DAO_EXCEPTION_TEXT, ex);
         } finally {
             DatabaseConnection.closeAll(conn, ps, rs);
         }

@@ -11,14 +11,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>model</module>
         <module>service</module>
         <module>dao</module>
-        <module>util</module>
-        <module>dao</module>
         <module>model</module>
-        <module>service</module>
-        <module>util</module>
         <module>starter</module>
         <module>exception</module>
     </modules>

@@ -1,20 +1,11 @@
 package com.blog.by.kotor.tag.service;
 
+import com.blog.by.kotor.DAOException;
+import com.blog.by.kotor.DBException;
 import com.blog.by.kotor.Tag;
-import com.blog.by.kotor.tag.TagDAO;
-import com.blog.by.kotor.tag.TagDAOImpl;
 
-public class TagService implements ImplTagService {
+public interface TagService {
 
-    private final TagDAO tagDAO;
-
-    public TagService(TagDAOImpl tagDAOImpl) {
-        tagDAO = tagDAOImpl;
-    }
-
-    @Override
-    public void createTag(Tag tag) {
-        tagDAO.insert(tag);
-    }
+    void createTag(Tag tag) throws DAOException, DBException;
 
 }

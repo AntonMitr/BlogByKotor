@@ -1,35 +1,16 @@
 package com.blog.by.kotor.post.service;
 
+import com.blog.by.kotor.DAOException;
+import com.blog.by.kotor.DBException;
 import com.blog.by.kotor.Post;
-import com.blog.by.kotor.post.PostDAO;
-import com.blog.by.kotor.post.PostDAOImpl;
 
-public class PostService implements ImplPostService{
+public interface PostService {
 
-    private final PostDAO postDAO;
+    void createPost(Post post) throws DAOException, DBException;
 
-    public PostService(PostDAOImpl postDAOImpl) {
-        postDAO = postDAOImpl;
-    }
+    void updatePost(Post oldPost, Post newPost) throws DAOException, DBException;
 
-    @Override
-    public void createPost(Post post) {
-        postDAO.insert(post);
-    }
+    void publishPost(Post post) throws DAOException, DBException;
 
-    @Override
-    public void updatePost(Post oldPost, Post newPost) {
-        postDAO.update(oldPost, newPost);
-    }
-
-    @Override
-    public void publishPost(Post post) {
-        postDAO.publishPost(post);
-    }
-
-    @Override
-    public boolean isPremium(Post post) {
-        return postDAO.isPremium(post.getId());
-    }
-
+    boolean isPremium(Post post) throws DAOException, DBException;
 }
