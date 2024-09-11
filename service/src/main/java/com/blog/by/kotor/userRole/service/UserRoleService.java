@@ -1,27 +1,23 @@
 package com.blog.by.kotor.userRole.service;
 
-import com.blog.by.kotor.Role;
-import com.blog.by.kotor.RoleDAO;
 import com.blog.by.kotor.UserRole.UserRole;
-import com.blog.by.kotor.UserRoleDAO;
 
-public class UserRoleService implements ImplUserRoleService {
+import java.util.List;
 
-    private final UserRoleDAO userRoleDAO;
+public interface UserRoleService {
 
-    private final RoleDAO roleDAO;
+    String getUserRole(int userId);
 
-    public UserRoleService(UserRoleDAO userRoleDAO, RoleDAO roleDAO) {
-        this.userRoleDAO = userRoleDAO;
-        this.roleDAO = roleDAO;
-    }
+    void createUserRole(UserRole userRole);
 
-    @Override
-    public String getUserRole(int userId) {
-        UserRole userRole = userRoleDAO.findUserAndRoleByUserId(userId);
+    UserRole getUserRoleById(int id);
 
-        Role role = roleDAO.getById(userRole.getUserRoleId().getUserId());
-        return role.getName();
-    }
+    List<UserRole> getAllUserRole();
+
+    void updateUserRole(UserRole userRole);
+
+    void deleteUserRoleById(int id);
+
+    void deleteUserRole(UserRole userRole);
 
 }

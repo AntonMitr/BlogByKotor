@@ -1,29 +1,23 @@
 package com.blog.by.kotor.post.service;
 
 import com.blog.by.kotor.Post;
-import com.blog.by.kotor.PostDAO;
 
-public class PostService implements ImplPostService {
+import java.util.List;
 
-    private final PostDAO postDAO;
+public interface PostService {
 
-    public PostService(PostDAO postDAO) {
-        this.postDAO = postDAO;
-    }
+    void createPost(Post post);
 
-    @Override
-    public void createPost(Post post) {
-        postDAO.create(post);
-    }
+    Post getPostById(int id);
 
-    @Override
-    public void updatePost(Post post) {
-        postDAO.update(post);
-    }
+    List<Post> getAllPost();
 
-    @Override
-    public void publishPost(Post post) {
-        postDAO.publishPost(post);
-    }
+    void updatePost(Post post);
+
+    void deletePostById(int id);
+
+    void deletePost(Post post);
+
+    void publishPost(Post post);
 
 }

@@ -1,6 +1,6 @@
 package com.blog.by.kotor;
 
-import com.blog.by.kotor.post.service.PostService;
+import com.blog.by.kotor.post.service.PostServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,10 +10,9 @@ public class Starter {
 
     public static void main(String[] args) {
 
-        PostDAO postDAO = new PostDAO();
-        PostService postService = new PostService(postDAO);
+        PostServiceImpl postService = new PostServiceImpl();
         Post post = new Post();
-        UserDAO userDAO = new UserDAO();
+        UserDAO userDAO = UserDAO.getUserDAO();
         User user = userDAO.getById(1);
         post.setContent("Hello world I love ItClopedia");
         post.setUser(user);

@@ -1,19 +1,21 @@
 package com.blog.by.kotor.category.service;
 
 import com.blog.by.kotor.Category;
-import com.blog.by.kotor.CategoryDAO;
 
-public class CategoryService implements ImplCategoryService {
+import java.util.List;
 
-    private final CategoryDAO categoryDAO;
+public interface CategoryService {
 
-    public CategoryService(CategoryDAO categoryDAO) {
-        this.categoryDAO = categoryDAO;
-    }
+    Category getCategoryById(int id);
 
-    @Override
-    public void createCategory(Category category) {
-        categoryDAO.create(category);
-    }
+    List<Category> getAllCategory();
+
+    void createCategory(Category category);
+
+    void updateCategory(Category category);
+
+    void deleteCategoryById(int id);
+
+    void deleteCategory(Category category);
 
 }

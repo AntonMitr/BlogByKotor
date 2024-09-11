@@ -1,27 +1,24 @@
 package com.blog.by.kotor.comment.service;
 
-
+import com.blog.by.kotor.Category;
 import com.blog.by.kotor.Comment;
-import com.blog.by.kotor.CommentDAO;
 
 import java.util.List;
 
-public class CommentService implements ImplCommentService {
+public interface CommentService {
 
-    private final CommentDAO commentDAO;
+    void createComment(Comment comment);
 
-    public CommentService(CommentDAO commentDAO) {
-        this.commentDAO = commentDAO;
-    }
+    List<Comment> findCommentByPostId(int postId);
 
-    @Override
-    public void createComment(Comment comment) {
-        commentDAO.create(comment);
-    }
+    Comment getCommentById(int id);
 
-    @Override
-    public List<Comment> findCommentByPostId(int postId) {
-        return commentDAO.findByPostId(postId);
-    }
+    List<Comment> getAllComment();
+
+    void updateComment(Comment comment);
+
+    void deleteCommentById(int id);
+
+    void deleteComment(Comment comment);
 
 }

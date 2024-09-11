@@ -7,10 +7,8 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>starter</artifactId>
+    <artifactId>dao-hibernate</artifactId>
     <packaging>jar</packaging>
-
-    <name>starter</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,21 +18,7 @@
 
         <dependency>
             <groupId>com.blog.by.kotor</groupId>
-            <artifactId>dao-hibernate</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.blog.by.kotor</groupId>
             <artifactId>model</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.blog.by.kotor</groupId>
-            <artifactId>service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

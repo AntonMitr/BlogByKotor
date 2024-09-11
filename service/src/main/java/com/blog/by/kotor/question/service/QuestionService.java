@@ -1,18 +1,23 @@
 package com.blog.by.kotor.question.service;
 
 import com.blog.by.kotor.Question;
-import com.blog.by.kotor.QuestionDAO;
 
-public class QuestionService {
+import java.util.List;
 
-    private final QuestionDAO questionDAO;
+public interface QuestionService {
 
-    public QuestionService(QuestionDAO questionDAO) {
-        this.questionDAO = questionDAO;
-    }
+    void createQuestion(Question question);
 
-    public void createQuestion(Question question) {
-        questionDAO.create(question);
-    }
+    Question getQuestionById(int id);
+
+    List<Question> getAllQuestion();
+
+    void updateQuestion(Question question);
+
+    void deleteQuestionById(int id);
+
+    void deleteQuestion(Question question);
+
+    Question findByPollId(int pollId);
 
 }

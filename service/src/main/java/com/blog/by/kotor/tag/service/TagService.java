@@ -1,19 +1,21 @@
 package com.blog.by.kotor.tag.service;
 
 import com.blog.by.kotor.Tag;
-import com.blog.by.kotor.TagDAO;
 
-public class TagService implements ImplTagService {
+import java.util.List;
 
-    private final TagDAO tagDAO;
+public interface TagService {
 
-    public TagService(TagDAO tagDAO) {
-        this.tagDAO = tagDAO;
-    }
+    void createTag(Tag tag);
 
-    @Override
-    public void createTag(Tag tag) {
-        tagDAO.create(tag);
-    }
+    Tag getTagById(int id);
+
+    List<Tag> getAllTag();
+
+    void updateTag(Tag tag);
+
+    void deleteTagById(int id);
+
+    void deleteTag(Tag tag);
 
 }

@@ -14,9 +14,8 @@
 
     <modules>
         <module>starter</module>
-        <module>daoHibernate</module>
+        <module>dao-hibernate</module>
         <module>model</module>
-        <module>util</module>
         <module>service</module>
         <module>model</module>
     </modules>

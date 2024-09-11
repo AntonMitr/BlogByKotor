@@ -1,19 +1,21 @@
 package com.blog.by.kotor.poll.service;
 
 import com.blog.by.kotor.Poll;
-import com.blog.by.kotor.PollDAO;
 
-public class PollService implements ImplPollService {
+import java.util.List;
 
-    private final PollDAO pollDAO;
+public interface PollService {
 
-    public PollService(PollDAO pollDAO) {
-        this.pollDAO = pollDAO;
-    }
+    void createPoll(Poll poll);
 
-    @Override
-    public void createPoll(Poll poll) {
-        pollDAO.create(poll);
-    }
+    Poll getPollById(int id);
+
+    List<Poll> getAllPoll();
+
+    void updatePoll(Poll poll);
+
+    void deletePollById(int id);
+
+    void deletePoll(Poll poll);
 
 }
