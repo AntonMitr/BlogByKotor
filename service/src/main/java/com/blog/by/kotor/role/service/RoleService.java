@@ -1,23 +1,24 @@
 package com.blog.by.kotor.role.service;
 
+import com.blog.by.kotor.Role;
 import com.blog.by.kotor.UserRole.UserRole;
-import com.blog.by.kotor.UserRoleDAO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
-public class RoleService implements ImplRoleService {
+import java.util.List;
 
-    private final UserRoleDAO userRoleDAO;
+public interface RoleService {
 
-    @Autowired
-    public RoleService(UserRoleDAO userRoleDAO) {
-        this.userRoleDAO = userRoleDAO;
-    }
+    void createRole(Role role);
 
-    @Override
-    public void addUserRole(UserRole userRole) {
-        userRoleDAO.create(userRole);
-    }
+    Role getRoleById(int id);
+
+    List<Role> getAllRole();
+
+    void updateRole(Role role);
+
+    void deleteRoleById(int id);
+
+    void deleteRole(Role role);
+
+    void addUserRole(UserRole userRole);
 
 }

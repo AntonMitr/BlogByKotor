@@ -1,0 +1,28 @@
+package com.blog.by.kotor;
+
+import com.blog.by.kotor.UserRole.UserRole;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+@Repository
+@Transactional
+public class UserRoleDAO extends AbstractHibernateDao<UserRole> {
+
+    public UserRoleDAO() {
+        super(UserRole.class);
+    }
+
+    @Transactional(readOnly = true)
+    public UserRole findUserAndRoleByUserId(int userId) {
+        String hql = "from UserRole userRole where userRole.userRoleId.userId = :userId";
+        try (Session session = sessionFactory.openSession()) {
+            Query<UserRole> query = session.createQuery(hql, UserRole.class);
+            query.setParameter("userId", userId);
+            return query.getSingleResult();
+        }
+
+    }
+
+}

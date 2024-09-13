@@ -7,10 +7,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 
-@Component
-@Scope("prototype")
-@Entity
-@Table(name = "question")
+@Entity()
+@Table(name = "questions")
 public class Question {
 
     @Id

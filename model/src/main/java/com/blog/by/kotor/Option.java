@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
-@Scope("prototype")
 @Entity
 @Table(name = "options")
 public class Option {

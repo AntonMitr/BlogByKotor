@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import java.sql.Date;
 import java.util.Objects;
 
-@Component
-@Scope("prototype")
 @Entity
 @Table(name = "polls")
 public class Poll {
@@ -16,15 +14,20 @@ public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
     @Column(name = "title")
     private String title;
+
     @Column(name = "description")
     private String description;
+
     @Column(name = "created_at")
     private Date createdAt;
+
     @OneToOne(mappedBy = "poll", fetch = FetchType.EAGER)
     private Question question;
 

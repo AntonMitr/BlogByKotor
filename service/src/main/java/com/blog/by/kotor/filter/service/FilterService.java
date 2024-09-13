@@ -1,66 +1,26 @@
 package com.blog.by.kotor.filter.service;
 
-import com.blog.by.kotor.*;
-import com.blog.by.kotor.PostCategory.PostCategory;
-import com.blog.by.kotor.PostTag.PostTag;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.blog.by.kotor.Filter;
+import com.blog.by.kotor.Post;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class FilterService implements ImplFilterService {
+public interface FilterService {
 
-    private final FilterDAO filterDAO;
+    List<Post> findByTagCriteria(String criteria);
 
-    private final CategoryDAO categoryDAO;
+    List<Post> findByCategoryCriteria(String criteria);
 
-    private final PostDAO postDAO;
+    void createFilter(Filter filter);
 
-    @Autowired
-    public FilterService(FilterDAO filterDAO, CategoryDAO categoryDAO, PostDAO postDAO) {
-        this.filterDAO = filterDAO;
-        this.categoryDAO = categoryDAO;
-        this.postDAO = postDAO;
-    }
+    Filter getFilterById(int id);
 
-    @Override
-    public List<Post> findByTagCriteria(String criteria) {
-        List<Post> posts = new ArrayList<>();
-        List<PostTag> postTags;
+    List<Filter> getAllFilter();
 
-        Filter filter = filterDAO.findByCriteria(criteria);
+    void updateFilter(Filter filter);
 
-        TagDAO tagDAO = new TagDAO();
+    void deleteFilterById(int id);
 
-        Tag tag = tagDAO.findByName(filter.getName());
-
-        PostTagDAO postTagDAO = new PostTagDAO();
-
-        postTags = postTagDAO.findPostTagByTagId(tag.getId());
-        for (PostTag postTag : postTags) {
-            posts.add(postDAO.getById(postTag.getId().getPostId()));
-        }
-        return posts;
-    }
-
-    @Override
-    public List<Post> findByCategoryCriteria(String criteria) {
-        List<Post> posts = new ArrayList<>();
-        List<PostCategory> postCategories;
-
-        Filter filter = filterDAO.findByCriteria(criteria);
-
-        Category category = categoryDAO.findByName(filter.getName());
-
-        PostCategoryDAO postCategoryDAO = new PostCategoryDAO();
-
-        postCategories = postCategoryDAO.findPostsAndCategoriesByCategoryId(category.getId());
-        for (PostCategory postCategory : postCategories) {
-            posts.add(postDAO.getById(postCategory.getId().getCategoryId()));
-        }
-        return posts;
-    }
+    void deleteFilter(Filter filter);
 
 }

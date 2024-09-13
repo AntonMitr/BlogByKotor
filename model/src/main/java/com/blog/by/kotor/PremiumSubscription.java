@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 
-@Component
-@Scope("prototype")
 @Entity
 @Table(name = "premium_subscriptions")
 public class PremiumSubscription {

@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 
-@Component
-@Scope("prototype")
 @Entity
 @Table(name = "roles")
 public class Role {

@@ -8,8 +8,6 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 
-@Component
-@Scope("prototype")
 @Entity
 @Table(name = "users")
 public class User {

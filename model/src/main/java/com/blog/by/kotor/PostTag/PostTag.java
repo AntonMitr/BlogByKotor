@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-@Component
-@Scope("prototype")
 @Entity
 @Table(name = "posts_tags")
 public class PostTag {

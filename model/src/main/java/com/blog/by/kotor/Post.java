@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import java.sql.Date;
 import java.util.List;
 
-@Component
-@Scope("prototype")
 @Entity
 @Table(name = "posts")
 public class Post {

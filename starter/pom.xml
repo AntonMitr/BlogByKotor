@@ -1,6 +1,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.blog.by.kotor</groupId>
         <artifactId>BlogByKotor</artifactId>
@@ -19,8 +20,9 @@
     <dependencies>
 
         <dependency>
+
             <groupId>com.blog.by.kotor</groupId>
-            <artifactId>daoHibernate</artifactId>
+            <artifactId>dao-hibernate</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
@@ -35,6 +37,13 @@
         <dependency>
             <groupId>com.blog.by.kotor</groupId>
             <artifactId>service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.blog.by.kotor</groupId>
+            <artifactId>spring-config</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

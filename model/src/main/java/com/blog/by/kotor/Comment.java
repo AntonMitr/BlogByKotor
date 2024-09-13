@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import java.sql.Date;
 import java.util.Objects;
 
-@Component
-@Scope("prototype")
 @Entity
 @Table(name = "comments")
 public class Comment {

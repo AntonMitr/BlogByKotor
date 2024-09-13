@@ -1,7 +1,6 @@
 package com.blog.by.kotor;
 
-import com.blog.by.kotor.category.service.CategoryService;
-import com.blog.by.kotor.registration.service.RegistrationService;
+import com.blog.by.kotor.role.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -13,16 +12,14 @@ public class Starter {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MyConfig.class);
 
-        RegistrationService registrationService = context.getBean(RegistrationService.class);
+        Role role = new Role();
 
-        User user = context.getBean(User.class);
+        RoleService roleService = context.getBean(RoleService.class);
 
-        user.setId(10);
-        user.setEmail("test@test.com");
-        user.setName("Pavel");
-        user.setPassword("123456");
+        role.setId(5);
+        role.setName("ldknsdk");
 
-        registrationService.register(user);
+        roleService.createRole(role);
 
         context.close();
     }

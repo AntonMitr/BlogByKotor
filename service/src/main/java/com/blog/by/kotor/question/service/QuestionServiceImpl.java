@@ -1,0 +1,63 @@
+package com.blog.by.kotor.question.service;
+
+import com.blog.by.kotor.Question;
+import com.blog.by.kotor.QuestionDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+public class QuestionServiceImpl implements QuestionService {
+
+    private final QuestionDAO questionDAO;
+
+    @Autowired
+    public QuestionServiceImpl(QuestionDAO questionDAO) {
+        this.questionDAO = questionDAO;
+    }
+
+    @Override
+    @Transactional
+    public void createQuestion(Question question) {
+        questionDAO.create(question);
+    }
+
+    @Override
+    @Transactional
+    public Question getQuestionById(int id) {
+        return questionDAO.getById(id);
+    }
+
+    @Override
+    @Transactional
+    public List<Question> getAllQuestion() {
+        return questionDAO.getAll();
+    }
+
+    @Override
+    @Transactional
+    public void updateQuestion(Question question) {
+        questionDAO.update(question);
+    }
+
+    @Override
+    @Transactional
+    public void deleteQuestionById(int id) {
+        questionDAO.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteQuestion(Question question) {
+        questionDAO.delete(question);
+    }
+
+    @Override
+    @Transactional
+    public Question findByPollId(int pollId) {
+        return questionDAO.findByPollId(pollId);
+    }
+
+}
