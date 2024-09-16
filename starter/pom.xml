@@ -20,7 +20,6 @@
     <dependencies>
 
         <dependency>
-
             <groupId>com.blog.by.kotor</groupId>
             <artifactId>dao-hibernate</artifactId>
             <version>0.0.1-SNAPSHOT</version>
@@ -43,7 +42,7 @@
 
         <dependency>
             <groupId>com.blog.by.kotor</groupId>
-            <artifactId>spring-config</artifactId>
+            <artifactId>spring</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

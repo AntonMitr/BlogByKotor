@@ -17,7 +17,7 @@
         <module>dao-hibernate</module>
         <module>model</module>
         <module>service</module>
-        <module>spring-config</module>
+        <module>spring</module>
     </modules>
 
     <dependencies>
@@ -41,20 +41,14 @@
             <version>1.4.12</version>
         </dependency>
 
+        <!-- Hibernate Core dependency -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>6.5.2.Final</version>
-            <type>pom</type>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.6.15.Final</version>
-        </dependency>
-
+        <!-- Spring dependencies -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -70,7 +64,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>5.3.20</version>
+            <version>6.1.12</version>
         </dependency>
 
     </dependencies>
