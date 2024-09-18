@@ -1,4 +1,4 @@
-package com.blog.by.kotor.PostTag;
+package com.blog.by.kotor.postCategory;
 
 import jakarta.persistence.Embeddable;
 
@@ -6,13 +6,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class PostTagId implements Serializable {
+public class PostCategoryId implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private int postId;
 
-    private int tagId;
+    private int categoryId;
 
     public int getPostId() {
         return postId;
@@ -22,25 +22,24 @@ public class PostTagId implements Serializable {
         this.postId = postId;
     }
 
-    public int getTagId() {
-        return tagId;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setTagId(int tagId) {
-        this.tagId = tagId;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PostTagId postTagId = (PostTagId) o;
-        return postId == postTagId.postId && tagId == postTagId.tagId;
+        PostCategoryId that = (PostCategoryId) o;
+        return postId == that.postId && categoryId == that.categoryId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(postId, tagId);
+        return Objects.hash(postId, categoryId);
     }
-
 }

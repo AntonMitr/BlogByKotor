@@ -1,4 +1,4 @@
-package com.blog.by.kotor.UserRole;
+package com.blog.by.kotor.userRole;
 
 import jakarta.persistence.Embeddable;
 

@@ -1,8 +1,8 @@
 package com.blog.by.kotor.filter.service;
 
 import com.blog.by.kotor.*;
-import com.blog.by.kotor.PostCategory.PostCategory;
-import com.blog.by.kotor.PostTag.PostTag;
+import com.blog.by.kotor.postCategory.PostCategory;
+import com.blog.by.kotor.postTag.PostTag;
 
 import java.util.ArrayList;
 import java.util.List;

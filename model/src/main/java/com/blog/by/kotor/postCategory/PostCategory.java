@@ -1,4 +1,4 @@
-package com.blog.by.kotor.PostTag;
+package com.blog.by.kotor.postCategory;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -7,17 +7,17 @@ import jakarta.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "posts_tags")
-public class PostTag {
+@Table(name = "posts_categories")
+public class PostCategory {
 
     @EmbeddedId
-    private PostTagId id;
+    private PostCategoryId id;
 
-    public PostTagId getId() {
+    public PostCategoryId getId() {
         return id;
     }
 
-    public void setId(PostTagId id) {
+    public void setId(PostCategoryId id) {
         this.id = id;
     }
 
@@ -25,8 +25,8 @@ public class PostTag {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PostTag postTag = (PostTag) o;
-        return Objects.equals(id, postTag.id);
+        PostCategory that = (PostCategory) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class PostTag {
 
     @Override
     public String toString() {
-        return "PostTag{" +
+        return "PostCategory{" +
                 "id=" + id +
                 '}';
     }

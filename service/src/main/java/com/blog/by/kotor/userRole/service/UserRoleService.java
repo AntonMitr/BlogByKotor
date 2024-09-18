@@ -1,6 +1,6 @@
 package com.blog.by.kotor.userRole.service;
 
-import com.blog.by.kotor.UserRole.UserRole;
+import com.blog.by.kotor.userRole.UserRole;
 
 import java.util.List;
 

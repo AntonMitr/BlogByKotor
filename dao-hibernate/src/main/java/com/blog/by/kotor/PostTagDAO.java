@@ -1,6 +1,6 @@
 package com.blog.by.kotor;
 
-import com.blog.by.kotor.PostTag.PostTag;
+import com.blog.by.kotor.postTag.PostTag;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 

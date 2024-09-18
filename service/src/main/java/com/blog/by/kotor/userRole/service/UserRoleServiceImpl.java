@@ -2,7 +2,7 @@ package com.blog.by.kotor.userRole.service;
 
 import com.blog.by.kotor.Role;
 import com.blog.by.kotor.RoleDAO;
-import com.blog.by.kotor.UserRole.UserRole;
+import com.blog.by.kotor.userRole.UserRole;
 import com.blog.by.kotor.UserRoleDAO;
 
 import java.util.List;

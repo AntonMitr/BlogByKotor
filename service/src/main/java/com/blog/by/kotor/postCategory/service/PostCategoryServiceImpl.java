@@ -1,6 +1,6 @@
 package com.blog.by.kotor.postCategory.service;
 
-import com.blog.by.kotor.PostCategory.PostCategory;
+import com.blog.by.kotor.postCategory.PostCategory;
 import com.blog.by.kotor.PostCategoryDAO;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.blog.by.kotor;
 
-import com.blog.by.kotor.PostCategory.PostCategory;
-import com.blog.by.kotor.PostTag.PostTag;
-import com.blog.by.kotor.UserRole.UserRole;
+import com.blog.by.kotor.postCategory.PostCategory;
+import com.blog.by.kotor.postTag.PostTag;
+import com.blog.by.kotor.userRole.UserRole;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
