@@ -16,7 +16,10 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>Starter</module>
+		<module>starter</module>
+		<module>model</module>
+		<module>repository</module>
+		<module>service</module>
 	</modules>
 
 	<properties>
