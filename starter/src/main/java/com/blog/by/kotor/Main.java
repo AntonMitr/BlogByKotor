@@ -1,18 +1,17 @@
 package com.blog.by.kotor;
 
-import com.blog.by.kotor.tag.service.TagService;
-import com.blog.by.kotor.tag.service.TagServiceImpl;
+import com.blog.by.kotor.login.service.LoginService;
+import com.blog.by.kotor.login.service.LoginServiceImpl;
 
 public class Main {
 
     public static void main(String[] args) {
-        TagService tagService = new TagServiceImpl();
-        Tag tag = new Tag();
-        tag.setName("Tag valera");
+        LoginService loginService = new LoginServiceImpl();
+
         try {
-            tagService.createTag(tag);
-        } catch (DAOException | DBException ex) {
-            ex.getMessage();
+            loginService.login("Anton1234@gmail.com","qwerty1");
+        } catch (LoginException | DAOException | DBException ex) {
+            System.out.println(ex.getMessage());
         }
 
     }

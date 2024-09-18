@@ -13,6 +13,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public RegistrationServiceImpl() {
     }
 
+
     @Override
     public boolean register(User user) throws DAOException, DBException, RegistrationException {
         boolean result = true;
@@ -36,4 +37,5 @@ public class RegistrationServiceImpl implements RegistrationService {
         UserDAOImpl.getUserDAOImpl().insert(user);
         return result;
     }
+
 }

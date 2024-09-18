@@ -12,7 +12,7 @@ public class DatabaseConnection {
     private static final String DB_USER;
     private static final String DB_PASSWORD;
 
-    private static DatabaseConnection databaseConnection;
+    private static Connection conn;
 
     static {
         ResourceBundle rb = ResourceBundle.getBundle("db");
@@ -22,23 +22,14 @@ public class DatabaseConnection {
         DB_PASSWORD = rb.getString("db.password");
     }
 
-    private DatabaseConnection() {
-    }
-
-    public static DatabaseConnection getDatabaseConnection() {
-        if (databaseConnection == null) {
-            databaseConnection = new DatabaseConnection();
-        }
-        return databaseConnection;
-    }
-
     public static Connection getConnection() throws DBException {
-        Connection conn = null;
-        try {
-            Class.forName(DB_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-        } catch (ClassNotFoundException | SQLException ex) {
-            throw new DBException(DB_NOT_CONNECTED_TEXT, ex);
+        if(conn == null) {
+            try {
+                Class.forName(DB_DRIVER);
+                conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            } catch (ClassNotFoundException | SQLException ex) {
+                throw new DBException(DB_NOT_CONNECTED_TEXT, ex);
+            }
         }
         return conn;
     }
