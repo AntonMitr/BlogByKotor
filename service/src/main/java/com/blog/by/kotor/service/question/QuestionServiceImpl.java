@@ -1,63 +1,59 @@
-package com.blog.by.kotor.service;
+package com.blog.by.kotor.service.question;
 
-import com.blog.by.kotor.dao.QuestionDAO;
 import com.blog.by.kotor.model.Question;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.blog.by.kotor.repository.QuestionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
-    private final QuestionDAO questionDAO;
-
-    @Autowired
-    public QuestionServiceImpl(QuestionDAO questionDAO) {
-        this.questionDAO = questionDAO;
-    }
+    private final QuestionRepository questionRepository;
 
     @Override
     @Transactional
     public void createQuestion(Question question) {
-        questionDAO.create(question);
+        questionRepository.save(question);
     }
 
     @Override
     @Transactional
     public Question getQuestionById(Integer id) {
-        return questionDAO.getById(id);
+        return questionRepository.getReferenceById(id);
     }
 
     @Override
     @Transactional
     public List<Question> getAllQuestion() {
-        return questionDAO.getAll();
+        return questionRepository.findAll();
     }
 
     @Override
     @Transactional
     public void updateQuestion(Question question) {
-        questionDAO.update(question);
+        questionRepository.saveAndFlush(question);
     }
 
     @Override
     @Transactional
     public void deleteQuestionById(Integer id) {
-        questionDAO.deleteById(id);
+        questionRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteQuestion(Question question) {
-        questionDAO.delete(question);
+        questionRepository.delete(question);
     }
 
     @Override
     @Transactional
     public Question findByPollId(Integer pollId) {
-        return questionDAO.findByPollId(pollId);
+        return questionRepository.findByPollId(pollId);
     }
 
 }

@@ -18,6 +18,4 @@ public interface PostService {
 
     void deletePost(Post post);
 
-    void publishPost(Post post);
-
 }

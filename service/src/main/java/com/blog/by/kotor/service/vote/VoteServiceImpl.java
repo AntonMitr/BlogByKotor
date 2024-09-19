@@ -1,57 +1,53 @@
-package com.blog.by.kotor.service;
+package com.blog.by.kotor.service.vote;
 
 import com.blog.by.kotor.model.Vote;
-import com.blog.by.kotor.dao.VoteDAO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.blog.by.kotor.repository.VoteRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class VoteServiceImpl implements VoteService {
 
-    private final VoteDAO voteDAO;
-
-    @Autowired
-    public VoteServiceImpl(VoteDAO voteDAO) {
-        this.voteDAO = voteDAO;
-    }
+    private final VoteRepository voteRepository;
 
     @Override
     @Transactional
     public void createVote(Vote vote) {
-        voteDAO.create(vote);
+        voteRepository.save(vote);
     }
 
     @Override
     @Transactional
     public Vote getVoteById(Integer id) {
-        return voteDAO.getById(id);
+        return voteRepository.getReferenceById(id);
     }
 
     @Override
     @Transactional
     public List<Vote> getAllVote() {
-        return voteDAO.getAll();
+        return voteRepository.findAll();
     }
 
     @Override
     @Transactional
     public void updateVote(Vote vote) {
-        voteDAO.update(vote);
+        voteRepository.saveAndFlush(vote);
     }
 
     @Override
     @Transactional
     public void deleteVoteById(Integer id) {
-        voteDAO.deleteById(id);
+        voteRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteVote(Vote vote) {
-        voteDAO.delete(vote);
+        voteRepository.delete(vote);
     }
 
 }

@@ -1,68 +1,63 @@
-package com.blog.by.kotor.service;
+package com.blog.by.kotor.service.role;
 
 import com.blog.by.kotor.model.Role;
-import com.blog.by.kotor.dao.RoleDAO;
 import com.blog.by.kotor.model.userRole.UserRole;
-import com.blog.by.kotor.dao.UserRoleDAO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.blog.by.kotor.repository.RoleRepository;
+import com.blog.by.kotor.repository.UserRoleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    private final UserRoleDAO userRoleDAO;
+    private final UserRoleRepository userRoleRepository;
 
-    private final RoleDAO roleDAO;
-
-    @Autowired
-    public RoleServiceImpl(UserRoleDAO userRoleDAO, RoleDAO roleDAO) {
-        this.userRoleDAO = userRoleDAO;
-        this.roleDAO = roleDAO;
-    }
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
     public void createRole(Role role) {
-        roleDAO.create(role);
+        roleRepository.save(role);
     }
 
     @Override
     @Transactional
     public Role getRoleById(Integer id) {
-        return roleDAO.getById(id);
+        return roleRepository.getReferenceById(id);
     }
 
     @Override
     @Transactional
     public List<Role> getAllRole() {
-        return roleDAO.getAll();
+        return roleRepository.findAll();
     }
 
     @Override
     @Transactional
     public void updateRole(Role role) {
-        roleDAO.update(role);
+        roleRepository.saveAndFlush(role);
     }
 
     @Override
     @Transactional
     public void deleteRoleById(Integer id) {
-        roleDAO.deleteById(id);
+        roleRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteRole(Role role) {
-        roleDAO.delete(role);
+        roleRepository.delete(role);
     }
 
     @Override
     @Transactional
     public void addUserRole(UserRole userRole) {
-        userRoleDAO.create(userRole);
+        userRoleRepository.save(userRole);
     }
 
 }

@@ -1,63 +1,53 @@
 package com.blog.by.kotor.service.post;
 
-import com.blog.by.kotor.dao.PostDAO;
 import com.blog.by.kotor.model.Post;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.blog.by.kotor.repository.PostRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class PostServiceImpl implements PostService {
 
-    private final PostDAO postDAO;
-
-    @Autowired
-    public PostServiceImpl(PostDAO postDAO) {
-        this.postDAO = postDAO;
-    }
+    private final PostRepository postRepository;
 
     @Override
     @Transactional
     public void createPost(Post post) {
-        postDAO.create(post);
+        postRepository.save(post);
     }
 
     @Override
     @Transactional
     public Post getPostById(Integer id) {
-        return postDAO.getById(id);
+        return postRepository.getReferenceById(id);
     }
 
     @Override
     @Transactional
     public List<Post> getAllPost() {
-        return postDAO.getAll();
+        return postRepository.findAll();
     }
 
     @Override
     @Transactional
     public void updatePost(Post post) {
-        postDAO.update(post);
+        postRepository.saveAndFlush(post);
     }
 
     @Override
     @Transactional
     public void deletePostById(Integer id) {
-        postDAO.deleteById(id);
+        postRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deletePost(Post post) {
-        postDAO.delete(post);
-    }
-
-    @Override
-    @Transactional
-    public void publishPost(Post post) {
-        postDAO.publishPost(post);
+        postRepository.delete(post);
     }
 
 }

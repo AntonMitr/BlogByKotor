@@ -1,57 +1,53 @@
-package com.blog.by.kotor.service;
+package com.blog.by.kotor.service.user;
 
 import com.blog.by.kotor.model.User;
-import com.blog.by.kotor.dao.UserDAO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.blog.by.kotor.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserDAO userDAO;
-
-    @Autowired
-    public UserServiceImpl(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
     public void createUser(User user) {
-        userDAO.create(user);
+        userRepository.save(user);
     }
 
     @Override
     @Transactional
     public User getUserById(Integer id) {
-        return userDAO.getById(id);
+        return userRepository.getReferenceById(id);
     }
 
     @Override
     @Transactional
     public List<User> getAllUser() {
-        return userDAO.getAll();
+        return userRepository.findAll();
     }
 
     @Override
     @Transactional
     public void updateUser(User user) {
-        userDAO.update(user);
+        userRepository.saveAndFlush(user);
     }
 
     @Override
     @Transactional
     public void deleteUserById(Integer id) {
-        userDAO.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteUser(User user) {
-        userDAO.delete(user);
+        userRepository.delete(user);
     }
 
 }

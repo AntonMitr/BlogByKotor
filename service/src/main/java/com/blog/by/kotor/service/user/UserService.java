@@ -1,4 +1,4 @@
-package com.blog.by.kotor.service;
+package com.blog.by.kotor.service.user;
 
 import com.blog.by.kotor.model.User;
 

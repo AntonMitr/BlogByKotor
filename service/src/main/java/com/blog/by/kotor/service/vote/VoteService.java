@@ -1,4 +1,4 @@
-package com.blog.by.kotor.service;
+package com.blog.by.kotor.service.vote;
 
 import com.blog.by.kotor.model.Vote;
 

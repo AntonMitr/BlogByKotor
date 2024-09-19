@@ -1,57 +1,53 @@
-package com.blog.by.kotor.service;
+package com.blog.by.kotor.service.premiumSubscription;
 
-import com.blog.by.kotor.dao.PremiumSubscriptionDAO;
+import com.blog.by.kotor.repository.PremiumSubscriptionRepository;
 import com.blog.by.kotor.model.PremiumSubscription;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class PremiumSubscriptionServiceImpl implements PremiumSubscriptionService {
 
-    private final PremiumSubscriptionDAO premiumSubscriptionDAO;
-
-    @Autowired
-    public PremiumSubscriptionServiceImpl(PremiumSubscriptionDAO premiumSubscriptionDAO) {
-        this.premiumSubscriptionDAO = premiumSubscriptionDAO;
-    }
+    private final PremiumSubscriptionRepository premiumSubscriptionRepository;
 
     @Override
     @Transactional
     public void createPremiumSubscription(PremiumSubscription premiumSubscription) {
-        premiumSubscriptionDAO.create(premiumSubscription);
+        premiumSubscriptionRepository.save(premiumSubscription);
     }
 
     @Override
     @Transactional
     public PremiumSubscription getPremiumSubscriptionById(Integer id) {
-        return premiumSubscriptionDAO.getById(id);
+        return premiumSubscriptionRepository.getReferenceById(id);
     }
 
     @Override
     @Transactional
     public List<PremiumSubscription> getAllPremiumSubscription() {
-        return premiumSubscriptionDAO.getAll();
+        return premiumSubscriptionRepository.findAll();
     }
 
     @Override
     @Transactional
     public void updatePremiumSubscription(PremiumSubscription premiumSubscription) {
-        premiumSubscriptionDAO.update(premiumSubscription);
+        premiumSubscriptionRepository.saveAndFlush(premiumSubscription);
     }
 
     @Override
     @Transactional
     public void deletePremiumSubscriptionById(Integer id) {
-        premiumSubscriptionDAO.deleteById(id);
+        premiumSubscriptionRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deletePremiumSubscription(PremiumSubscription premiumSubscription) {
-        premiumSubscriptionDAO.delete(premiumSubscription);
+        premiumSubscriptionRepository.delete(premiumSubscription);
     }
 
 }
