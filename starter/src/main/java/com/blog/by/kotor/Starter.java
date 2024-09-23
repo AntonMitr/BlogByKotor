@@ -17,6 +17,8 @@ public class Starter {
         post.setContent("Hello world I love ItClopedia");
         post.setUser(user);
         postService.createPost(post);
+
+        System.out.println(user.getEmail());
     }
 
 }
