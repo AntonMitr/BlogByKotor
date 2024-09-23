@@ -41,7 +41,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     @Override
     @Transactional
     public void updatePostCategory(PostCategory postCategory) {
-        postCategoryRepository.saveAndFlush(postCategory);
+        postCategoryRepository.save(postCategory);
     }
 
     @Override

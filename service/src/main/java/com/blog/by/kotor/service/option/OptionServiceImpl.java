@@ -41,7 +41,7 @@ public class OptionServiceImpl implements OptionService {
     @Override
     @Transactional
     public void updateOption(Option option) {
-        optionRepository.saveAndFlush(option);
+        optionRepository.save(option);
     }
 
     @Override

@@ -43,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void updateCategory(Category category) {
-        categoryRepository.saveAndFlush(category);
+        categoryRepository.save(category);
     }
 
     @Override

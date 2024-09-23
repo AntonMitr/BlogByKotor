@@ -41,7 +41,7 @@ public class PostTagServiceImpl implements PostTagService {
     @Override
     @Transactional
     public void updatePostTag(PostTag postTag) {
-        postTagRepository.saveAndFlush(postTag);
+        postTagRepository.save(postTag);
     }
 
     @Override

@@ -10,6 +10,10 @@ public interface VoteService {
 
     Vote findVoteById(Integer id);
 
+    List<Vote> findVotesByOptionId(Integer optionId);
+
+    List<Vote> findVotesByUserId(Integer userId);
+
     List<Vote> findAllVote();
 
     void updateVote(Vote vote);

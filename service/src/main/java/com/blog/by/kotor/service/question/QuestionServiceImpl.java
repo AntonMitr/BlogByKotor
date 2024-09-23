@@ -41,7 +41,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public void updateQuestion(Question question) {
-        questionRepository.saveAndFlush(question);
+        questionRepository.save(question);
     }
 
     @Override

@@ -22,23 +22,25 @@ public class RegistrationServiceImpl implements RegistrationService {
         boolean result = true;
 
         if (user.getEmail() == null) {
+            result = false;
             LOGGER.error("Почта не может быть null");
-            return false;
         }
 
         if (user.getPassword() == null) {
+            result = false;
             LOGGER.error("Пароль не может быть null");
         }
 
         if (user.getPassword().length() < 6) {
+            result = false;
             LOGGER.error("Пароль должен содержать не менее 6 символов!");
-            return false;
         }
 
         if (userRepository.findByEmail(user.getEmail())) {
+            result = false;
             LOGGER.error("Данный пользователь уже существует!");
-            return false;
         }
+
         userRepository.save(user);
         return result;
     }

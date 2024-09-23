@@ -41,7 +41,7 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void updateTag(Tag tag) {
-        tagRepository.saveAndFlush(tag);
+        tagRepository.save(tag);
     }
 
     @Override

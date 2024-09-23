@@ -43,7 +43,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public void updateRole(Role role) {
-        roleRepository.saveAndFlush(role);
+        roleRepository.save(role);
     }
 
     @Override

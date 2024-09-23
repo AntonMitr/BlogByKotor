@@ -35,7 +35,7 @@ public class PremiumSubscriptionServiceImpl implements PremiumSubscriptionServic
     @Override
     @Transactional
     public void updatePremiumSubscription(PremiumSubscription premiumSubscription) {
-        premiumSubscriptionRepository.saveAndFlush(premiumSubscription);
+        premiumSubscriptionRepository.save(premiumSubscription);
     }
 
     @Override

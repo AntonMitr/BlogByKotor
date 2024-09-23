@@ -28,6 +28,18 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Vote> findVotesByOptionId(Integer optionId) {
+        return voteRepository.findVotesByOptionId(optionId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Vote> findVotesByUserId(Integer userId) {
+        return voteRepository.findVotesByUserId(userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Vote> findAllVote() {
         return voteRepository.findAll();
     }
@@ -35,7 +47,7 @@ public class VoteServiceImpl implements VoteService {
     @Override
     @Transactional
     public void updateVote(Vote vote) {
-        voteRepository.saveAndFlush(vote);
+        voteRepository.save(vote);
     }
 
     @Override

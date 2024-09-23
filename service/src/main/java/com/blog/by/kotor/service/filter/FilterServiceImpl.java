@@ -96,7 +96,7 @@ public class FilterServiceImpl implements FilterService {
     @Override
     @Transactional
     public void updateFilter(Filter filter) {
-        filterRepository.saveAndFlush(filter);
+        filterRepository.save(filter);
     }
 
     @Override

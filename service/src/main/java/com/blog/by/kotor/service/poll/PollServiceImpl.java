@@ -47,7 +47,7 @@ public class PollServiceImpl implements PollService {
     @Override
     @Transactional
     public void updatePoll(Poll poll) {
-        pollRepository.saveAndFlush(poll);
+        pollRepository.save(poll);
     }
 
     @Override
