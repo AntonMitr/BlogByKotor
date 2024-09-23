@@ -21,14 +21,20 @@ public class OptionServiceImpl implements OptionService {
     }
 
     @Override
-    @Transactional
-    public Option getOptionById(Integer id) {
-        return optionRepository.getReferenceById(id);
+    @Transactional(readOnly = true)
+    public List<Option> findByQuestionId(Integer id) {
+        return optionRepository.findByQuestionId(id);
     }
 
     @Override
-    @Transactional
-    public List<Option> getAllOption() {
+    @Transactional(readOnly = true)
+    public Option findOptionById(Integer id) {
+        return optionRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Option> findAllOption() {
         return optionRepository.findAll();
     }
 

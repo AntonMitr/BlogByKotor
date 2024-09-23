@@ -21,14 +21,38 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    @Transactional
-    public Post getPostById(Integer id) {
-        return postRepository.getReferenceById(id);
+    @Transactional(readOnly = true)
+    public Post findPostById(Integer id) {
+        return postRepository.findById(id).orElse(null);
     }
 
     @Override
-    @Transactional
-    public List<Post> getAllPost() {
+    @Transactional(readOnly = true)
+    public List<Post> findByUserId(Integer userId) {
+        return postRepository.findByUserId(userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Post> findByTitle(String title) {
+        return postRepository.findByTitle(title);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Post> findByTitleOrderByDatePublished(String title) {
+        return postRepository.findByTitleOrderByDatePublished(title);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Post> findByContentContainsOrderByDatePublished(String content) {
+        return postRepository.findByContentContainsOrderByDatePublished(content);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Post> findAllPost() {
         return postRepository.findAll();
     }
 

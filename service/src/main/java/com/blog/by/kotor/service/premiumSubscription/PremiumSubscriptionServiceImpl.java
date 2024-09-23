@@ -21,14 +21,14 @@ public class PremiumSubscriptionServiceImpl implements PremiumSubscriptionServic
     }
 
     @Override
-    @Transactional
-    public PremiumSubscription getPremiumSubscriptionById(Integer id) {
-        return premiumSubscriptionRepository.getReferenceById(id);
+    @Transactional(readOnly = true)
+    public PremiumSubscription findPremiumSubscriptionById(Integer id) {
+        return premiumSubscriptionRepository.findById(id).orElse(null);
     }
 
     @Override
-    @Transactional
-    public List<PremiumSubscription> getAllPremiumSubscription() {
+    @Transactional(readOnly = true)
+    public List<PremiumSubscription> findAllPremiumSubscription() {
         return premiumSubscriptionRepository.findAll();
     }
 

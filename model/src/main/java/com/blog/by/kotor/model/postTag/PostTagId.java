@@ -15,8 +15,10 @@ public class PostTagId implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Column(name = "post_id")
     private Integer postId;
 
+    @Column(name = "tag_id")
     private Integer tagId;
 
     @Override

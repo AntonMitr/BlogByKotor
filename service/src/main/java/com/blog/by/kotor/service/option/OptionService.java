@@ -8,9 +8,11 @@ public interface OptionService {
 
     void createOption(Option option);
 
-    Option getOptionById(Integer id);
+    List<Option> findByQuestionId(Integer id);
 
-    List<Option> getAllOption();
+    Option findOptionById(Integer id);
+
+    List<Option> findAllOption();
 
     void updateOption(Option option);
 

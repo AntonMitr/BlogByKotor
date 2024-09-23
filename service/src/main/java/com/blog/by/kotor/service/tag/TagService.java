@@ -8,9 +8,11 @@ public interface TagService {
 
     void createTag(Tag tag);
 
-    Tag getTagById(Integer id);
+    Tag findTagByName(String tagName);
 
-    List<Tag> getAllTag();
+    Tag findTagById(Integer id);
+
+    List<Tag> findAllTag();
 
     void updateTag(Tag tag);
 

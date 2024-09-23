@@ -10,14 +10,18 @@ public interface CommentService {
 
     List<Comment> findCommentByPostId(Integer postId);
 
-    Comment getCommentById(Integer id);
+    Comment findCommentById(Integer id);
 
-    List<Comment> getAllComment();
+    List<Comment> findAllComment();
 
     void updateComment(Comment comment);
 
     void deleteCommentById(Integer id);
 
     void deleteComment(Comment comment);
+
+    List<Comment> findByPostIdOrderByCreatedAt(Integer postId);
+
+    List<Comment> findByUserIdOrderByCreatedAt(Integer userId);
 
 }

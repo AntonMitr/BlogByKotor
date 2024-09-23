@@ -21,15 +21,21 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    @Transactional
-    public Question getQuestionById(Integer id) {
-        return questionRepository.getReferenceById(id);
+    @Transactional(readOnly = true)
+    public Question findQuestionById(Integer id) {
+        return questionRepository.findById(id).orElse(null);
     }
 
     @Override
-    @Transactional
-    public List<Question> getAllQuestion() {
+    @Transactional(readOnly = true)
+    public List<Question> findAllQuestion() {
         return questionRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Question> findByQuestionTextContaining(String questionText) {
+        return questionRepository.findByQuestionTextContaining(questionText);
     }
 
     @Override
@@ -51,7 +57,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Question findByPollId(Integer pollId) {
         return questionRepository.findByPollId(pollId);
     }

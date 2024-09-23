@@ -10,7 +10,10 @@ import java.util.List;
 @Repository
 public interface PostCategoryRepository extends JpaRepository<PostCategory, Integer> {
 
-    @Query("select p from PostCategory p join p.id id where id.categoryId = ?1")
-    List<PostCategory> findPostsAndCategoriesByCategoryId(Integer categoryId);
+    @Query("select p from PostCategory p join p.id pc where pc.categoryId = :categoryId")
+    List<PostCategory> findByCategoryId(Integer categoryId);
+
+    @Query("select p from PostCategory p join p.id pc where pc.postId = :postId")
+    List<PostCategory> findByPostId(Integer postId);
 
 }

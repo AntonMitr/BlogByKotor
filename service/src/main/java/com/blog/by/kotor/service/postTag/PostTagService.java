@@ -8,9 +8,11 @@ public interface PostTagService {
 
     void createPostTag(PostTag postTag);
 
-    PostTag getPostTagById(Integer id);
+    PostTag findPostTagById(Integer id);
 
-    List<PostTag> getAllPostTag();
+    List<PostTag> findPostTagByTagId(Integer tagId);
+
+    List<PostTag> findAllPostTag();
 
     void updatePostTag(PostTag postTag);
 

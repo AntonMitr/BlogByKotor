@@ -8,9 +8,9 @@ public interface VoteService {
 
     void createVote(Vote vote);
 
-    Vote getVoteById(Integer id);
+    Vote findVoteById(Integer id);
 
-    List<Vote> getAllVote();
+    List<Vote> findAllVote();
 
     void updateVote(Vote vote);
 

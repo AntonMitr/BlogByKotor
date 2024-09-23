@@ -8,9 +8,17 @@ public interface PostService {
 
     void createPost(Post post);
 
-    Post getPostById(Integer id);
+    Post findPostById(Integer postId);
 
-    List<Post> getAllPost();
+    List<Post> findByUserId(Integer userId);
+
+    List<Post> findByTitle(String title);
+
+    List<Post> findByTitleOrderByDatePublished(String title);
+
+    List<Post> findByContentContainsOrderByDatePublished(String content);
+
+    List<Post> findAllPost();
 
     void updatePost(Post post);
 

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Integer> {
 
-    @Query("select t from Tag t where t.name = ?1")
     Tag findByName(String name);
 
 }

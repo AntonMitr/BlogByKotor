@@ -21,14 +21,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public User getUserById(Integer id) {
-        return userRepository.getReferenceById(id);
+    @Transactional(readOnly = true)
+    public User findUserById(Integer id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
-    @Transactional
-    public List<User> getAllUser() {
+    @Transactional(readOnly = true)
+    public List<User> findAllUser() {
         return userRepository.findAll();
     }
 

@@ -1,8 +1,8 @@
 HELP.md
-target/
+tarfind/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+!**/src/main/**/tarfind/
+!**/src/test/**/tarfind/
 
 ### STS ###
 .apt_generated

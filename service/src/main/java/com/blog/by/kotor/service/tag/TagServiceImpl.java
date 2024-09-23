@@ -21,14 +21,20 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional
-    public Tag getTagById(Integer id) {
-        return tagRepository.getReferenceById(id);
+    @Transactional(readOnly = true)
+    public Tag findTagByName(String tagName) {
+        return tagRepository.findByName(tagName);
     }
 
     @Override
-    @Transactional
-    public List<Tag> getAllTag() {
+    @Transactional(readOnly = true)
+    public Tag findTagById(Integer id) {
+        return tagRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Tag> findAllTag() {
         return tagRepository.findAll();
     }
 

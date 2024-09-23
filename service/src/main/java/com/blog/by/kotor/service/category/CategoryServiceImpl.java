@@ -1,12 +1,14 @@
 package com.blog.by.kotor.service.category;
 
-import com.blog.by.kotor.repository.CategoryRepository;
+
 import com.blog.by.kotor.model.Category;
+import com.blog.by.kotor.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 
 @RequiredArgsConstructor
 @Service
@@ -15,13 +17,20 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Category getCategoryById(Integer id) {
-        return categoryRepository.getReferenceById(id);
+    @Transactional(readOnly = true)
+    public Category findCategoryById(Integer id) {
+        return categoryRepository.findById(id).orElse(null);
     }
 
     @Override
-    @Transactional
-    public List<Category> getAllCategory() {
+    @Transactional(readOnly = true)
+    public Category findByName(String name) {
+         return categoryRepository.findByName(name);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Category> findAllCategory() {
         return categoryRepository.findAll();
     }
 
@@ -48,6 +57,5 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(Category category) {
         categoryRepository.delete(category);
     }
-
 
 }

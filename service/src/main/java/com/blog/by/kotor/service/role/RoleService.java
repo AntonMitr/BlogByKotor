@@ -9,16 +9,16 @@ public interface RoleService {
 
     void createRole(Role role);
 
-    Role getRoleById(Integer id);
+    Role findRoleById(Integer id);
 
-    List<Role> getAllRole();
+    Role findRoleByName(String roleName);
+
+    List<Role> findAllRole();
 
     void updateRole(Role role);
 
     void deleteRoleById(Integer id);
 
     void deleteRole(Role role);
-
-    void addUserRole(UserRole userRole);
 
 }

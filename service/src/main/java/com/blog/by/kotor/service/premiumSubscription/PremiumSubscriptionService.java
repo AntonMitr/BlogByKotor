@@ -9,9 +9,9 @@ public interface PremiumSubscriptionService {
 
     void createPremiumSubscription(PremiumSubscription premiumSubscription);
 
-    PremiumSubscription getPremiumSubscriptionById(Integer id);
+    PremiumSubscription findPremiumSubscriptionById(Integer id);
 
-    List<PremiumSubscription> getAllPremiumSubscription();
+    List<PremiumSubscription> findAllPremiumSubscription();
 
     void updatePremiumSubscription(PremiumSubscription premiumSubscription);
 

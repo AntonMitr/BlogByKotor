@@ -21,14 +21,14 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    @Transactional
-    public Vote getVoteById(Integer id) {
-        return voteRepository.getReferenceById(id);
+    @Transactional(readOnly = true)
+    public Vote findVoteById(Integer id) {
+        return voteRepository.findById(id).orElse(null);
     }
 
     @Override
-    @Transactional
-    public List<Vote> getAllVote() {
+    @Transactional(readOnly = true)
+    public List<Vote> findAllVote() {
         return voteRepository.findAll();
     }
 

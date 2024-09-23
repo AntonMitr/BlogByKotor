@@ -8,9 +8,11 @@ public interface QuestionService {
 
     void createQuestion(Question question);
 
-    Question getQuestionById(Integer id);
+    Question findQuestionById(Integer id);
 
-    List<Question> getAllQuestion();
+    List<Question> findAllQuestion();
+
+    List<Question> findByQuestionTextContaining(String questionText);
 
     void updateQuestion(Question question);
 

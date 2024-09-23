@@ -1,11 +1,19 @@
 package com.blog.by.kotor.service.filter;
 
+import com.blog.by.kotor.model.Category;
 import com.blog.by.kotor.model.Filter;
 import com.blog.by.kotor.model.Post;
 import com.blog.by.kotor.model.Tag;
+import com.blog.by.kotor.model.postCategory.PostCategory;
 import com.blog.by.kotor.model.postTag.PostTag;
 import com.blog.by.kotor.repository.*;
+import com.blog.by.kotor.service.category.CategoryService;
+import com.blog.by.kotor.service.post.PostService;
+import com.blog.by.kotor.service.postCategory.PostCategoryService;
+import com.blog.by.kotor.service.postTag.PostTagService;
+import com.blog.by.kotor.service.tag.TagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,29 +26,34 @@ public class FilterServiceImpl implements FilterService {
 
     private final FilterRepository filterRepository;
 
-    private final TagRepository tagRepository;
+    @Lazy
+    private final TagService tagService;
 
-    private final PostTagRepository postTagRepository;
+    @Lazy
+    private final PostTagService postTagService;
 
-    private final PostRepository postRepository;
+    @Lazy
+    private final PostService postService;
 
-    private final CategoryRepository categoryRepository;
+    @Lazy
+    private final CategoryService categoryService;
 
-    private final PostCategoryRepository postCategoryRepository;
+    @Lazy
+    private final PostCategoryService postCategoryService;
 
     @Override
     @Transactional
     public List<Post> findByTagCriteria(String criteria) {
         List<Post> posts = new ArrayList<>();
-        List<PostTagRepository> postTags;
+        List<PostTag> postTags;
 
         Filter filter = filterRepository.findByCriteria(criteria);
 
-        Tag tag = tagRepository.findByName(filter.getName());
+        Tag tag = tagService.findTagByName(filter.getName());
 
-        postTags = postTagRepository.findPostTagByTagId(tag.getId());
+        postTags = postTagService.findPostTagByTagId(tag.getId());
         for (PostTag postTag : postTags) {
-            posts.add(postRepository.getReferenceById(postTag.getId().getPostId()));
+            posts.add(postService.findPostById(postTag.getId().getPostId()));
         }
         return posts;
     }
@@ -51,13 +64,13 @@ public class FilterServiceImpl implements FilterService {
         List<Post> posts = new ArrayList<>();
         List<PostCategory> postCategories;
 
-        Filter filter = filterDAO.findByCriteria(criteria);
+        Filter filter = filterRepository.findByCriteria(criteria);
 
-        Category category = categoryRepository.findByName(filter.getName());
+        Category category = categoryService.findByName(filter.getName());
 
-        postCategories = postCategoryRepository.findPostsAndCategoriesByCategoryId(category.getId());
+        postCategories = postCategoryService.findByCategoryId(category.getId());
         for (PostCategory postCategory : postCategories) {
-            posts.add(postDAO.getById(postCategory.getId().getCategoryId()));
+            posts.add(postService.findPostById(postCategory.getId().getPostId()));
         }
         return posts;
     }
@@ -65,37 +78,37 @@ public class FilterServiceImpl implements FilterService {
     @Override
     @Transactional
     public void createFilter(Filter filter) {
-        filterDAO.create(filter);
+        filterRepository.save(filter);
     }
 
     @Override
-    @Transactional
-    public Filter getFilterById(Integer id) {
-        return filterDAO.getById(id);
+    @Transactional(readOnly = true)
+    public Filter findFilterById(Integer id) {
+        return filterRepository.findById(id).orElse(null);
     }
 
     @Override
-    @Transactional
-    public List<Filter> getAllFilter() {
-        return filterDAO.getAll();
+    @Transactional(readOnly = true)
+    public List<Filter> findAllFilter() {
+        return filterRepository.findAll();
     }
 
     @Override
     @Transactional
     public void updateFilter(Filter filter) {
-        filterDAO.update(filter);
+        filterRepository.saveAndFlush(filter);
     }
 
     @Override
     @Transactional
     public void deleteFilterById(Integer id) {
-        filterDAO.deleteById(id);
+        filterRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteFilter(Filter filter) {
-        filterDAO.delete(filter);
+        filterRepository.delete(filter);
     }
 
 }

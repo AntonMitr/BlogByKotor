@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface UserRoleService {
 
-    String getUserRole(Integer userId);
+    String findUserRole(Integer userId);
 
     void createUserRole(UserRole userRole);
 
-    UserRole getUserRoleById(Integer id);
+    UserRole findUserRoleByUserId(Integer id);
 
-    List<UserRole> getAllUserRole();
+    List<UserRole> findAllUserRole();
 
     void updateUserRole(UserRole userRole);
 

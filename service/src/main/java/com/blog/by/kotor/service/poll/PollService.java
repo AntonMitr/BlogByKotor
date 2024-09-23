@@ -8,9 +8,13 @@ public interface PollService {
 
     void createPoll(Poll poll);
 
-    Poll getPollById(Integer id);
+    Poll findPollById(Integer id);
 
-    List<Poll> getAllPoll();
+    List<Poll> findAllPoll();
+
+    List<Poll> findPollByTitle(String title);
+
+    List<Poll> findPollByUserId(Integer userId);
 
     void updatePoll(Poll poll);
 

@@ -13,9 +13,9 @@ public interface FilterService {
 
     void createFilter(Filter filter);
 
-    Filter getFilterById(Integer id);
+    Filter findFilterById(Integer id);
 
-    List<Filter> getAllFilter();
+    List<Filter> findAllFilter();
 
     void updateFilter(Filter filter);
 

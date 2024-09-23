@@ -21,15 +21,27 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    @Transactional
-    public Poll getPollById(Integer id) {
-        return pollRepository.getReferenceById(id);
+    @Transactional(readOnly = true)
+    public Poll findPollById(Integer id) {
+        return pollRepository.findById(id).orElse(null);
     }
 
     @Override
-    @Transactional
-    public List<Poll> getAllPoll() {
+    @Transactional(readOnly = true)
+    public List<Poll> findAllPoll() {
         return pollRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Poll> findPollByTitle(String title) {
+        return pollRepository.findByTitle(title);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Poll> findPollByUserId(Integer userId) {
+        return pollRepository.findByUserId(userId);
     }
 
     @Override
