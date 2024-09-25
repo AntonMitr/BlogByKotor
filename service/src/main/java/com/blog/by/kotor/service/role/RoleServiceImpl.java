@@ -1,10 +1,12 @@
 package com.blog.by.kotor.service.role;
 
+import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
+import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
+import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Role;
 import com.blog.by.kotor.repository.RoleRepository;
-import com.blog.by.kotor.service.userRole.UserRoleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,19 +25,16 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Role findRoleById(Integer id) {
-        return roleRepository.findById(id).orElse(null);
+        return roleRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.ROLE_NOT_FOUND, id));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Role findRoleByName(String name) {
         return roleRepository.findRoleByName(name);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Role> findAllRole() {
         return roleRepository.findAll();
     }
@@ -43,19 +42,22 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public void updateRole(Role role) {
+        roleRepository.findById(role.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.PREMIUM_SUBSCRIPTION_NOT_FOUND, role.getId()));
         roleRepository.save(role);
     }
 
     @Override
     @Transactional
     public void deleteRoleById(Integer id) {
+        roleRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.PREMIUM_SUBSCRIPTION_NOT_FOUND, id));
         roleRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteRole(Role role) {
-        roleRepository.delete(role);
+        roleRepository.findById(role.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.PREMIUM_SUBSCRIPTION_NOT_FOUND, role.getId()));
+        roleRepository.deleteById(role.getId());
     }
 
 }

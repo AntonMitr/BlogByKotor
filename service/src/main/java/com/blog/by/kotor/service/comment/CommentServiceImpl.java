@@ -1,9 +1,14 @@
 package com.blog.by.kotor.service.comment;
 
+import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.NotNullParam;
+import com.blog.by.kotor.exception.create.CreateExceptionFactory;
+import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
+import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
+import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Comment;
 import com.blog.by.kotor.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,23 +23,30 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void createComment(Comment comment) {
+        if(comment.getId() == null){
+            throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_ID);
+        }
+        if(comment.getContent() == null){
+            throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_CONTENT);
+        }
+        if(comment.getPost().getId() == null){
+            throw CreateExceptionFactory.CategoryParamNotBeNull(NotNullParam.COMMENT_POST_ID);
+        }
+        if(comment.getPost().getId() == null){}
         commentRepository.save(comment);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Comment> findCommentByPostId(Integer postId) {
         return commentRepository.findByPostId(postId);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Comment findCommentById(Integer id) {
-        return commentRepository.findById(id).orElse(null);
+        return commentRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.COMMENT_NOT_FOUND, id));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Comment> findAllComment() {
         return commentRepository.findAll();
     }
@@ -42,31 +54,30 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void updateComment(Comment comment) {
+        commentRepository.findById(comment.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.COMMENT_NOT_FOUND, comment.getId()));
         commentRepository.save(comment);
     }
 
     @Override
-    @Modifying
     @Transactional
     public void deleteCommentById(Integer id) {
+        commentRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.COMMENT_NOT_FOUND, id));
         commentRepository.deleteById(id);
     }
 
     @Override
-    @Modifying
     @Transactional
     public void deleteComment(Comment comment) {
+        commentRepository.findById(comment.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.COMMENT_NOT_FOUND, comment.getId()));
         commentRepository.delete(comment);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Comment> findByPostIdOrderByCreatedAt(Integer postId) {
         return commentRepository.findByPostIdOrderByCreatedAt(postId);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Comment> findByUserIdOrderByCreatedAt(Integer userId) {
         return commentRepository.findByUserIdOrderByCreatedAt(userId);
     }

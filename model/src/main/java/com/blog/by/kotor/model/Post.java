@@ -51,7 +51,7 @@ public class Post {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "posts_categories",
             joinColumns = {@JoinColumn(name = "post_id")},
-            inverseJoinColumns = {@JoinColumn(name = "categories_id")})
+            inverseJoinColumns = {@JoinColumn(name = "category_id")})
     private List<Category> categories;
 
     @JsonIgnore

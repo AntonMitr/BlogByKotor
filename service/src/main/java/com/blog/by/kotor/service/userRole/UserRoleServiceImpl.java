@@ -36,13 +36,11 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public UserRole findUserRoleByUserId(Integer id) {
         return userRoleRepository.findUserAndRoleByUserId(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<UserRole> findAllUserRole() {
         return userRoleRepository.findAll();
     }

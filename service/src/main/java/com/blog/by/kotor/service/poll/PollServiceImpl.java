@@ -1,5 +1,9 @@
 package com.blog.by.kotor.service.poll;
 
+import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
+import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
+import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Poll;
 import com.blog.by.kotor.repository.PollRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,25 +25,22 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Poll findPollById(Integer id) {
-        return pollRepository.findById(id).orElse(null);
+        return pollRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.POLL_NOT_FOUND, id));
+
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Poll> findAllPoll() {
         return pollRepository.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Poll> findPollByTitle(String title) {
         return pollRepository.findByTitle(title);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Poll> findPollByUserId(Integer userId) {
         return pollRepository.findByUserId(userId);
     }
@@ -47,18 +48,21 @@ public class PollServiceImpl implements PollService {
     @Override
     @Transactional
     public void updatePoll(Poll poll) {
+        pollRepository.findById(poll.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.POLL_NOT_FOUND, poll.getId()));
         pollRepository.save(poll);
     }
 
     @Override
     @Transactional
     public void deletePollById(Integer id) {
+        pollRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.POLL_NOT_FOUND, id));
         pollRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deletePoll(Poll poll) {
+        pollRepository.findById(poll.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.POLL_NOT_FOUND, poll.getId()));
         pollRepository.delete(poll);
     }
 

@@ -1,5 +1,9 @@
 package com.blog.by.kotor.service.filter;
 
+import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
+import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
+import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Category;
 import com.blog.by.kotor.model.Filter;
 import com.blog.by.kotor.model.Post;
@@ -26,19 +30,14 @@ public class FilterServiceImpl implements FilterService {
 
     private final FilterRepository filterRepository;
 
-    @Lazy
     private final TagService tagService;
 
-    @Lazy
     private final PostTagService postTagService;
 
-    @Lazy
     private final PostService postService;
 
-    @Lazy
     private final CategoryService categoryService;
 
-    @Lazy
     private final PostCategoryService postCategoryService;
 
     @Override
@@ -82,13 +81,11 @@ public class FilterServiceImpl implements FilterService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Filter findFilterById(Integer id) {
-        return filterRepository.findById(id).orElse(null);
+        return filterRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.FILTER_NOT_FOUND, id));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Filter> findAllFilter() {
         return filterRepository.findAll();
     }
@@ -96,18 +93,21 @@ public class FilterServiceImpl implements FilterService {
     @Override
     @Transactional
     public void updateFilter(Filter filter) {
+        filterRepository.findById(filter.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.FILTER_NOT_FOUND, filter.getId()));
         filterRepository.save(filter);
     }
 
     @Override
     @Transactional
     public void deleteFilterById(Integer id) {
+        filterRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.FILTER_NOT_FOUND, id));
         filterRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteFilter(Filter filter) {
+        filterRepository.findById(filter.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.FILTER_NOT_FOUND, filter.getId()));
         filterRepository.delete(filter);
     }
 

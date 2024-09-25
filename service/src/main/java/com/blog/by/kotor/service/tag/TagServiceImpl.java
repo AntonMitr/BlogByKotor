@@ -1,5 +1,9 @@
 package com.blog.by.kotor.service.tag;
 
+import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
+import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
+import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Tag;
 import com.blog.by.kotor.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,19 +25,16 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Tag findTagByName(String tagName) {
         return tagRepository.findByName(tagName);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Tag findTagById(Integer id) {
-        return tagRepository.findById(id).orElse(null);
+        return tagRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.TAG_NOT_FOUND, id));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Tag> findAllTag() {
         return tagRepository.findAll();
     }
@@ -41,19 +42,22 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void updateTag(Tag tag) {
+        tagRepository.findById(tag.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.TAG_NOT_FOUND, tag.getId()));
         tagRepository.save(tag);
     }
 
     @Override
     @Transactional
     public void deleteTagById(Integer id) {
+        tagRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.TAG_NOT_FOUND, id));
         tagRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteTag(Tag tag) {
-        tagRepository.delete(tag);
+        tagRepository.findById(tag.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.TAG_NOT_FOUND, tag.getId()));
+        tagRepository.deleteById(tag.getId());
     }
 
 }

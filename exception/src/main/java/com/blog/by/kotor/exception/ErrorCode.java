@@ -1,0 +1,16 @@
+package com.blog.by.kotor.exception;
+
+public enum ErrorCode {
+    CATEGORY_NOT_FOUND,
+    COMMENT_NOT_FOUND,
+    FILTER_NOT_FOUND,
+    OPTION_NOT_FOUND,
+    POLL_NOT_FOUND,
+    POST_NOT_FOUND,
+    PREMIUM_SUBSCRIPTION_NOT_FOUND,
+    QUESTION_NOT_FOUND,
+    ROLE_NOT_FOUND,
+    TAG_NOT_FOUND,
+    USER_NOT_FOUND,
+    VOTE_NOT_FOUND;
+}

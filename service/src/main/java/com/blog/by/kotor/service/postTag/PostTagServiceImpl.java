@@ -21,19 +21,16 @@ public class PostTagServiceImpl implements PostTagService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public PostTag findPostTagById(Integer id) {
         return postTagRepository.findById(id).orElse(null);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<PostTag> findPostTagByTagId(Integer id) {
         return postTagRepository.findPostTagByTagId(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<PostTag> findAllPostTag() {
         return postTagRepository.findAll();
     }

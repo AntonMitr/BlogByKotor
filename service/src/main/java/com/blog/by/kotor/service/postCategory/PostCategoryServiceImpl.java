@@ -21,19 +21,16 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<PostCategory> findByCategoryId(Integer id) {
         return postCategoryRepository.findByCategoryId(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<PostCategory> findByPostId(Integer id) {
         return postCategoryRepository.findByPostId(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<PostCategory> findAllPostCategory() {
         return postCategoryRepository.findAll();
     }

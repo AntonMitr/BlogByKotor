@@ -1,5 +1,9 @@
 package com.blog.by.kotor.service.premiumSubscription;
 
+import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
+import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
+import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.repository.PremiumSubscriptionRepository;
 import com.blog.by.kotor.model.PremiumSubscription;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +27,11 @@ public class PremiumSubscriptionServiceImpl implements PremiumSubscriptionServic
     @Override
     @Transactional(readOnly = true)
     public PremiumSubscription findPremiumSubscriptionById(Integer id) {
-        return premiumSubscriptionRepository.findById(id).orElse(null);
+        return premiumSubscriptionRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.PREMIUM_SUBSCRIPTION_NOT_FOUND, id));
+
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<PremiumSubscription> findAllPremiumSubscription() {
         return premiumSubscriptionRepository.findAll();
     }
@@ -35,18 +39,21 @@ public class PremiumSubscriptionServiceImpl implements PremiumSubscriptionServic
     @Override
     @Transactional
     public void updatePremiumSubscription(PremiumSubscription premiumSubscription) {
+        premiumSubscriptionRepository.findById(premiumSubscription.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.PREMIUM_SUBSCRIPTION_NOT_FOUND, premiumSubscription.getId()));
         premiumSubscriptionRepository.save(premiumSubscription);
     }
 
     @Override
     @Transactional
     public void deletePremiumSubscriptionById(Integer id) {
+        premiumSubscriptionRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.PREMIUM_SUBSCRIPTION_NOT_FOUND, id));
         premiumSubscriptionRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deletePremiumSubscription(PremiumSubscription premiumSubscription) {
+        premiumSubscriptionRepository.findById(premiumSubscription.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.PREMIUM_SUBSCRIPTION_NOT_FOUND, premiumSubscription.getId()));
         premiumSubscriptionRepository.delete(premiumSubscription);
     }
 

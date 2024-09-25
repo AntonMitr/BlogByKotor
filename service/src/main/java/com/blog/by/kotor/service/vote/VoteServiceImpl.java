@@ -1,5 +1,9 @@
 package com.blog.by.kotor.service.vote;
 
+import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
+import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
+import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Vote;
 import com.blog.by.kotor.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,25 +25,21 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Vote findVoteById(Integer id) {
-        return voteRepository.findById(id).orElse(null);
+        return voteRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.VOTE_NOT_FOUND, id));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Vote> findVotesByOptionId(Integer optionId) {
         return voteRepository.findVotesByOptionId(optionId);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Vote> findVotesByUserId(Integer userId) {
         return voteRepository.findVotesByUserId(userId);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Vote> findAllVote() {
         return voteRepository.findAll();
     }
@@ -47,18 +47,21 @@ public class VoteServiceImpl implements VoteService {
     @Override
     @Transactional
     public void updateVote(Vote vote) {
+        voteRepository.findById(vote.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.VOTE_NOT_FOUND, vote.getId()));
         voteRepository.save(vote);
     }
 
     @Override
     @Transactional
     public void deleteVoteById(Integer id) {
+        voteRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.VOTE_NOT_FOUND, id));
         voteRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteVote(Vote vote) {
+        voteRepository.findById(vote.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.VOTE_NOT_FOUND, vote.getId()));
         voteRepository.delete(vote);
     }
 
