@@ -17,6 +17,7 @@
         <module>dao-hibernate</module>
         <module>service</module>
         <module>model</module>
+        <module>exception</module>
     </modules>
 
     <dependencies>
