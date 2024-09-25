@@ -1,4 +1,4 @@
-package com.blog.by.kotor.model.postCategory;
+package com.blog.by.kotor.model.post.category;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

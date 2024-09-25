@@ -1,4 +1,4 @@
-package com.blog.by.kotor.model.userRole;
+package com.blog.by.kotor.model.user.role;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

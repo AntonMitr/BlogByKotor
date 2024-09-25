@@ -1,6 +1,6 @@
 package com.blog.by.kotor.service;
 
-import com.blog.by.kotor.model.postTag.PostTag;
+import com.blog.by.kotor.model.post.tag.PostTag;
 
 import java.util.List;
 

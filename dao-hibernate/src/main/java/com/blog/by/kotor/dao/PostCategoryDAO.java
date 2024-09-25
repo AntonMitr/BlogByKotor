@@ -1,6 +1,6 @@
 package com.blog.by.kotor.dao;
 
-import com.blog.by.kotor.model.postCategory.PostCategory;
+import com.blog.by.kotor.model.post.category.PostCategory;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;

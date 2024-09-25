@@ -1,4 +1,4 @@
-package com.blog.by.kotor.model.postTag;
+package com.blog.by.kotor.model.post.tag;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

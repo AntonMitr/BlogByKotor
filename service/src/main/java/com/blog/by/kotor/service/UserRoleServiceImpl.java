@@ -2,7 +2,7 @@ package com.blog.by.kotor.service;
 
 import com.blog.by.kotor.model.Role;
 import com.blog.by.kotor.dao.RoleDAO;
-import com.blog.by.kotor.model.userRole.UserRole;
+import com.blog.by.kotor.model.user.role.UserRole;
 import com.blog.by.kotor.dao.UserRoleDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

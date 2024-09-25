@@ -1,6 +1,6 @@
 package com.blog.by.kotor.service;
 
-import com.blog.by.kotor.model.postCategory.PostCategory;
+import com.blog.by.kotor.model.post.category.PostCategory;
 import com.blog.by.kotor.dao.PostCategoryDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

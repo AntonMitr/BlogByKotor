@@ -1,6 +1,6 @@
 package com.blog.by.kotor.dao;
 
-import com.blog.by.kotor.model.userRole.UserRole;
+import com.blog.by.kotor.model.user.role.UserRole;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
