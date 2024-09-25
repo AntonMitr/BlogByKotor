@@ -1,11 +1,24 @@
 package com.blog.by.kotor.role.service;
 
-import com.blog.by.kotor.DAOException;
-import com.blog.by.kotor.DBException;
-import com.blog.by.kotor.UserRole;
+import com.blog.by.kotor.Role;
+import com.blog.by.kotor.userRole.UserRole;
+
+import java.util.List;
 
 public interface RoleService {
 
-    void addUserRole(UserRole userRole) throws DAOException, DBException;
+    void createRole(Role role);
+
+    Role getRoleById(int id);
+
+    List<Role> getAllRole();
+
+    void updateRole(Role role);
+
+    void deleteRoleById(int id);
+
+    void deleteRole(Role role);
+
+    void addUserRole(UserRole userRole);
 
 }

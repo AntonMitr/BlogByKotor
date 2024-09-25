@@ -1,11 +1,21 @@
 package com.blog.by.kotor.category.service;
 
 import com.blog.by.kotor.Category;
-import com.blog.by.kotor.DAOException;
-import com.blog.by.kotor.DBException;
+
+import java.util.List;
 
 public interface CategoryService {
 
-    void createCategory(Category category) throws DAOException, DBException;
+    Category getCategoryById(int id);
+
+    List<Category> getAllCategory();
+
+    void createCategory(Category category);
+
+    void updateCategory(Category category);
+
+    void deleteCategoryById(int id);
+
+    void deleteCategory(Category category);
 
 }

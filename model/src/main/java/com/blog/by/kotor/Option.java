@@ -1,19 +1,28 @@
 package com.blog.by.kotor;
 
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "options")
 public class Option {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int questionId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id")
+    private Question question;
+
+    @Column(name = "option_text")
     private String optionText;
 
-    public Option(int id, int questionId, String optionText) {
-        this.id = id;
-        this.questionId = questionId;
-        this.optionText = optionText;
-    }
+    @OneToMany(mappedBy = "option", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Vote> votes;
 
     public Option() {
-
     }
 
     public int getId() {
@@ -24,14 +33,6 @@ public class Option {
         this.id = id;
     }
 
-    public int getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
-    }
-
     public String getOptionText() {
         return optionText;
     }
@@ -40,12 +41,29 @@ public class Option {
         this.optionText = optionText;
     }
 
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
+    }
+
     @Override
     public String toString() {
         return "Option{" +
                 "id=" + id +
-                ", questionId=" + questionId +
+                ", question=" + question +
                 ", optionText='" + optionText + '\'' +
+                ", votes=" + votes +
                 '}';
     }
 

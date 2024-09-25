@@ -1,40 +1,43 @@
 package com.blog.by.kotor.registration.service;
 
-import com.blog.by.kotor.DAOException;
-import com.blog.by.kotor.DBException;
-import com.blog.by.kotor.RegistrationException;
 import com.blog.by.kotor.User;
-import com.blog.by.kotor.user.UserDAOImpl;
-
-import static com.blog.by.kotor.RegistrationException.*;
+import com.blog.by.kotor.UserDAO;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 public class RegistrationServiceImpl implements RegistrationService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationServiceImpl.class);
+
+    private final UserDAO userDAO;
+
     public RegistrationServiceImpl() {
+        userDAO = UserDAO.getUserDAO();
     }
 
-
     @Override
-    public boolean register(User user) throws DAOException, DBException, RegistrationException {
+    public boolean register(User user) {
         boolean result = true;
 
         if (user.getEmail() == null) {
-            throw new RegistrationException(REGISTRATION_NULL_EMAIL);
+            LOGGER.error("Почта не может быть null");
+            return false;
         }
 
         if (user.getPassword() == null) {
-            throw new RegistrationException(REGISTRATION_NULL_PASSWORD);
+            LOGGER.error("Пароль не может быть null");
         }
 
         if (user.getPassword().length() < 6) {
-            throw new RegistrationException(REGISTRATION_SHORT_PASSWORD);
+            LOGGER.error("Пароль должен содержать не менее 6 символов!");
+            return false;
         }
 
-        if (UserDAOImpl.getUserDAOImpl().findByEmail(user.getEmail())) {
-            throw new RegistrationException(REGISTRATION_EXISTING_USER);
+        if (userDAO.findByEmail(user.getEmail())) {
+            LOGGER.error("Данный пользователь уже существует!");
+            return false;
         }
-
-        UserDAOImpl.getUserDAOImpl().insert(user);
+        userDAO.create(user);
         return result;
     }
 

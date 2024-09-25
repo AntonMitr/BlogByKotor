@@ -1,19 +1,30 @@
 package com.blog.by.kotor;
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
+@Entity
+@Table(name = "votes")
 public class Vote {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int postId;
-    private int userId;
-    private int optionId;
 
-    public Vote(int id, int postId, int userId, int optionId) {
-        this.id = id;
-        this.postId = postId;
-        this.userId = userId;
-        this.optionId = optionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "option_id")
+    private Option option;
+
+    public Vote() {
     }
 
     public int getId() {
@@ -24,35 +35,37 @@ public class Vote {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public Post getPost() {
+        return post;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
-    public int getPostId() {
-        return postId;
+    public User getUser() {
+        return user;
     }
 
-    public void setPostId(int postId) {
-        this.postId = postId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getOptionId() {
-        return optionId;
+    public Option getOption() {
+        return option;
     }
 
-    public void setOptionId(int optionId) {
-        this.optionId = optionId;
+    public void setOption(Option option) {
+        this.option = option;
     }
 
     @Override
     public String toString() {
         return "Vote{" +
                 "id=" + id +
-                ", optionId=" + optionId +
+                ", post=" + post +
+                ", user=" + user +
+                ", option=" + option +
                 '}';
     }
 
@@ -61,12 +74,11 @@ public class Vote {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vote vote = (Vote) o;
-        return id == vote.id && optionId == vote.optionId;
+        return id == vote.id && Objects.equals(post, vote.post) && Objects.equals(user, vote.user) && Objects.equals(option, vote.option);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, optionId);
+        return Objects.hash(id, post, user, option);
     }
-
 }

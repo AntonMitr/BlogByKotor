@@ -1,21 +1,36 @@
 package com.blog.by.kotor;
 
+import jakarta.persistence.*;
+
+import java.util.List;
 import java.util.Objects;
 
+@Entity(name = "question")
 public class Question {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int pollId;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "poll_id")
+    private Poll poll;
+
+    @Column(name = "question_text")
     private String questionText;
 
-    public Question(int id, int pollId, String questionText) {
-        this.id = id;
-        this.pollId = pollId;
-        this.questionText = questionText;
-    }
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Option> options;
 
     public Question() {
+    }
 
+    public Poll getPoll() {
+        return poll;
+    }
+
+    public void setPoll(Poll poll) {
+        this.poll = poll;
     }
 
     public int getId() {
@@ -24,14 +39,6 @@ public class Question {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getPollId() {
-        return pollId;
-    }
-
-    public void setPollId(int pollId) {
-        this.pollId = pollId;
     }
 
     public String getQuestionText() {
@@ -46,7 +53,7 @@ public class Question {
     public String toString() {
         return "Question{" +
                 "id=" + id +
-                ", pollId=" + pollId +
+                ", poll=" + poll +
                 ", questionText='" + questionText + '\'' +
                 '}';
     }

@@ -1,25 +1,35 @@
 package com.blog.by.kotor;
 
-import java.sql.Date;
+import jakarta.persistence.*;
 
+import java.sql.Date;
+import java.util.Objects;
+
+@Entity
+@Table(name = "polls")
 public class Poll {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "created_at")
     private Date createdAt;
 
-    public Poll(int id, int userId, String title, String description, Date createdAt) {
-        this.id = id;
-        this.userId = userId;
-        this.title = title;
-        this.description = description;
-        this.createdAt = createdAt;
-    }
+    @OneToOne(mappedBy = "poll", fetch = FetchType.EAGER)
+    private Question question;
 
     public Poll() {
-
     }
 
     public int getId() {
@@ -28,14 +38,6 @@ public class Poll {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getTitle() {
@@ -62,15 +64,35 @@ public class Poll {
         this.createdAt = createdAt;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "Poll{" +
                 "id=" + id +
-                ", user_id=" + userId +
+                ", user=" + user +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Poll poll = (Poll) o;
+        return id == poll.id && Objects.equals(user, poll.user) && Objects.equals(title, poll.title) && Objects.equals(description, poll.description) && Objects.equals(createdAt, poll.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, user, title, description, createdAt);
+    }
 }

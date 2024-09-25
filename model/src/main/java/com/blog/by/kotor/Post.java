@@ -1,30 +1,54 @@
 package com.blog.by.kotor;
 
-import java.sql.Date;
+import jakarta.persistence.*;
 
+import java.sql.Date;
+import java.util.List;
+
+@Entity
+@Table(name = "posts")
 public class Post {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "content")
     private String content;
+
+    @Column(name = "date_published")
     private Date datePublished;
+
+    @Column(name = "is_premium")
     private boolean isPremium;
+
+    @Column(name = "is_published")
     private boolean isPublished;
 
-    public Post(int id, int userId, String title, String content, Date datePublished, boolean isPremium, boolean isPublished) {
-        this.id = id;
-        this.userId = userId;
-        this.title = title;
-        this.content = content;
-        this.datePublished = datePublished;
-        this.isPremium = isPremium;
-        this.isPublished = isPublished;
-    }
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments;
 
-    public Post() {
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Vote> votes;
 
-    }
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "posts_categories",
+            joinColumns = {@JoinColumn(name = "post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "categories_id")})
+    private List<Category> categories;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "posts_tags",
+            joinColumns = {@JoinColumn(name = "post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")})
+    private List<Tag> tags;
 
     public int getId() {
         return id;
@@ -34,12 +58,12 @@ public class Post {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getTitle() {
@@ -74,28 +98,48 @@ public class Post {
         isPremium = premium;
     }
 
-    public void isPremium(boolean isPremium) {
-        this.isPremium = isPremium;
-    }
-
     public boolean isPublished() {
         return isPublished;
     }
 
-    public void setPublished(boolean isPublished) {
-        this.isPublished = isPublished;
+    public void setPublished(boolean published) {
+        isPublished = published;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
     @Override
     public String toString() {
         return "Post{" +
                 "id=" + id +
-                ", user_id=" + userId +
-                ", title='" + title + '\'' +
+                ", user=" + user +
                 ", content='" + content + '\'' +
-                ", date_published=" + datePublished +
-                ", is_premium=" + isPremium +
-                ", is_published=" + isPublished +
+                ", title='" + title + '\'' +
+                ", isPremium=" + isPremium +
+                ", datePublished=" + datePublished +
+                ", isPublished=" + isPublished +
                 '}';
     }
 

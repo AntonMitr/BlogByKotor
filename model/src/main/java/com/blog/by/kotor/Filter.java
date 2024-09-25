@@ -1,22 +1,22 @@
 package com.blog.by.kotor;
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
+@Entity
+@Table(name = "filters")
 public class Filter {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "criteria")
     private String criteria;
-
-    public Filter(int id, String name, String criteria) {
-        this.id = id;
-        this.name = name;
-        this.criteria = criteria;
-    }
-
-    public Filter() {
-
-    }
 
     public int getId() {
         return id;

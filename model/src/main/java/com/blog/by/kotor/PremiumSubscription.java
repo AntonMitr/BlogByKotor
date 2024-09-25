@@ -1,24 +1,26 @@
 package com.blog.by.kotor;
 
+import jakarta.persistence.*;
+
 import java.sql.Date;
 
+@Entity
+@Table(name = "premium_subscriptions")
 public class PremiumSubscription {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int userId;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(name = "start_date")
     private Date startDate;
+
+    @Column(name = "end_date")
     private Date endDate;
-
-    public PremiumSubscription(int id, int user_id, Date start_date, Date end_date) {
-        this.id = id;
-        this.userId = user_id;
-        this.startDate = start_date;
-        this.endDate = end_date;
-    }
-
-    public PremiumSubscription() {
-
-    }
 
     public int getId() {
         return id;
@@ -28,12 +30,12 @@ public class PremiumSubscription {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Date getStartDate() {
@@ -56,9 +58,8 @@ public class PremiumSubscription {
     public String toString() {
         return "PremiumSubscription{" +
                 "id=" + id +
-                ", user_id=" + userId +
-                ", start_date=" + startDate +
-                ", end_date=" + endDate +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
                 '}';
     }
 

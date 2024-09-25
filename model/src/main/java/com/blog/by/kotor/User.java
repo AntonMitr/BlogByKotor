@@ -1,26 +1,51 @@
 package com.blog.by.kotor;
 
+import jakarta.persistence.*;
+
 import java.sql.Date;
+import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "users")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "created_at")
     private Date createdAt;
 
-    public User(int id, String name, String email, String password, Date createdAt) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.createdAt = createdAt;
-    }
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
+    private PremiumSubscription premiumSubscription;
 
-    public User() {
-    }
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
+    private Vote vote;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Poll> poll;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_roles",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private List<Role> roles;
 
     public int getId() {
         return id;
@@ -62,6 +87,46 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    public PremiumSubscription getPremiumSubscription() {
+        return premiumSubscription;
+    }
+
+    public void setPremiumSubscription(PremiumSubscription premiumSubscription) {
+        this.premiumSubscription = premiumSubscription;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public List<Poll> getPoll() {
+        return poll;
+    }
+
+    public void setPoll(List<Poll> poll) {
+        this.poll = poll;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -69,7 +134,8 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", created_at=" + createdAt +
+                ", createdAt=" + createdAt +
+                ", premiumSubscription=" + premiumSubscription +
                 '}';
     }
 

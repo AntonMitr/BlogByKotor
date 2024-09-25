@@ -1,28 +1,26 @@
 package com.blog.by.kotor.login.service;
 
-import com.blog.by.kotor.DAOException;
-import com.blog.by.kotor.DBException;
-import com.blog.by.kotor.LoginException;
-import com.blog.by.kotor.user.UserDAOImpl;
-
-import static com.blog.by.kotor.LoginException.LOGIN_CONFIRMED_TEXT;
-import static com.blog.by.kotor.LoginException.LOGIN_FAILED_TEXT;
+import com.blog.by.kotor.UserDAO;
 
 public class LoginServiceImpl implements LoginService {
 
+    private final UserDAO userDAO;
+
     public LoginServiceImpl() {
+        userDAO = UserDAO.getUserDAO();
     }
 
     @Override
-    public void login(String email, String password) throws DAOException, DBException, LoginException {
+    public boolean isLogin(String email, String password) {
         boolean result = true;
 
-        if (UserDAOImpl.getUserDAOImpl().findByEmail(email) && UserDAOImpl.getUserDAOImpl().findByPassword(password)) {
-            throw new LoginException(LOGIN_CONFIRMED_TEXT);
+        if (userDAO.findByEmail(email) && userDAO.findByPassword(password)) {
+            System.out.println("Добро пожаловать!");
         } else {
             System.out.println("Неправильный логин или пароль!");
-             throw new LoginException(LOGIN_FAILED_TEXT);
+            result = false;
         }
+        return result;
     }
 
 }
