@@ -1,6 +1,8 @@
 package com.blog.by.kotor.service.user;
 
 import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.NotNullParam;
+import com.blog.by.kotor.exception.create.CreateExceptionFactory;
 import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
 import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
@@ -21,6 +23,21 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void createUser(User user) {
+        if(user.getId() == null){
+            throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_ID);
+        }
+        if(user.getEmail() == null){
+            throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_EMAIL);
+        }
+        if(user.getName() == null){
+            throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_NAME);
+        }
+        if(user.getPassword() == null){
+            throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_PASSWORD);
+        }
+        if(user.getCreatedAt() == null){
+            throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_CREATED_AT);
+        }
         userRepository.save(user);
     }
 

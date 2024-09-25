@@ -22,7 +22,11 @@ public class Starter {
     public static void main( String[] args ) {
         ConfigurableApplicationContext context = SpringApplication.run(Starter.class, args);
 
-        CategoryService categoryService = context.getBean(CategoryService.class);
+        UserService userService = context.getBean(UserService.class);
+
+        User user = new User();
+        user.setId(23);
+        userService.createUser(user);
 
         context.close();
     }

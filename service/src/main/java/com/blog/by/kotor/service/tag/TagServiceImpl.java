@@ -1,8 +1,11 @@
 package com.blog.by.kotor.service.tag;
 
 import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.NotNullParam;
+import com.blog.by.kotor.exception.create.CreateExceptionFactory;
 import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
 import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
+import com.blog.by.kotor.exception.find.by.name.FindByNameExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Tag;
 import com.blog.by.kotor.repository.TagRepository;
@@ -21,12 +24,18 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void createTag(Tag tag) {
+        if(tag.getId() == null){
+            throw CreateExceptionFactory.TagParamNotBeNull(NotNullParam.TAG_ID);
+        }
+        if(tag.getName() == null){
+            throw CreateExceptionFactory.TagParamNotBeNull(NotNullParam.TAG_NAME);
+        }
         tagRepository.save(tag);
     }
 
     @Override
     public Tag findTagByName(String tagName) {
-        return tagRepository.findByName(tagName);
+        return tagRepository.findByName(tagName).orElseThrow(()-> FindByNameExceptionFactory.moduleNotFound(ErrorCode.TAG_NOT_FOUND, tagName));
     }
 
     @Override

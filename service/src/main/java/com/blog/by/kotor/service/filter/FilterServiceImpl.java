@@ -1,6 +1,8 @@
 package com.blog.by.kotor.service.filter;
 
 import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.NotNullParam;
+import com.blog.by.kotor.exception.create.CreateExceptionFactory;
 import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
 import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
@@ -77,6 +79,15 @@ public class FilterServiceImpl implements FilterService {
     @Override
     @Transactional
     public void createFilter(Filter filter) {
+        if(filter.getId() == null){
+            throw CreateExceptionFactory.FilterParamNotBeNull(NotNullParam.FILTER_ID);
+        }
+        if(filter.getCriteria() == null){
+            throw CreateExceptionFactory.FilterParamNotBeNull(NotNullParam.FILTER_CRITERIA);
+        }
+        if(filter.getName() == null){
+            throw CreateExceptionFactory.FilterParamNotBeNull(NotNullParam.FILTER_ID);
+        }
         filterRepository.save(filter);
     }
 

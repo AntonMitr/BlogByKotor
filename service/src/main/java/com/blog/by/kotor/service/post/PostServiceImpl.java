@@ -1,11 +1,14 @@
 package com.blog.by.kotor.service.post;
 
 import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.NotNullParam;
+import com.blog.by.kotor.exception.create.CreateExceptionFactory;
 import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
 import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Post;
 import com.blog.by.kotor.repository.PostRepository;
+import com.blog.by.kotor.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +21,26 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
+    private final UserService userService;
+
     @Override
     @Transactional
     public void createPost(Post post) {
+        if(post.getId() == null){
+            throw CreateExceptionFactory.PostParamNotBeNull(NotNullParam.POST_ID);
+        }
+        if(post.getUser().getId() == null){
+            throw CreateExceptionFactory.PostParamNotBeNull(NotNullParam.POST_USER_ID);
+        }
+        if(post.getContent() == null){
+            throw CreateExceptionFactory.PostParamNotBeNull(NotNullParam.POST_CONTENT);
+        }
+        if(post.getTitle() == null){
+            throw CreateExceptionFactory.PostParamNotBeNull(NotNullParam.POST_TITLE);
+        }
+        if(post.getDatePublished() == null){
+            throw CreateExceptionFactory.PostParamNotBeNull(NotNullParam.POST_DATE_PUBLISHED);
+        }
         postRepository.save(post);
     }
 
@@ -31,6 +51,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> findByUserId(Integer userId) {
+        userService.findUserById(userId);
         return postRepository.findByUserId(userId);
     }
 

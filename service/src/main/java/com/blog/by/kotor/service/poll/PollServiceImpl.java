@@ -1,11 +1,15 @@
 package com.blog.by.kotor.service.poll;
 
 import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.NotNullParam;
+import com.blog.by.kotor.exception.create.CreateExceptionFactory;
 import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
 import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Poll;
 import com.blog.by.kotor.repository.PollRepository;
+import com.blog.by.kotor.repository.UserRepository;
+import com.blog.by.kotor.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +22,23 @@ public class PollServiceImpl implements PollService {
 
     private final PollRepository pollRepository;
 
+    private final UserService userService;
+
     @Override
     @Transactional
     public void createPoll(Poll poll) {
+        if(poll.getId() == null){
+            throw CreateExceptionFactory.PollParamNotBeNull(NotNullParam.POLL_ID);
+        }
+        if(poll.getUser().getId() == null){
+            throw CreateExceptionFactory.PollParamNotBeNull(NotNullParam.POLL_USER_ID);
+        }
+        if(poll.getTitle() == null){
+            throw CreateExceptionFactory.PollParamNotBeNull(NotNullParam.POLL_TITLE);
+        }
+        if(poll.getCreatedAt() == null){
+            throw CreateExceptionFactory.PollParamNotBeNull(NotNullParam.POLL_CREATED_AT);
+        }
         pollRepository.save(poll);
     }
 
@@ -42,6 +60,7 @@ public class PollServiceImpl implements PollService {
 
     @Override
     public List<Poll> findPollByUserId(Integer userId) {
+        userService.findUserById(userId);
         return pollRepository.findByUserId(userId);
     }
 

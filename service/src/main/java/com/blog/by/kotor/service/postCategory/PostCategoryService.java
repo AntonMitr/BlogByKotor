@@ -17,8 +17,6 @@ public interface PostCategoryService {
 
     void updatePostCategory(PostCategory postCategory);
 
-    void deletePostCategoryById(Integer id);
-
     void deletePostCategory(PostCategory postCategory);
 
 }

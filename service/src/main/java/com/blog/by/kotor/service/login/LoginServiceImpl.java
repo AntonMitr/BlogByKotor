@@ -13,16 +13,13 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     @Transactional
-    public boolean isLogin(String email, String password) {
-        boolean result = true;
+    public void isLogin(String email, String password) {
 
         if (userRepository.findByEmail(email) && userRepository.findByPassword(password)) {
-            System.out.println("Добро пожаловать!");
+            throw new RuntimeException("Добро пожаловать!");
         } else {
-            System.out.println("Неправильный логин или пароль!");
-            result = false;
+            throw new RuntimeException("Неправильный логин или пароль!");
         }
-        return result;
     }
 
 }

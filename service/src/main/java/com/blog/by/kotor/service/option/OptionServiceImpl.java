@@ -1,11 +1,15 @@
 package com.blog.by.kotor.service.option;
 
 import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.NotNullParam;
+import com.blog.by.kotor.exception.create.CreateExceptionFactory;
 import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
 import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Option;
 import com.blog.by.kotor.repository.OptionRepository;
+import com.blog.by.kotor.repository.QuestionRepository;
+import com.blog.by.kotor.service.question.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +22,26 @@ public class OptionServiceImpl implements OptionService {
 
     private final OptionRepository optionRepository;
 
+    private final QuestionService questionService;
+
     @Override
     @Transactional
     public void createOption(Option option) {
+        if(option.getId() == null){
+            throw CreateExceptionFactory.OptionParamNotBeNull(NotNullParam.OPTION_ID);
+        }
+        if(option.getOptionText() == null){
+            throw CreateExceptionFactory.OptionParamNotBeNull(NotNullParam.OPTION_TEXT);
+        }
+        if(option.getQuestion().getId() == null){
+            throw CreateExceptionFactory.OptionParamNotBeNull(NotNullParam.OPTION_QUESTION_ID);
+        }
         optionRepository.save(option);
     }
 
     @Override
     public List<Option> findByQuestionId(Integer id) {
+        questionService.findQuestionById(id);
         return optionRepository.findByQuestionId(id);
     }
 

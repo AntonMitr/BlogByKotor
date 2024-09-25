@@ -16,8 +16,6 @@ public interface UserRoleService {
 
     void updateUserRole(UserRole userRole);
 
-    void deleteUserRoleById(Integer id);
-
     void deleteUserRole(UserRole userRole);
 
 }

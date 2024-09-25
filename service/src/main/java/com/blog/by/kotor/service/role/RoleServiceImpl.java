@@ -1,6 +1,8 @@
 package com.blog.by.kotor.service.role;
 
 import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.NotNullParam;
+import com.blog.by.kotor.exception.create.CreateExceptionFactory;
 import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
 import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
@@ -21,6 +23,12 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public void createRole(Role role) {
+        if(role.getId() == null){
+            throw CreateExceptionFactory.RoleParamNotBeNull(NotNullParam.ROLE_ID);
+        }
+        if(role.getName() == null){
+            throw CreateExceptionFactory.RoleParamNotBeNull(NotNullParam.ROLE_NAME);
+        }
         roleRepository.save(role);
     }
 

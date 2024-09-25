@@ -1,5 +1,7 @@
 package com.blog.by.kotor.service.registration;
 
+import com.blog.by.kotor.exception.NotNullParam;
+import com.blog.by.kotor.exception.create.CreateExceptionFactory;
 import com.blog.by.kotor.model.User;
 import com.blog.by.kotor.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,21 +26,22 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (user.getEmail() == null) {
             result = false;
             LOGGER.error("Почта не может быть null");
+            throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_EMAIL);
         }
-
         if (user.getPassword() == null) {
             result = false;
             LOGGER.error("Пароль не может быть null");
+            throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_PASSWORD);
         }
-
         if (user.getPassword().length() < 6) {
             result = false;
             LOGGER.error("Пароль должен содержать не менее 6 символов!");
+            throw new RuntimeException("Пароль должен содержать не менее 6 символов!");
         }
-
         if (userRepository.findByEmail(user.getEmail())) {
             result = false;
             LOGGER.error("Данный пользователь уже существует!");
+            throw new RuntimeException("Данный пользователь уже существует!");
         }
 
         userRepository.save(user);

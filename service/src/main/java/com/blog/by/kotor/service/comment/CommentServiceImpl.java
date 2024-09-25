@@ -8,6 +8,10 @@ import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Comment;
 import com.blog.by.kotor.repository.CommentRepository;
+import com.blog.by.kotor.repository.PostRepository;
+import com.blog.by.kotor.repository.UserRepository;
+import com.blog.by.kotor.service.post.PostService;
+import com.blog.by.kotor.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +23,8 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
+    private final PostService postService;
+    private final UserService userService;
 
     @Override
     @Transactional
@@ -30,14 +36,20 @@ public class CommentServiceImpl implements CommentService {
             throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_CONTENT);
         }
         if(comment.getPost().getId() == null){
-            throw CreateExceptionFactory.CategoryParamNotBeNull(NotNullParam.COMMENT_POST_ID);
+            throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_POST_ID);
         }
-        if(comment.getPost().getId() == null){}
+        if(comment.getUser().getId() == null){
+            throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_USER_ID);
+        }
+        if(comment.getCreatedAt() == null){
+            throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_CONTENT);
+        }
         commentRepository.save(comment);
     }
 
     @Override
     public List<Comment> findCommentByPostId(Integer postId) {
+        postService.findPostById(postId);
         return commentRepository.findByPostId(postId);
     }
 
@@ -74,11 +86,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> findByPostIdOrderByCreatedAt(Integer postId) {
+        postService.findPostById(postId);
         return commentRepository.findByPostIdOrderByCreatedAt(postId);
     }
 
     @Override
     public List<Comment> findByUserIdOrderByCreatedAt(Integer userId) {
+        userService.findUserById(userId);
         return commentRepository.findByUserIdOrderByCreatedAt(userId);
     }
 

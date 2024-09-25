@@ -1,6 +1,8 @@
 package com.blog.by.kotor.service.vote;
 
 import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.NotNullParam;
+import com.blog.by.kotor.exception.create.CreateExceptionFactory;
 import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
 import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
@@ -21,6 +23,18 @@ public class VoteServiceImpl implements VoteService {
     @Override
     @Transactional
     public void createVote(Vote vote) {
+        if(vote.getId() == null){
+            throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.VOTE_ID);
+        }
+        if(vote.getPost().getId() == null){
+            throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.VOTE_POST_ID);
+        }
+        if(vote.getOption().getId() == null){
+            throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.VOTE_OPTION_ID);
+        }
+        if(vote.getUser().getId() == null){
+            throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.VOTE_USER_ID);
+        }
         voteRepository.save(vote);
     }
 
