@@ -26,13 +26,13 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public void createQuestion(Question question) {
-        if(question.getId() == null){
+        if (question.getId() == null) {
             throw CreateExceptionFactory.QuestionParamNotBeNull(NotNullParam.QUESTION_ID);
         }
-        if(question.getPoll().getId() == null){
+        if (question.getPoll().getId() == null) {
             throw CreateExceptionFactory.QuestionParamNotBeNull(NotNullParam.QUESTION_POLL_ID);
         }
-        if(question.getQuestionText() == null){
+        if (question.getQuestionText() == null) {
             throw CreateExceptionFactory.QuestionParamNotBeNull(NotNullParam.QUESTION_TEXT);
         }
         questionRepository.save(question);

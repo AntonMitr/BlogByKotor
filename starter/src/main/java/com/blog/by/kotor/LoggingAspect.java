@@ -21,7 +21,7 @@ public class LoggingAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingAspect.class);
 
     @Pointcut("execution(* com.blog.by.kotor.service..*(..))")
-        public void serviceLayer() {
+    public void serviceLayer() {
     }
 
     @Before("serviceLayer()")

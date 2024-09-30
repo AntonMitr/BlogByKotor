@@ -1,6 +1,6 @@
 <configuration debug="false">
     <include
-            resource="/org/springframework/boot/logging/logback/base.xml" />
+            resource="/org/springframework/boot/logging/logback/base.xml"/>
     <appender name="STDOUT"
               class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -30,12 +30,12 @@
         </encoder>
     </appender>
 
-    <logger name="com.blog.by.kotor" level="ERROR" />
-    <logger name="com.blog.by.kotor" level="INFO" />
+    <logger name="com.blog.by.kotor" level="ERROR"/>
+    <logger name="com.blog.by.kotor" level="INFO"/>
 
     <root level="info">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 
 </configuration>

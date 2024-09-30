@@ -8,7 +8,6 @@ import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Poll;
 import com.blog.by.kotor.repository.PollRepository;
-import com.blog.by.kotor.repository.UserRepository;
 import com.blog.by.kotor.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,16 +26,16 @@ public class PollServiceImpl implements PollService {
     @Override
     @Transactional
     public void createPoll(Poll poll) {
-        if(poll.getId() == null){
+        if (poll.getId() == null) {
             throw CreateExceptionFactory.PollParamNotBeNull(NotNullParam.POLL_ID);
         }
-        if(poll.getUser().getId() == null){
+        if (poll.getUser().getId() == null) {
             throw CreateExceptionFactory.PollParamNotBeNull(NotNullParam.POLL_USER_ID);
         }
-        if(poll.getTitle() == null){
+        if (poll.getTitle() == null) {
             throw CreateExceptionFactory.PollParamNotBeNull(NotNullParam.POLL_TITLE);
         }
-        if(poll.getCreatedAt() == null){
+        if (poll.getCreatedAt() == null) {
             throw CreateExceptionFactory.PollParamNotBeNull(NotNullParam.POLL_CREATED_AT);
         }
         pollRepository.save(poll);

@@ -8,7 +8,6 @@ import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Option;
 import com.blog.by.kotor.repository.OptionRepository;
-import com.blog.by.kotor.repository.QuestionRepository;
 import com.blog.by.kotor.service.question.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,13 +26,13 @@ public class OptionServiceImpl implements OptionService {
     @Override
     @Transactional
     public void createOption(Option option) {
-        if(option.getId() == null){
+        if (option.getId() == null) {
             throw CreateExceptionFactory.OptionParamNotBeNull(NotNullParam.OPTION_ID);
         }
-        if(option.getOptionText() == null){
+        if (option.getOptionText() == null) {
             throw CreateExceptionFactory.OptionParamNotBeNull(NotNullParam.OPTION_TEXT);
         }
-        if(option.getQuestion().getId() == null){
+        if (option.getQuestion().getId() == null) {
             throw CreateExceptionFactory.OptionParamNotBeNull(NotNullParam.OPTION_QUESTION_ID);
         }
         optionRepository.save(option);

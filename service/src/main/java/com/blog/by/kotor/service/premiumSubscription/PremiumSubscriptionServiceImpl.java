@@ -6,8 +6,8 @@ import com.blog.by.kotor.exception.create.CreateExceptionFactory;
 import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
 import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
-import com.blog.by.kotor.repository.PremiumSubscriptionRepository;
 import com.blog.by.kotor.model.PremiumSubscription;
+import com.blog.by.kotor.repository.PremiumSubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,16 +23,16 @@ public class PremiumSubscriptionServiceImpl implements PremiumSubscriptionServic
     @Override
     @Transactional
     public void createPremiumSubscription(PremiumSubscription premiumSubscription) {
-        if(premiumSubscription.getId() == null){
+        if (premiumSubscription.getId() == null) {
             throw CreateExceptionFactory.PremiumSubscriptionParamNotBeNull(NotNullParam.PREMIUM_SUBSCRIPTION_ID);
         }
-        if(premiumSubscription.getUser().getId() == null){
+        if (premiumSubscription.getUser().getId() == null) {
             throw CreateExceptionFactory.PremiumSubscriptionParamNotBeNull(NotNullParam.PREMIUM_SUBSCRIPTION_USER_ID);
         }
-        if(premiumSubscription.getStartDate() == null){
+        if (premiumSubscription.getStartDate() == null) {
             throw CreateExceptionFactory.PremiumSubscriptionParamNotBeNull(NotNullParam.PREMIUM_SUBSCRIPTION_START_DATE);
         }
-        if(premiumSubscription.getEndDate() == null){
+        if (premiumSubscription.getEndDate() == null) {
             throw CreateExceptionFactory.PremiumSubscriptionParamNotBeNull(NotNullParam.PREMIUM_SUBSCRIPTION_START_DATE);
         }
         premiumSubscriptionRepository.save(premiumSubscription);

@@ -8,7 +8,6 @@ import com.blog.by.kotor.repository.UserRoleRepository;
 import com.blog.by.kotor.service.role.RoleService;
 import com.blog.by.kotor.service.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,10 +34,10 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     @Transactional
     public void createUserRole(UserRole userRole) {
-        if(userRole.getUserRoleId().getUserId() == null){
+        if (userRole.getUserRoleId().getUserId() == null) {
             throw CreateExceptionFactory.UserRoleParamNotBeNull(NotNullParam.USER_ROLE_USER_ID);
         }
-        if(userRole.getUserRoleId().getRoleId() == null){
+        if (userRole.getUserRoleId().getRoleId() == null) {
             throw CreateExceptionFactory.UserRoleParamNotBeNull(NotNullParam.USER_ROLE_ROLE_ID);
         }
         userRoleRepository.save(userRole);

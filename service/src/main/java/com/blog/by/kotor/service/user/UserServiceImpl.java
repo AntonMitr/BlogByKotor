@@ -23,19 +23,19 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void createUser(User user) {
-        if(user.getId() == null){
+        if (user.getId() == null) {
             throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_ID);
         }
-        if(user.getEmail() == null){
+        if (user.getEmail() == null) {
             throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_EMAIL);
         }
-        if(user.getName() == null){
+        if (user.getName() == null) {
             throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_NAME);
         }
-        if(user.getPassword() == null){
+        if (user.getPassword() == null) {
             throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_PASSWORD);
         }
-        if(user.getCreatedAt() == null){
+        if (user.getCreatedAt() == null) {
             throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_CREATED_AT);
         }
         userRepository.save(user);

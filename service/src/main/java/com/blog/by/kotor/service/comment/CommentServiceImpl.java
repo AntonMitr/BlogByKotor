@@ -8,8 +8,6 @@ import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Comment;
 import com.blog.by.kotor.repository.CommentRepository;
-import com.blog.by.kotor.repository.PostRepository;
-import com.blog.by.kotor.repository.UserRepository;
 import com.blog.by.kotor.service.post.PostService;
 import com.blog.by.kotor.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,19 +27,19 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void createComment(Comment comment) {
-        if(comment.getId() == null){
+        if (comment.getId() == null) {
             throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_ID);
         }
-        if(comment.getContent() == null){
+        if (comment.getContent() == null) {
             throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_CONTENT);
         }
-        if(comment.getPost().getId() == null){
+        if (comment.getPost().getId() == null) {
             throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_POST_ID);
         }
-        if(comment.getUser().getId() == null){
+        if (comment.getUser().getId() == null) {
             throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_USER_ID);
         }
-        if(comment.getCreatedAt() == null){
+        if (comment.getCreatedAt() == null) {
             throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_CONTENT);
         }
         commentRepository.save(comment);

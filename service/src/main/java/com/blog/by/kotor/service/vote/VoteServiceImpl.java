@@ -23,16 +23,16 @@ public class VoteServiceImpl implements VoteService {
     @Override
     @Transactional
     public void createVote(Vote vote) {
-        if(vote.getId() == null){
+        if (vote.getId() == null) {
             throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.VOTE_ID);
         }
-        if(vote.getPost().getId() == null){
+        if (vote.getPost().getId() == null) {
             throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.VOTE_POST_ID);
         }
-        if(vote.getOption().getId() == null){
+        if (vote.getOption().getId() == null) {
             throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.VOTE_OPTION_ID);
         }
-        if(vote.getUser().getId() == null){
+        if (vote.getUser().getId() == null) {
             throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.VOTE_USER_ID);
         }
         voteRepository.save(vote);
