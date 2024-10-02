@@ -1,6 +1,5 @@
-package com.blog.by.kotor;
+package com.blog.by.kotor.controller;
 
-import com.blog.by.kotor.model.User;
 import com.blog.by.kotor.model.Vote;
 import com.blog.by.kotor.service.vote.VoteService;
 import lombok.RequiredArgsConstructor;
@@ -9,13 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/votes")
+@RequestMapping("/v1/vote")
 @RequiredArgsConstructor
 public class VoteController {
 
     private final VoteService voteService;
 
-    @GetMapping("/all")
+    @GetMapping("/view-votes")
     public ResponseEntity<?> getAllVotes() {
         return new ResponseEntity<>(voteService.findAllVote(), HttpStatus.OK);
     }
@@ -25,23 +24,23 @@ public class VoteController {
         return new ResponseEntity<>(voteService.findVoteById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/users")
-    public ResponseEntity<?> getVoteByUserId(@RequestParam Integer userId) {
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getVoteByUserId(@PathVariable Integer userId) {
         return new ResponseEntity<>(voteService.findVotesByUserId(userId), HttpStatus.OK);
     }
 
-    @GetMapping("/questions")
-    public ResponseEntity<?> getVoteByOptionId(@RequestParam Integer optionId) {
+    @GetMapping("/option/{optionId}")
+    public ResponseEntity<?> getVoteByOptionId(@PathVariable Integer optionId) {
         return new ResponseEntity<>(voteService.findVotesByOptionId(optionId), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/add-vote")
     public ResponseEntity<?> addVote(@RequestBody Vote vote) {
         voteService.createVote(vote);
         return new ResponseEntity<>(vote, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/update-vote")
     public ResponseEntity<?> updateVote(@RequestBody Vote vote) {
         voteService.updateVote(vote);
         return new ResponseEntity<>(vote, HttpStatus.OK);

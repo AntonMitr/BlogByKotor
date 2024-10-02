@@ -8,7 +8,11 @@ import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.User;
 import com.blog.by.kotor.repository.UserRepository;
+import com.blog.by.kotor.service.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +20,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -29,7 +33,7 @@ public class UserServiceImpl implements UserService {
         if (user.getEmail() == null) {
             throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_EMAIL);
         }
-        if (user.getName() == null) {
+        if (user.getUsername() == null) {
             throw CreateExceptionFactory.UserParamNotBeNull(NotNullParam.USER_NAME);
         }
         if (user.getPassword() == null) {
@@ -70,6 +74,13 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(User user) {
         userRepository.findById(user.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.USER_NOT_FOUND, user.getId()));
         userRepository.deleteById(user.getId());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Пользователь с username: " + username + " не найден"));
+
+        return UserDetailsImpl.build(user);
     }
 
 }

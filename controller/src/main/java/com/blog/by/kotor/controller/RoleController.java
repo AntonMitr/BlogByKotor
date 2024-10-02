@@ -1,4 +1,4 @@
-package com.blog.by.kotor;
+package com.blog.by.kotor.controller;
 
 import com.blog.by.kotor.model.Role;
 import com.blog.by.kotor.service.role.RoleService;
@@ -14,7 +14,7 @@ public class RoleController {
 
     private final RoleService roleService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<?> getAllRoles() {
         return new ResponseEntity<>(roleService.findAllRole(), HttpStatus.OK);
     }

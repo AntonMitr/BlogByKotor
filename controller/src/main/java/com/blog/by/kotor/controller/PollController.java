@@ -1,4 +1,4 @@
-package com.blog.by.kotor;
+package com.blog.by.kotor.controller;
 
 
 import com.blog.by.kotor.model.Poll;
@@ -9,39 +9,39 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/polls")
+@RequestMapping("/v1/poll")
 @RequiredArgsConstructor
 public class PollController {
 
     private final PollService pollService;
 
-    @GetMapping("/all")
-    public ResponseEntity<?> findAllOPolls() {
+    @GetMapping("/view-polls")
+    public ResponseEntity<?> viewAllOPolls() {
         return new ResponseEntity<>(pollService.findAllPoll(), HttpStatus.OK);
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<?> findPollByUerId(@RequestParam Integer userId) {
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> viewPollByUerId(@PathVariable Integer userId) {
         return new ResponseEntity<>(pollService.findPollByUserId(userId), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findPollById(@PathVariable Integer id) {
+    public ResponseEntity<?> viewPollById(@PathVariable Integer id) {
         return new ResponseEntity<>(pollService.findPollById(id), HttpStatus.OK);
     }
 
-    @GetMapping()
-    public ResponseEntity<?> findPollByTitle(@RequestParam String title) {
+    @GetMapping
+    public ResponseEntity<?> viewPollByTitle(@RequestParam String title) {
         return new ResponseEntity<>(pollService.findPollByTitle(title), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<?> createPoll(@RequestBody Poll poll) {
+    @PostMapping("/add-poll")
+    public ResponseEntity<?> addPoll(@RequestBody Poll poll) {
         pollService.createPoll(poll);
         return new ResponseEntity<>(poll, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("update-poll")
     public ResponseEntity<?> updatePoll(@RequestBody Poll poll) {
         pollService.updatePoll(poll);
         return new ResponseEntity<>(poll, HttpStatus.OK);

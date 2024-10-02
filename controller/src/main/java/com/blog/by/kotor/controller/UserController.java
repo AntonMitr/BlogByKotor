@@ -1,4 +1,4 @@
-package com.blog.by.kotor;
+package com.blog.by.kotor.controller;
 
 import com.blog.by.kotor.model.User;
 import com.blog.by.kotor.service.user.UserService;
@@ -8,29 +8,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/users")
+@RequestMapping("/v1/user")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllUsers() {
+    @GetMapping("/view-users")
+    public ResponseEntity<?> viewAllUsers() {
         return new ResponseEntity<>(userService.findAllUser(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Integer id) {
+    public ResponseEntity<?> viewUserById(@PathVariable Integer id) {
         return new ResponseEntity<>(userService.findUserById(id), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/add-user")
     public ResponseEntity<?> addUser(@RequestBody User user) {
         userService.createUser(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/update-user")
     public ResponseEntity<?> updateUser(@RequestBody User user) {
         userService.updateUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);

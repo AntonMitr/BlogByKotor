@@ -1,4 +1,4 @@
-package com.blog.by.kotor;
+package com.blog.by.kotor.controller;
 
 import com.blog.by.kotor.model.Option;
 import com.blog.by.kotor.service.option.OptionService;
@@ -8,34 +8,34 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/options")
+@RequestMapping("/v1/option")
 @RequiredArgsConstructor
 public class OptionController {
 
     private final OptionService optionService;
 
-    @GetMapping("/all")
-    public ResponseEntity<?> findAllOption() {
+    @GetMapping("/view-options")
+    public ResponseEntity<?> viewAllOption() {
         return new ResponseEntity<>(optionService.findAllOption(), HttpStatus.OK);
     }
 
-    @GetMapping("/question")
-    public ResponseEntity<?> findOptionByQuestionId(@RequestParam Integer questionId) {
+    @GetMapping("/question/{questionId}")
+    public ResponseEntity<?> viewOptionByQuestionId(@PathVariable Integer questionId) {
         return new ResponseEntity<>(optionService.findByQuestionId(questionId), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findOptionById(@PathVariable Integer id) {
+    public ResponseEntity<?> viewOptionById(@PathVariable Integer id) {
         return new ResponseEntity<>(optionService.findOptionById(id), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<?> createOption(@RequestBody Option option) {
+    @PostMapping("/add-option")
+    public ResponseEntity<?> addOption(@RequestBody Option option) {
         optionService.createOption(option);
         return new ResponseEntity<>(option, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/update-option")
     public ResponseEntity<?> updateOption(@RequestBody Option option) {
         optionService.updateOption(option);
         return new ResponseEntity<>(option, HttpStatus.OK);

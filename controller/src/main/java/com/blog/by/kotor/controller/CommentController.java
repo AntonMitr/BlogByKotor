@@ -1,4 +1,4 @@
-package com.blog.by.kotor;
+package com.blog.by.kotor.controller;
 
 import com.blog.by.kotor.model.Comment;
 import com.blog.by.kotor.service.comment.CommentService;
@@ -8,44 +8,44 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/comments")
+@RequestMapping("/v1/comment")
 @RequiredArgsConstructor
 public class CommentController {
 
     public final CommentService commentService;
 
-    @GetMapping("/all")
-    public ResponseEntity<?> findAllComments() {
+    @GetMapping("/view-comments")
+    public ResponseEntity<?> viewAllComments() {
         return new ResponseEntity<>(commentService.findAllComment(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findCommentById(@PathVariable Integer id) {
+    public ResponseEntity<?> viewCommentById(@PathVariable Integer id) {
         return new ResponseEntity<>(commentService.findCommentById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/post")
-    public ResponseEntity<?> findCommentsByPostId(@RequestParam Integer postId) {
+    @GetMapping("/post/{posId}")
+    public ResponseEntity<?> viewCommentsByPostId(@PathVariable Integer postId) {
         return new ResponseEntity<>(commentService.findCommentByPostId(postId), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<?> createComment(@RequestBody Comment comment) {
+    @PostMapping("add-comment")
+    public ResponseEntity<?> addComment(@RequestBody Comment comment) {
         commentService.createComment(comment);
         return new ResponseEntity<>(comment, HttpStatus.CREATED);
     }
 
-    @GetMapping("/post/order-by-created")
-    public ResponseEntity<?> findByPostIdOrderByCreatedAt(@RequestParam Integer postId) {
+    @GetMapping("/post/{postId}/order-by-created")
+    public ResponseEntity<?> viewByPostIdOrderByCreatedAt(@RequestParam Integer postId) {
         return new ResponseEntity<>(commentService.findByPostIdOrderByCreatedAt(postId), HttpStatus.OK);
     }
 
-    @GetMapping("/user/order-by-created")
-    public ResponseEntity<?> findByUserIdOrderByCreatedAt(@RequestParam Integer userId) {
+    @GetMapping("/user/{userId}/order-by-created")
+    public ResponseEntity<?> viewByUserIdOrderByCreatedAt(@RequestParam Integer userId) {
         return new ResponseEntity<>(commentService.findByUserIdOrderByCreatedAt(userId), HttpStatus.OK);
     }
 
-    @PutMapping
+    @PutMapping("update-comment")
     public ResponseEntity<?> updateComment(@RequestBody Comment comment) {
         commentService.updateComment(comment);
         return new ResponseEntity<>(comment, HttpStatus.OK);
