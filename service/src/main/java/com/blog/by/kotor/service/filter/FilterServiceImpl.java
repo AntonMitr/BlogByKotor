@@ -12,13 +12,14 @@ import com.blog.by.kotor.model.Post;
 import com.blog.by.kotor.model.Tag;
 import com.blog.by.kotor.model.postCategory.PostCategory;
 import com.blog.by.kotor.model.postTag.PostTag;
-import com.blog.by.kotor.repository.FilterRepository;
+import com.blog.by.kotor.repository.*;
 import com.blog.by.kotor.service.category.CategoryService;
 import com.blog.by.kotor.service.post.PostService;
 import com.blog.by.kotor.service.postCategory.PostCategoryService;
 import com.blog.by.kotor.service.postTag.PostTagService;
 import com.blog.by.kotor.service.tag.TagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,21 +79,22 @@ public class FilterServiceImpl implements FilterService {
     @Override
     @Transactional
     public void createFilter(Filter filter) {
-        if (filter.getId() == null) {
-            throw CreateExceptionFactory.FilterParamNotBeNull(NotNullParam.FILTER_ID);
+        if(filter.getId() == null){
+            throw new CreateException(ErrorCode.FILTER_ID);
         }
-        if (filter.getCriteria() == null) {
-            throw CreateExceptionFactory.FilterParamNotBeNull(NotNullParam.FILTER_CRITERIA);
+        if(filter.getCriteria() == null){
+            throw new CreateException(ErrorCode.FILTER_CRITERIA);
         }
-        if (filter.getName() == null) {
-            throw CreateExceptionFactory.FilterParamNotBeNull(NotNullParam.FILTER_ID);
+        if(filter.getName() == null){
+            throw new CreateException(ErrorCode.FILTER_ID);
         }
         filterRepository.save(filter);
     }
 
     @Override
     public Filter findFilterById(Integer id) {
-        return filterRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.FILTER_NOT_FOUND, id));
+        return filterRepository.findById(id)
+                .orElseThrow(() -> new FindByIdException(ErrorCode.FILTER_NOT_FOUND, id));
     }
 
     @Override
@@ -103,21 +105,24 @@ public class FilterServiceImpl implements FilterService {
     @Override
     @Transactional
     public void updateFilter(Filter filter) {
-        filterRepository.findById(filter.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.FILTER_NOT_FOUND, filter.getId()));
+        filterRepository.findById(filter.getId())
+                .orElseThrow(() -> new UpdateException(ErrorCode.FILTER_NOT_FOUND, filter.getId()));
         filterRepository.save(filter);
     }
 
     @Override
     @Transactional
     public void deleteFilterById(Integer id) {
-        filterRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.FILTER_NOT_FOUND, id));
+        filterRepository.findById(id)
+                .orElseThrow(() -> new DeleteException(ErrorCode.FILTER_NOT_FOUND, id));
         filterRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteFilter(Filter filter) {
-        filterRepository.findById(filter.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.FILTER_NOT_FOUND, filter.getId()));
+        filterRepository.findById(filter.getId())
+                .orElseThrow(() -> new DeleteException(ErrorCode.FILTER_NOT_FOUND, filter.getId()));
         filterRepository.delete(filter);
     }
 

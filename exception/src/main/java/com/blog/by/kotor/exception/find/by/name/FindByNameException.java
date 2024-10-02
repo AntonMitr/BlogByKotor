@@ -6,11 +6,8 @@ import lombok.Getter;
 @Getter
 public class FindByNameException extends RuntimeException {
 
-    private final ErrorCode errorCode;
-
-    public FindByNameException(ErrorCode errorCode, String message) {
-        super(message);
-        this.errorCode = errorCode;
+    public FindByNameException(ErrorCode errorCode, String name) {
+        super(String.format(errorCode.getMessage(), name));
     }
 
 }

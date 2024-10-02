@@ -8,6 +8,7 @@ import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
 import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
 import com.blog.by.kotor.model.Option;
 import com.blog.by.kotor.repository.OptionRepository;
+import com.blog.by.kotor.repository.QuestionRepository;
 import com.blog.by.kotor.service.question.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,14 +27,14 @@ public class OptionServiceImpl implements OptionService {
     @Override
     @Transactional
     public void createOption(Option option) {
-        if (option.getId() == null) {
-            throw CreateExceptionFactory.OptionParamNotBeNull(NotNullParam.OPTION_ID);
+        if(option.getId() == null){
+            throw new CreateException(ErrorCode.OPTION_ID);
         }
-        if (option.getOptionText() == null) {
-            throw CreateExceptionFactory.OptionParamNotBeNull(NotNullParam.OPTION_TEXT);
+        if(option.getOptionText() == null){
+            throw new CreateException(ErrorCode.OPTION_TEXT);
         }
-        if (option.getQuestion().getId() == null) {
-            throw CreateExceptionFactory.OptionParamNotBeNull(NotNullParam.OPTION_QUESTION_ID);
+        if(option.getQuestion().getId() == null){
+            throw new CreateException(ErrorCode.OPTION_QUESTION_ID);
         }
         optionRepository.save(option);
     }
@@ -46,7 +47,8 @@ public class OptionServiceImpl implements OptionService {
 
     @Override
     public Option findOptionById(Integer id) {
-        return optionRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.OPTION_NOT_FOUND, id));
+        return optionRepository.findById(id)
+                .orElseThrow(() -> new FindByIdException(ErrorCode.OPTION_NOT_FOUND, id));
     }
 
     @Override
@@ -57,21 +59,24 @@ public class OptionServiceImpl implements OptionService {
     @Override
     @Transactional
     public void updateOption(Option option) {
-        optionRepository.findById(option.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.OPTION_NOT_FOUND, option.getId()));
+        optionRepository.findById(option.getId())
+                .orElseThrow(() -> new UpdateException(ErrorCode.OPTION_NOT_FOUND, option.getId()));
         optionRepository.save(option);
     }
 
     @Override
     @Transactional
     public void deleteOptionById(Integer id) {
-        optionRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.OPTION_NOT_FOUND, id));
+        optionRepository.findById(id)
+                .orElseThrow(() -> new DeleteException(ErrorCode.OPTION_NOT_FOUND, id));
         optionRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteOption(Option option) {
-        optionRepository.findById(option.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.OPTION_NOT_FOUND, option.getId()));
+        optionRepository.findById(option.getId())
+                .orElseThrow(() -> new DeleteException(ErrorCode.OPTION_NOT_FOUND, option.getId()));
         optionRepository.delete(option);
     }
 

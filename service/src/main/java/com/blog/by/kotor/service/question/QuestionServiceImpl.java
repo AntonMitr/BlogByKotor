@@ -26,21 +26,22 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public void createQuestion(Question question) {
-        if (question.getId() == null) {
-            throw CreateExceptionFactory.QuestionParamNotBeNull(NotNullParam.QUESTION_ID);
+        if(question.getId() == null){
+            throw new CreateException(ErrorCode.QUESTION_ID);
         }
-        if (question.getPoll().getId() == null) {
-            throw CreateExceptionFactory.QuestionParamNotBeNull(NotNullParam.QUESTION_POLL_ID);
+        if(question.getPoll().getId() == null){
+            throw new CreateException(ErrorCode.QUESTION_POLL_ID);
         }
-        if (question.getQuestionText() == null) {
-            throw CreateExceptionFactory.QuestionParamNotBeNull(NotNullParam.QUESTION_TEXT);
+        if(question.getQuestionText() == null){
+            throw new CreateException(ErrorCode.QUESTION_TEXT);
         }
         questionRepository.save(question);
     }
 
     @Override
     public Question findQuestionById(Integer id) {
-        return questionRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.QUESTION_NOT_FOUND, id));
+        return questionRepository.findById(id)
+                .orElseThrow(() -> new FindByIdException(ErrorCode.QUESTION_NOT_FOUND, id));
 
     }
 
@@ -57,21 +58,24 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public void updateQuestion(Question question) {
-        questionRepository.findById(question.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.QUESTION_NOT_FOUND, question.getId()));
+        questionRepository.findById(question.getId())
+                .orElseThrow(() -> new UpdateException(ErrorCode.QUESTION_NOT_FOUND, question.getId()));
         questionRepository.save(question);
     }
 
     @Override
     @Transactional
     public void deleteQuestionById(Integer id) {
-        questionRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.QUESTION_NOT_FOUND, id));
+        questionRepository.findById(id)
+                .orElseThrow(() -> new DeleteException(ErrorCode.QUESTION_NOT_FOUND, id));
         questionRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteQuestion(Question question) {
-        questionRepository.findById(question.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.QUESTION_NOT_FOUND, question.getId()));
+        questionRepository.findById(question.getId())
+                .orElseThrow(() -> new DeleteException(ErrorCode.QUESTION_NOT_FOUND, question.getId()));
         questionRepository.delete(question);
     }
 

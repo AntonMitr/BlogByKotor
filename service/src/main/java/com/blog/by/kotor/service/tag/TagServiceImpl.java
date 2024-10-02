@@ -24,23 +24,25 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void createTag(Tag tag) {
-        if (tag.getId() == null) {
-            throw CreateExceptionFactory.TagParamNotBeNull(NotNullParam.TAG_ID);
+        if(tag.getId() == null){
+            throw new CreateException(ErrorCode.TAG_ID);
         }
-        if (tag.getName() == null) {
-            throw CreateExceptionFactory.TagParamNotBeNull(NotNullParam.TAG_NAME);
+        if(tag.getName() == null){
+            throw new CreateException(ErrorCode.TAG_NAME);
         }
         tagRepository.save(tag);
     }
 
     @Override
     public Tag findTagByName(String tagName) {
-        return tagRepository.findByName(tagName).orElseThrow(() -> FindByNameExceptionFactory.moduleNotFound(ErrorCode.TAG_NOT_FOUND, tagName));
+        return tagRepository.findByName(tagName)
+                .orElseThrow(()-> new FindByNameException(ErrorCode.TAG_NOT_FOUND, tagName));
     }
 
     @Override
     public Tag findTagById(Integer id) {
-        return tagRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.TAG_NOT_FOUND, id));
+        return tagRepository.findById(id)
+                .orElseThrow(() -> new FindByIdException(ErrorCode.TAG_NOT_FOUND, id));
     }
 
     @Override
@@ -51,21 +53,24 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void updateTag(Tag tag) {
-        tagRepository.findById(tag.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.TAG_NOT_FOUND, tag.getId()));
+        tagRepository.findById(tag.getId())
+                .orElseThrow(() -> new UpdateException(ErrorCode.TAG_NOT_FOUND, tag.getId()));
         tagRepository.save(tag);
     }
 
     @Override
     @Transactional
     public void deleteTagById(Integer id) {
-        tagRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.TAG_NOT_FOUND, id));
+        tagRepository.findById(id)
+                .orElseThrow(() -> new DeleteException(ErrorCode.TAG_NOT_FOUND, id));
         tagRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteTag(Tag tag) {
-        tagRepository.findById(tag.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.TAG_NOT_FOUND, tag.getId()));
+        tagRepository.findById(tag.getId())
+                .orElseThrow(() -> new DeleteException(ErrorCode.TAG_NOT_FOUND, tag.getId()));
         tagRepository.deleteById(tag.getId());
     }
 

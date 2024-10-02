@@ -26,27 +26,27 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void createPost(Post post) {
-        if (post.getId() == null) {
-            throw CreateExceptionFactory.PostParamNotBeNull(NotNullParam.POST_ID);
+        if(post.getId() == null){
+            throw new CreateException(ErrorCode.POST_ID);
         }
-        if (post.getUser().getId() == null) {
-            throw CreateExceptionFactory.PostParamNotBeNull(NotNullParam.POST_USER_ID);
+        if(post.getUser().getId() == null){
+            throw new CreateException(ErrorCode.POST_USER_ID);
         }
-        if (post.getContent() == null) {
-            throw CreateExceptionFactory.PostParamNotBeNull(NotNullParam.POST_CONTENT);
+        if(post.getContent() == null){
+            throw new CreateException(ErrorCode.POST_CONTENT);
         }
-        if (post.getTitle() == null) {
-            throw CreateExceptionFactory.PostParamNotBeNull(NotNullParam.POST_TITLE);
+        if(post.getTitle() == null){
+            throw new CreateException(ErrorCode.POST_TITLE);
         }
-        if (post.getDatePublished() == null) {
-            throw CreateExceptionFactory.PostParamNotBeNull(NotNullParam.POST_DATE_PUBLISHED);
+        if(post.getDatePublished() == null){
+            throw new CreateException(ErrorCode.POST_DATE_PUBLISHED);
         }
         postRepository.save(post);
     }
 
     @Override
     public Post findPostById(Integer id) {
-        return postRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.POST_NOT_FOUND, id));
+        return postRepository.findById(id).orElseThrow(() -> new FindByIdException(ErrorCode.POST_NOT_FOUND, id));
     }
 
     @Override
@@ -78,21 +78,24 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void updatePost(Post post) {
-        postRepository.findById(post.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.POST_NOT_FOUND, post.getId()));
+        postRepository.findById(post.getId())
+                .orElseThrow(() -> new UpdateException(ErrorCode.POST_NOT_FOUND, post.getId()));
         postRepository.save(post);
     }
 
     @Override
     @Transactional
     public void deletePostById(Integer id) {
-        postRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.POST_NOT_FOUND, id));
+        postRepository.findById(id)
+                .orElseThrow(() -> new DeleteException(ErrorCode.POST_NOT_FOUND, id));
         postRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deletePost(Post post) {
-        postRepository.findById(post.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.POST_NOT_FOUND, post.getId()));
+        postRepository.findById(post.getId())
+                .orElseThrow(() -> new DeleteException(ErrorCode.POST_NOT_FOUND, post.getId()));
         postRepository.delete(post);
     }
 
