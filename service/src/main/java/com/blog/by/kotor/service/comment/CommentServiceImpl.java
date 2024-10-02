@@ -1,15 +1,12 @@
 package com.blog.by.kotor.service.comment;
 
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.NotNullParam;
-import com.blog.by.kotor.exception.create.CreateExceptionFactory;
-import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
-import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
-import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
+import com.blog.by.kotor.exception.create.CreateException;
+import com.blog.by.kotor.exception.delete.DeleteException;
+import com.blog.by.kotor.exception.find.by.id.FindByIdException;
+import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Comment;
 import com.blog.by.kotor.repository.CommentRepository;
-import com.blog.by.kotor.repository.PostRepository;
-import com.blog.by.kotor.repository.UserRepository;
 import com.blog.by.kotor.service.post.PostService;
 import com.blog.by.kotor.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,19 +27,19 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public void createComment(Comment comment) {
         if(comment.getId() == null){
-            throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_ID);
+            throw new CreateException(ErrorCode.COMMENT_ID);
         }
         if(comment.getContent() == null){
-            throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_CONTENT);
+            throw new CreateException(ErrorCode.COMMENT_CONTENT);
         }
         if(comment.getPost().getId() == null){
-            throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_POST_ID);
+            throw new CreateException(ErrorCode.COMMENT_POST_ID);
         }
         if(comment.getUser().getId() == null){
-            throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_USER_ID);
+                throw new CreateException(ErrorCode.COMMENT_USER_ID);
         }
         if(comment.getCreatedAt() == null){
-            throw CreateExceptionFactory.CommentParamNotBeNull(NotNullParam.COMMENT_CONTENT);
+            throw new CreateException(ErrorCode.COMMENT_CONTENT);
         }
         commentRepository.save(comment);
     }
@@ -55,7 +52,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment findCommentById(Integer id) {
-        return commentRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.COMMENT_NOT_FOUND, id));
+        return commentRepository.findById(id)
+                .orElseThrow(() -> new FindByIdException(ErrorCode.COMMENT_NOT_FOUND, id));
     }
 
     @Override
@@ -66,21 +64,24 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void updateComment(Comment comment) {
-        commentRepository.findById(comment.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.COMMENT_NOT_FOUND, comment.getId()));
+        commentRepository.findById(comment.getId())
+                .orElseThrow(() -> new UpdateException(ErrorCode.COMMENT_NOT_FOUND, comment.getId()));
         commentRepository.save(comment);
     }
 
     @Override
     @Transactional
     public void deleteCommentById(Integer id) {
-        commentRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.COMMENT_NOT_FOUND, id));
+        commentRepository.findById(id)
+                .orElseThrow(() -> new DeleteException(ErrorCode.COMMENT_NOT_FOUND, id));
         commentRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteComment(Comment comment) {
-        commentRepository.findById(comment.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.COMMENT_NOT_FOUND, comment.getId()));
+        commentRepository.findById(comment.getId())
+                .orElseThrow(() -> new DeleteException(ErrorCode.COMMENT_NOT_FOUND, comment.getId()));
         commentRepository.delete(comment);
     }
 

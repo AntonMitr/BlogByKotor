@@ -1,14 +1,13 @@
 package com.blog.by.kotor.service.userRole;
 
-import com.blog.by.kotor.exception.NotNullParam;
-import com.blog.by.kotor.exception.create.CreateExceptionFactory;
+import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.model.Role;
 import com.blog.by.kotor.model.userRole.UserRole;
 import com.blog.by.kotor.repository.UserRoleRepository;
 import com.blog.by.kotor.service.role.RoleService;
 import com.blog.by.kotor.service.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +35,10 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Transactional
     public void createUserRole(UserRole userRole) {
         if(userRole.getUserRoleId().getUserId() == null){
-            throw CreateExceptionFactory.UserRoleParamNotBeNull(NotNullParam.USER_ROLE_USER_ID);
+            throw new CreateException(ErrorCode.USER_ROLE_USER_ID);
         }
         if(userRole.getUserRoleId().getRoleId() == null){
-            throw CreateExceptionFactory.UserRoleParamNotBeNull(NotNullParam.USER_ROLE_ROLE_ID);
+            throw new CreateException(ErrorCode.USER_ROLE_ROLE_ID);
         }
         userRoleRepository.save(userRole);
     }

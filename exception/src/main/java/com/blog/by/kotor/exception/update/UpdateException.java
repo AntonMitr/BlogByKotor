@@ -6,11 +6,8 @@ import lombok.Getter;
 @Getter
 public class UpdateException extends RuntimeException {
 
-    private final ErrorCode errorCode;
-
-    public UpdateException(ErrorCode errorCode, String message) {
-        super(message);
-        this.errorCode = errorCode;
+    public UpdateException(ErrorCode errorCode, Integer id) {
+        super(String.format(errorCode.getMessage(), id));
     }
 
 }

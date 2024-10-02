@@ -2,14 +2,11 @@ package com.blog.by.kotor.service.category;
 
 
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.NotNullParam;
 import com.blog.by.kotor.exception.create.CreateException;
-import com.blog.by.kotor.exception.create.CreateExceptionFactory;
-import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
+import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
-import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
-import com.blog.by.kotor.exception.find.by.name.FindByNameExceptionFactory;
-import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
+import com.blog.by.kotor.exception.find.by.name.FindByNameException;
+import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Category;
 import com.blog.by.kotor.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +23,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category findCategoryById(Integer id) {
-        return categoryRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.CATEGORY_NOT_FOUND, id));
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new FindByIdException(ErrorCode.CATEGORY_NOT_FOUND, id));
     }
 
     @Override
     public Category findByName(String name) {
-        return categoryRepository.findByName(name).orElseThrow(() -> FindByNameExceptionFactory.moduleNotFound(ErrorCode.CATEGORY_NOT_FOUND, name));
+        return categoryRepository.findByName(name)
+                .orElseThrow(() -> new FindByNameException(ErrorCode.CATEGORY_NOT_FOUND, name));
     }
 
     @Override
@@ -43,10 +42,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void createCategory(Category category) {
         if(category.getId() == null) {
-            throw CreateExceptionFactory.CategoryParamNotBeNull(NotNullParam.CATEGORY_ID);
+            throw new CreateException(ErrorCode.CATEGORY_ID);
         }
         if(category.getName() == null) {
-            throw CreateExceptionFactory.CategoryParamNotBeNull(NotNullParam.CATEGORY_NAME);
+            throw new CreateException(ErrorCode.CATEGORY_NAME);
         }
         categoryRepository.save(category);
     }
@@ -54,21 +53,24 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void updateCategory(Category category) {
-        categoryRepository.findById(category.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.CATEGORY_NOT_FOUND, category.getId()));
+        categoryRepository.findById(category.getId())
+                .orElseThrow(() -> new UpdateException(ErrorCode.CATEGORY_NOT_FOUND, category.getId()));
         categoryRepository.save(category);
     }
 
     @Override
     @Transactional
     public void deleteCategoryById(Integer id) {
-        categoryRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.CATEGORY_NOT_FOUND, id));
+        categoryRepository.findById(id)
+                .orElseThrow(() -> new DeleteException(ErrorCode.CATEGORY_NOT_FOUND, id));
         categoryRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteCategory(Category category) {
-        categoryRepository.findById(category.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.CATEGORY_NOT_FOUND, category.getId()));
+        categoryRepository.findById(category.getId())
+                .orElseThrow(() -> new DeleteException(ErrorCode.CATEGORY_NOT_FOUND, category.getId()));
         categoryRepository.delete(category);
     }
 

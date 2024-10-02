@@ -1,14 +1,12 @@
 package com.blog.by.kotor.service.poll;
 
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.NotNullParam;
-import com.blog.by.kotor.exception.create.CreateExceptionFactory;
-import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
-import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
-import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
+import com.blog.by.kotor.exception.create.CreateException;
+import com.blog.by.kotor.exception.delete.DeleteException;
+import com.blog.by.kotor.exception.find.by.id.FindByIdException;
+import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Poll;
 import com.blog.by.kotor.repository.PollRepository;
-import com.blog.by.kotor.repository.UserRepository;
 import com.blog.by.kotor.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,23 +26,23 @@ public class PollServiceImpl implements PollService {
     @Transactional
     public void createPoll(Poll poll) {
         if(poll.getId() == null){
-            throw CreateExceptionFactory.PollParamNotBeNull(NotNullParam.POLL_ID);
+            throw new CreateException(ErrorCode.POLL_ID);
         }
         if(poll.getUser().getId() == null){
-            throw CreateExceptionFactory.PollParamNotBeNull(NotNullParam.POLL_USER_ID);
+            throw new CreateException(ErrorCode.POLL_USER_ID);
         }
         if(poll.getTitle() == null){
-            throw CreateExceptionFactory.PollParamNotBeNull(NotNullParam.POLL_TITLE);
+            throw new CreateException(ErrorCode.POLL_TITLE);
         }
         if(poll.getCreatedAt() == null){
-            throw CreateExceptionFactory.PollParamNotBeNull(NotNullParam.POLL_CREATED_AT);
+            throw new CreateException(ErrorCode.POLL_CREATED_AT);
         }
         pollRepository.save(poll);
     }
 
     @Override
     public Poll findPollById(Integer id) {
-        return pollRepository.findById(id).orElseThrow(() -> FindByIdExceptionFactory.moduleNotFound(ErrorCode.POLL_NOT_FOUND, id));
+        return pollRepository.findById(id).orElseThrow(() -> new FindByIdException(ErrorCode.POLL_NOT_FOUND, id));
 
     }
 
@@ -67,21 +65,24 @@ public class PollServiceImpl implements PollService {
     @Override
     @Transactional
     public void updatePoll(Poll poll) {
-        pollRepository.findById(poll.getId()).orElseThrow(() -> UpdateExceptionFactory.moduleNotFound(ErrorCode.POLL_NOT_FOUND, poll.getId()));
+        pollRepository.findById(poll.getId())
+                .orElseThrow(() -> new UpdateException(ErrorCode.POLL_NOT_FOUND, poll.getId()));
         pollRepository.save(poll);
     }
 
     @Override
     @Transactional
     public void deletePollById(Integer id) {
-        pollRepository.findById(id).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.POLL_NOT_FOUND, id));
+        pollRepository.findById(id)
+                .orElseThrow(() -> new DeleteException(ErrorCode.POLL_NOT_FOUND, id));
         pollRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deletePoll(Poll poll) {
-        pollRepository.findById(poll.getId()).orElseThrow(() -> DeleteExceptionFactory.moduleNotFound(ErrorCode.POLL_NOT_FOUND, poll.getId()));
+        pollRepository.findById(poll.getId())
+                .orElseThrow(() -> new DeleteException(ErrorCode.POLL_NOT_FOUND, poll.getId()));
         pollRepository.delete(poll);
     }
 
