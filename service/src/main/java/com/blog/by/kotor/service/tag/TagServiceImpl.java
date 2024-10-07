@@ -1,12 +1,11 @@
 package com.blog.by.kotor.service.tag;
 
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.NotNullParam;
-import com.blog.by.kotor.exception.create.CreateExceptionFactory;
-import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
-import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
-import com.blog.by.kotor.exception.find.by.name.FindByNameExceptionFactory;
-import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
+import com.blog.by.kotor.exception.create.CreateException;
+import com.blog.by.kotor.exception.delete.DeleteException;
+import com.blog.by.kotor.exception.find.by.id.FindByIdException;
+import com.blog.by.kotor.exception.find.by.name.FindByNameException;
+import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Tag;
 import com.blog.by.kotor.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +23,10 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void createTag(Tag tag) {
-        if(tag.getId() == null){
+        if (tag.getId() == null) {
             throw new CreateException(ErrorCode.TAG_ID);
         }
-        if(tag.getName() == null){
+        if (tag.getName() == null) {
             throw new CreateException(ErrorCode.TAG_NAME);
         }
         tagRepository.save(tag);
@@ -36,7 +35,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag findTagByName(String tagName) {
         return tagRepository.findByName(tagName)
-                .orElseThrow(()-> new FindByNameException(ErrorCode.TAG_NOT_FOUND, tagName));
+                .orElseThrow(() -> new FindByNameException(ErrorCode.TAG_NOT_FOUND, tagName));
     }
 
     @Override

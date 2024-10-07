@@ -1,25 +1,23 @@
 package com.blog.by.kotor.service.filter;
 
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.NotNullParam;
-import com.blog.by.kotor.exception.create.CreateExceptionFactory;
-import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
-import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
-import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
+import com.blog.by.kotor.exception.create.CreateException;
+import com.blog.by.kotor.exception.delete.DeleteException;
+import com.blog.by.kotor.exception.find.by.id.FindByIdException;
+import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Category;
 import com.blog.by.kotor.model.Filter;
 import com.blog.by.kotor.model.Post;
 import com.blog.by.kotor.model.Tag;
 import com.blog.by.kotor.model.postCategory.PostCategory;
 import com.blog.by.kotor.model.postTag.PostTag;
-import com.blog.by.kotor.repository.*;
+import com.blog.by.kotor.repository.FilterRepository;
 import com.blog.by.kotor.service.category.CategoryService;
 import com.blog.by.kotor.service.post.PostService;
 import com.blog.by.kotor.service.postCategory.PostCategoryService;
 import com.blog.by.kotor.service.postTag.PostTagService;
 import com.blog.by.kotor.service.tag.TagService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,13 +77,13 @@ public class FilterServiceImpl implements FilterService {
     @Override
     @Transactional
     public void createFilter(Filter filter) {
-        if(filter.getId() == null){
+        if (filter.getId() == null) {
             throw new CreateException(ErrorCode.FILTER_ID);
         }
-        if(filter.getCriteria() == null){
+        if (filter.getCriteria() == null) {
             throw new CreateException(ErrorCode.FILTER_CRITERIA);
         }
-        if(filter.getName() == null){
+        if (filter.getName() == null) {
             throw new CreateException(ErrorCode.FILTER_ID);
         }
         filterRepository.save(filter);

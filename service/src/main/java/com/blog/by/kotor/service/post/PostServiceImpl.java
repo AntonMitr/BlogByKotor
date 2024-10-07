@@ -1,11 +1,10 @@
 package com.blog.by.kotor.service.post;
 
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.NotNullParam;
-import com.blog.by.kotor.exception.create.CreateExceptionFactory;
-import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
-import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
-import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
+import com.blog.by.kotor.exception.create.CreateException;
+import com.blog.by.kotor.exception.delete.DeleteException;
+import com.blog.by.kotor.exception.find.by.id.FindByIdException;
+import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Post;
 import com.blog.by.kotor.repository.PostRepository;
 import com.blog.by.kotor.service.user.UserService;
@@ -26,19 +25,19 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void createPost(Post post) {
-        if(post.getId() == null){
+        if (post.getId() == null) {
             throw new CreateException(ErrorCode.POST_ID);
         }
-        if(post.getUser().getId() == null){
+        if (post.getUser().getId() == null) {
             throw new CreateException(ErrorCode.POST_USER_ID);
         }
-        if(post.getContent() == null){
+        if (post.getContent() == null) {
             throw new CreateException(ErrorCode.POST_CONTENT);
         }
-        if(post.getTitle() == null){
+        if (post.getTitle() == null) {
             throw new CreateException(ErrorCode.POST_TITLE);
         }
-        if(post.getDatePublished() == null){
+        if (post.getDatePublished() == null) {
             throw new CreateException(ErrorCode.POST_DATE_PUBLISHED);
         }
         postRepository.save(post);

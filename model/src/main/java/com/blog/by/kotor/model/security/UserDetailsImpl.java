@@ -1,15 +1,16 @@
-package com.blog.by.kotor.service;
+package com.blog.by.kotor.model.security;
 
 import com.blog.by.kotor.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,26 +22,27 @@ public class UserDetailsImpl implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsImpl.class);
+
     private Integer id;
     private String username;
     private String email;
-    @JsonIgnore
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
+
     public static UserDetailsImpl build(User user) {
-    List<GrantedAuthority> authorities = user.getRoles().stream()
-        .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-        .collect(Collectors.toUnmodifiableList());
+        List<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .collect(Collectors.toList());
 
-    return new UserDetailsImpl(
-            user.getId(),
-            user.getUsername(),
-            user.getEmail(),
-            user.getPassword(),
-            authorities);
+        return new UserDetailsImpl(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword(),
+                authorities);
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,11 +1,10 @@
 package com.blog.by.kotor.service.vote;
 
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.NotNullParam;
-import com.blog.by.kotor.exception.create.CreateExceptionFactory;
-import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
-import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
-import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
+import com.blog.by.kotor.exception.create.CreateException;
+import com.blog.by.kotor.exception.delete.DeleteException;
+import com.blog.by.kotor.exception.find.by.id.FindByIdException;
+import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Vote;
 import com.blog.by.kotor.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,16 +22,16 @@ public class VoteServiceImpl implements VoteService {
     @Override
     @Transactional
     public void createVote(Vote vote) {
-        if(vote.getId() == null){
+        if (vote.getId() == null) {
             throw new CreateException(ErrorCode.VOTE_ID);
         }
-        if(vote.getPost().getId() == null){
+        if (vote.getPost().getId() == null) {
             throw new CreateException(ErrorCode.VOTE_POST_ID);
         }
-        if(vote.getOption().getId() == null){
+        if (vote.getOption().getId() == null) {
             throw new CreateException(ErrorCode.VOTE_OPTION_ID);
         }
-        if(vote.getUser().getId() == null){
+        if (vote.getUser().getId() == null) {
             throw new CreateException(ErrorCode.VOTE_USER_ID);
         }
         voteRepository.save(vote);

@@ -1,15 +1,12 @@
 package com.blog.by.kotor.service.comment;
 
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.NotNullParam;
-import com.blog.by.kotor.exception.create.CreateExceptionFactory;
-import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
-import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
-import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
+import com.blog.by.kotor.exception.create.CreateException;
+import com.blog.by.kotor.exception.delete.DeleteException;
+import com.blog.by.kotor.exception.find.by.id.FindByIdException;
+import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Comment;
 import com.blog.by.kotor.repository.CommentRepository;
-import com.blog.by.kotor.repository.PostRepository;
-import com.blog.by.kotor.repository.UserRepository;
 import com.blog.by.kotor.service.post.PostService;
 import com.blog.by.kotor.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,19 +26,19 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void createComment(Comment comment) {
-        if(comment.getId() == null){
+        if (comment.getId() == null) {
             throw new CreateException(ErrorCode.COMMENT_ID);
         }
-        if(comment.getContent() == null){
+        if (comment.getContent() == null) {
             throw new CreateException(ErrorCode.COMMENT_CONTENT);
         }
-        if(comment.getPost().getId() == null){
+        if (comment.getPost().getId() == null) {
             throw new CreateException(ErrorCode.COMMENT_POST_ID);
         }
-        if(comment.getUser().getId() == null){
-                throw new CreateException(ErrorCode.COMMENT_USER_ID);
+        if (comment.getUser().getId() == null) {
+            throw new CreateException(ErrorCode.COMMENT_USER_ID);
         }
-        if(comment.getCreatedAt() == null){
+        if (comment.getCreatedAt() == null) {
             throw new CreateException(ErrorCode.COMMENT_CONTENT);
         }
         commentRepository.save(comment);

@@ -1,5 +1,6 @@
 package com.blog.by.kotor.controller;
 
+import com.blog.by.kotor.model.ERole;
 import com.blog.by.kotor.model.Role;
 import com.blog.by.kotor.service.role.RoleService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class RoleController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getRoleByName(@RequestParam String name) {
+    public ResponseEntity<?> getRoleByName(@RequestParam ERole name) {
         return new ResponseEntity<>(roleService.findRoleByName(name), HttpStatus.OK);
     }
 

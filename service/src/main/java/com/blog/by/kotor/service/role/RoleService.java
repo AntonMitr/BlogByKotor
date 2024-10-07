@@ -1,5 +1,6 @@
 package com.blog.by.kotor.service.role;
 
+import com.blog.by.kotor.model.ERole;
 import com.blog.by.kotor.model.Role;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface RoleService {
 
     Role findRoleById(Integer id);
 
-    Role findRoleByName(String roleName);
+    Role findRoleByName(ERole roleName);
 
     List<Role> findAllRole();
 

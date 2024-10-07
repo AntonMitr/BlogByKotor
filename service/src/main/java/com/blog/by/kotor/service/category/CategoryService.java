@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface CategoryService {
 
+    void deleteCategory(Category category);
+
     Category findCategoryById(Integer id);
 
     Category findByName(String name);

@@ -9,6 +9,12 @@ public interface UserService {
 
     void createUser(User user);
 
+    User findByUsername(String username);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
+
     User findUserById(Integer id);
 
     List<User> findAllUser();

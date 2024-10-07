@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface UserRoleService {
 
-    String findUserRole(Integer userId);
-
     void createUserRole(UserRole userRole);
 
     UserRole findUserRoleByUserId(Integer id);

@@ -1,11 +1,12 @@
 package com.blog.by.kotor.service.role;
 
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.NotNullParam;
-import com.blog.by.kotor.exception.create.CreateExceptionFactory;
-import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
-import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
-import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
+import com.blog.by.kotor.exception.create.CreateException;
+import com.blog.by.kotor.exception.delete.DeleteException;
+import com.blog.by.kotor.exception.find.by.id.FindByIdException;
+import com.blog.by.kotor.exception.find.by.name.FindByNameException;
+import com.blog.by.kotor.exception.update.UpdateException;
+import com.blog.by.kotor.model.ERole;
 import com.blog.by.kotor.model.Role;
 import com.blog.by.kotor.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public void createRole(Role role) {
-        if(role.getId() == null){
+        if (role.getId() == null) {
             throw new CreateException(ErrorCode.ROLE_ID);
         }
-        if(role.getName() == null){
+        if (role.getName() == null) {
             throw new CreateException(ErrorCode.ROLE_NAME);
         }
         roleRepository.save(role);
@@ -39,8 +40,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role findRoleByName(String name) {
-        return roleRepository.findRoleByName(name);
+    public Role findRoleByName(ERole name) {
+        return roleRepository.findRoleByName(name)
+                .orElseThrow(() -> new FindByNameException(ErrorCode.ROLE_NAME_NOT_FOUND, name.name()));
     }
 
     @Override

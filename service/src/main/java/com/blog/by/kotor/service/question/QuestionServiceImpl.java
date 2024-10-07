@@ -1,11 +1,10 @@
 package com.blog.by.kotor.service.question;
 
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.NotNullParam;
-import com.blog.by.kotor.exception.create.CreateExceptionFactory;
-import com.blog.by.kotor.exception.delete.DeleteExceptionFactory;
-import com.blog.by.kotor.exception.find.by.id.FindByIdExceptionFactory;
-import com.blog.by.kotor.exception.update.UpdateExceptionFactory;
+import com.blog.by.kotor.exception.create.CreateException;
+import com.blog.by.kotor.exception.delete.DeleteException;
+import com.blog.by.kotor.exception.find.by.id.FindByIdException;
+import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Question;
 import com.blog.by.kotor.repository.QuestionRepository;
 import com.blog.by.kotor.service.poll.PollService;
@@ -26,13 +25,13 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public void createQuestion(Question question) {
-        if(question.getId() == null){
+        if (question.getId() == null) {
             throw new CreateException(ErrorCode.QUESTION_ID);
         }
-        if(question.getPoll().getId() == null){
+        if (question.getPoll().getId() == null) {
             throw new CreateException(ErrorCode.QUESTION_POLL_ID);
         }
-        if(question.getQuestionText() == null){
+        if (question.getQuestionText() == null) {
             throw new CreateException(ErrorCode.QUESTION_TEXT);
         }
         questionRepository.save(question);
