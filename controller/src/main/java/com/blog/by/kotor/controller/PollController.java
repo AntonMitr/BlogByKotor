@@ -16,7 +16,7 @@ public class PollController {
     private final PollService pollService;
 
     @GetMapping("/view-polls")
-    public ResponseEntity<?> viewAllOPolls() {
+    public ResponseEntity<?> viewAllPolls() {
         return new ResponseEntity<>(pollService.findAllPoll(), HttpStatus.OK);
     }
 

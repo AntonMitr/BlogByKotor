@@ -35,8 +35,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public UserRole findUserRoleByUserId(Integer id) {
-        userService.findUserById(id);
+    public List<UserRole> findUserRoleByUserId(Integer id) {
         return userRoleRepository.findUserAndRoleByUserId(id);
     }
 

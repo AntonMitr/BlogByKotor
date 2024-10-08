@@ -6,6 +6,7 @@ import com.blog.by.kotor.service.role.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +17,7 @@ public class RoleController {
     private final RoleService roleService;
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
     public ResponseEntity<?> getAllRoles() {
         return new ResponseEntity<>(roleService.findAllRole(), HttpStatus.OK);
     }
@@ -31,18 +33,21 @@ public class RoleController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addRole(@RequestBody Role role) {
         roleService.createRole(role);
         return new ResponseEntity<>(role, HttpStatus.CREATED);
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateRole(@RequestBody Role role) {
         roleService.updateRole(role);
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteRole(@PathVariable Integer id) {
         roleService.deleteRoleById(id);
         return new ResponseEntity<>(HttpStatus.OK);

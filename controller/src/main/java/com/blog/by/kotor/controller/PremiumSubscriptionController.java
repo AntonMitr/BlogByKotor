@@ -5,6 +5,7 @@ import com.blog.by.kotor.service.premiumSubscription.PremiumSubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ public class PremiumSubscriptionController {
     private final PremiumSubscriptionService premiumSubscriptionService;
 
     @GetMapping("/view-premiumSubscription")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
     public ResponseEntity<?> viewAllPremiumSubscriptions() {
         return new ResponseEntity<>(premiumSubscriptionService.findAllPremiumSubscription(), HttpStatus.OK);
     }
@@ -25,18 +27,21 @@ public class PremiumSubscriptionController {
     }
 
     @PostMapping("/add-premiumSubscription")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
     public ResponseEntity<?> addPremiumSubscription(@RequestBody PremiumSubscription premiumSubscription) {
         premiumSubscriptionService.createPremiumSubscription(premiumSubscription);
         return new ResponseEntity<>(premiumSubscription, HttpStatus.CREATED);
     }
 
     @PutMapping("/update-premiumSubscription")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
     public ResponseEntity<?> updatePremiumSubscription(@RequestBody PremiumSubscription premiumSubscription) {
         premiumSubscriptionService.updatePremiumSubscription(premiumSubscription);
         return new ResponseEntity<>(premiumSubscription, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
     public ResponseEntity<?> deletePremiumSubscription(@PathVariable Integer id) {
         premiumSubscriptionService.deletePremiumSubscriptionById(id);
         return new ResponseEntity<>(HttpStatus.OK);

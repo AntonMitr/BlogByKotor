@@ -7,13 +7,10 @@ import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.exception.find.by.name.FindByNameException;
 import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.User;
-import com.blog.by.kotor.model.security.UserDetailsImpl;
 import com.blog.by.kotor.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

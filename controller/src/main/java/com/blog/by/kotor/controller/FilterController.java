@@ -5,6 +5,7 @@ import com.blog.by.kotor.service.filter.FilterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,18 +36,21 @@ public class FilterController {
     }
 
     @PostMapping("add-filter")
+    @PreAuthorize("hasRole(hasRole('ADMIN') or hasRole('MODERATOR'))")
     public ResponseEntity<?> addFilter(@RequestBody Filter filter) {
         filterService.createFilter(filter);
         return new ResponseEntity<>(filter, HttpStatus.OK);
     }
 
     @PutMapping("update-filter")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
     public ResponseEntity<?> updateFilter(@RequestBody Filter filter) {
         filterService.updateFilter(filter);
         return new ResponseEntity<>(filter, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
     public ResponseEntity<?> deleteFilterById(@PathVariable Integer id) {
         filterService.deleteFilterById(id);
         return new ResponseEntity<>(HttpStatus.OK);

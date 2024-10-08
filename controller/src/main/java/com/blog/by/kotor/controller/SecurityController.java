@@ -17,11 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,10 +27,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
@@ -65,7 +62,7 @@ public class SecurityController {
                 passwordEncoder.encode(signupRequest.getPassword()));
 
         Set<String> strRoles = signupRequest.getRoles();
-        Set<Role> roles = new HashSet<>();
+        List<Role> roles = new ArrayList<>();
 
         if (strRoles == null) {
             Role userRole = roleService
@@ -95,18 +92,20 @@ public class SecurityController {
         }
         user.setRoles(roles);
         userService.createUser(user);
-        LOGGER.info(String.format( "Роли пользователя в signup: %s", userService.findByUsername(user.getUsername()).getRoles().toString()));
+        LOGGER.info(String.format("Роли пользователя в signup: %s", userService.findByUsername(user.getUsername()).getRoles().toString()));
         return ResponseEntity.ok("User registered successfully!");
     }
 
     @PostMapping("/signin")
     ResponseEntity<?> signin(@RequestBody SigninRequest signinRequest) {
-        LOGGER.info(String.format( "Роли пользователя в signin: %s", userService.findByUsername(signinRequest.getUsername()).getRoles().size()));
+        LOGGER.info("Начал работу");
+        User user = userService.findByUsername(signinRequest.getUsername());
+        LOGGER.info(String.format("Роли пользователя в signin: %s", user.getRoles().size()));
         Authentication authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(
-                            signinRequest.getUsername(),
-                            signinRequest.getPassword()
-                    ));
+                .authenticate(new UsernamePasswordAuthenticationToken(
+                        signinRequest.getUsername(),
+                        signinRequest.getPassword()
+                ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtCore.generateToken(authentication);

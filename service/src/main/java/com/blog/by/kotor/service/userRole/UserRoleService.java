@@ -8,7 +8,7 @@ public interface UserRoleService {
 
     void createUserRole(UserRole userRole);
 
-    UserRole findUserRoleByUserId(Integer id);
+    List<UserRole> findUserRoleByUserId(Integer id);
 
     List<UserRole> findAllUserRole();
 

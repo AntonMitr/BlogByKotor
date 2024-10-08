@@ -1,7 +1,6 @@
 package com.blog.by.kotor.model.security;
 
 import com.blog.by.kotor.model.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.slf4j.Logger;

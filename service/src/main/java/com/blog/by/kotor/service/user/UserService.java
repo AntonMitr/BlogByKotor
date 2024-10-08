@@ -1,7 +1,6 @@
 package com.blog.by.kotor.service.user;
 
 import com.blog.by.kotor.model.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 

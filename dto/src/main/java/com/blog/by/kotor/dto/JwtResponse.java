@@ -1,6 +1,5 @@
 package com.blog.by.kotor.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
