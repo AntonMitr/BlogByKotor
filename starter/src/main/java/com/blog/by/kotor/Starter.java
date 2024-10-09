@@ -1,10 +1,6 @@
 package com.blog.by.kotor;
 
-import com.blog.by.kotor.model.Category;
 import com.blog.by.kotor.model.User;
-import com.blog.by.kotor.service.category.CategoryService;
-import com.blog.by.kotor.service.login.LoginService;
-import com.blog.by.kotor.service.role.RoleService;
 import com.blog.by.kotor.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

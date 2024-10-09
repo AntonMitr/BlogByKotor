@@ -8,7 +8,6 @@ import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.User;
 import com.blog.by.kotor.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DeadlockLoserDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

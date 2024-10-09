@@ -11,7 +11,7 @@ import com.blog.by.kotor.model.Post;
 import com.blog.by.kotor.model.Tag;
 import com.blog.by.kotor.model.postCategory.PostCategory;
 import com.blog.by.kotor.model.postTag.PostTag;
-import com.blog.by.kotor.repository.*;
+import com.blog.by.kotor.repository.FilterRepository;
 import com.blog.by.kotor.service.category.CategoryService;
 import com.blog.by.kotor.service.post.PostService;
 import com.blog.by.kotor.service.postCategory.PostCategoryService;
