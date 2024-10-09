@@ -36,7 +36,6 @@ public class TokenFilter extends OncePerRequestFilter {
             String jwt = parseJwt(request);
             if (jwt != null && jwtCore.validateJwtToken(jwt)) {
                 String username = jwtCore.getNameFromJwt(jwt);
-                LOGGER.info("USERNAME FROM JWT: {}", username);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -46,7 +45,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            LOGGER.info("Cannot set user authentication: {}", e.getMessage());
+            LOGGER.info("Невозможно установить аутентификацию пользователя: {}", e.getMessage());
         }
 
         filterChain.doFilter(request, response);
