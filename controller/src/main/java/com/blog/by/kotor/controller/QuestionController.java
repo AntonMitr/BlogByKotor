@@ -14,7 +14,7 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    @GetMapping("/view-questions")
+    @GetMapping("/all")
     public ResponseEntity<?> viewAllQuestions() {
         return new ResponseEntity<>(questionService.findAllQuestion(), HttpStatus.OK);
     }
@@ -34,7 +34,7 @@ public class QuestionController {
         return new ResponseEntity<>(questionService.findByPollId(pollId), HttpStatus.OK);
     }
 
-    @PostMapping("/add-question")
+    @PostMapping
     public ResponseEntity<?> addQuestion(@RequestBody Question question) {
         questionService.createQuestion(question);
         return new ResponseEntity<>(question, HttpStatus.CREATED);

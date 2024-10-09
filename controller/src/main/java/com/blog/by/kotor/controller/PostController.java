@@ -14,7 +14,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/view-posts")
+    @GetMapping("/all")
     public ResponseEntity<?> viewAllPosts() {
         return new ResponseEntity<>(postService.findAllPost(), HttpStatus.OK);
     }
@@ -29,29 +29,29 @@ public class PostController {
         return new ResponseEntity<>(postService.findByTitle(title), HttpStatus.OK);
     }
 
-    @GetMapping("/title/order-by-date-published")
+    @GetMapping("/title/date-published-order")
     public ResponseEntity<?> viewPostByTitleOrderByDatePublished(@RequestParam String title) {
         return new ResponseEntity<>(postService.findByTitleOrderByDatePublished(title), HttpStatus.OK);
     }
 
-    @GetMapping("/content/order-by-date-published")
+    @GetMapping("/content/date-published-order")
     public ResponseEntity<?> viewPostByContentContainsOrderByDatePublished(@RequestParam String title) {
         return new ResponseEntity<>(postService.findByTitleOrderByDatePublished(title), HttpStatus.OK);
     }
 
-    @PutMapping("/update-post")
+    @PutMapping
     public ResponseEntity<?> updatePost(@RequestBody Post post) {
         postService.updatePost(post);
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
-    @PostMapping("/add-post")
+    @PostMapping
     public ResponseEntity<?> addPost(@RequestBody Post post) {
         postService.createPost(post);
         return new ResponseEntity<>(post, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{postId}")
     public ResponseEntity<?> deletePost(@PathVariable Integer postId) {
         postService.deletePostById(postId);
         return new ResponseEntity<>(postService.findPostById(postId), HttpStatus.OK);

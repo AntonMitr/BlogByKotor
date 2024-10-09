@@ -15,8 +15,8 @@ public class PremiumSubscriptionController {
 
     private final PremiumSubscriptionService premiumSubscriptionService;
 
-    @GetMapping("/view-premiumSubscription")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> viewAllPremiumSubscriptions() {
         return new ResponseEntity<>(premiumSubscriptionService.findAllPremiumSubscription(), HttpStatus.OK);
     }
@@ -26,15 +26,15 @@ public class PremiumSubscriptionController {
         return new ResponseEntity<>(premiumSubscriptionService.findPremiumSubscriptionById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/add-premiumSubscription")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> addPremiumSubscription(@RequestBody PremiumSubscription premiumSubscription) {
         premiumSubscriptionService.createPremiumSubscription(premiumSubscription);
         return new ResponseEntity<>(premiumSubscription, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update-premiumSubscription")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
+    @PutMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> updatePremiumSubscription(@RequestBody PremiumSubscription premiumSubscription) {
         premiumSubscriptionService.updatePremiumSubscription(premiumSubscription);
         return new ResponseEntity<>(premiumSubscription, HttpStatus.OK);

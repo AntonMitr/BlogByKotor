@@ -14,7 +14,7 @@ public class CommentController {
 
     public final CommentService commentService;
 
-    @GetMapping("/view-comments")
+    @GetMapping("/all")
     public ResponseEntity<?> viewAllComments() {
         return new ResponseEntity<>(commentService.findAllComment(), HttpStatus.OK);
     }
@@ -29,7 +29,7 @@ public class CommentController {
         return new ResponseEntity<>(commentService.findCommentByPostId(postId), HttpStatus.OK);
     }
 
-    @PostMapping("add-comment")
+    @PostMapping
     public ResponseEntity<?> addComment(@RequestBody Comment comment) {
         commentService.createComment(comment);
         return new ResponseEntity<>(comment, HttpStatus.CREATED);
@@ -45,7 +45,7 @@ public class CommentController {
         return new ResponseEntity<>(commentService.findByUserIdOrderByCreatedAt(userId), HttpStatus.OK);
     }
 
-    @PutMapping("update-comment")
+    @PutMapping
     public ResponseEntity<?> updateComment(@RequestBody Comment comment) {
         commentService.updateComment(comment);
         return new ResponseEntity<>(comment, HttpStatus.OK);

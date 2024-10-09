@@ -15,7 +15,7 @@ public class FilterController {
 
     private final FilterService filterService;
 
-    @GetMapping("/view-filters")
+    @GetMapping("/all")
     public ResponseEntity<?> viewAllFilters() {
         return new ResponseEntity<>(filterService.findAllFilter(), HttpStatus.OK);
     }
@@ -36,21 +36,21 @@ public class FilterController {
     }
 
     @PostMapping("add-filter")
-    @PreAuthorize("hasRole(hasRole('ADMIN') or hasRole('MODERATOR'))")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> addFilter(@RequestBody Filter filter) {
         filterService.createFilter(filter);
         return new ResponseEntity<>(filter, HttpStatus.OK);
     }
 
-    @PutMapping("update-filter")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
+    @PutMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> updateFilter(@RequestBody Filter filter) {
         filterService.updateFilter(filter);
         return new ResponseEntity<>(filter, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> deleteFilterById(@PathVariable Integer id) {
         filterService.deleteFilterById(id);
         return new ResponseEntity<>(HttpStatus.OK);

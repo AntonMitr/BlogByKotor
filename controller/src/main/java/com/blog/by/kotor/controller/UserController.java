@@ -14,7 +14,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/view-users")
+    @GetMapping("/all")
     public ResponseEntity<?> viewAllUsers() {
         return new ResponseEntity<>(userService.findAllUser(), HttpStatus.OK);
     }
@@ -24,13 +24,13 @@ public class UserController {
         return new ResponseEntity<>(userService.findUserById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/add-user")
+    @PostMapping()
     public ResponseEntity<?> addUser(@RequestBody User user) {
         userService.createUser(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update-user")
+    @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody User user) {
         userService.updateUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);

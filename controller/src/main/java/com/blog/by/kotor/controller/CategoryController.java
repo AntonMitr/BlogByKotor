@@ -14,7 +14,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/view-categories")
+    @GetMapping("/all")
     public ResponseEntity<?> viewAllCategories() {
         return new ResponseEntity<>(categoryService.findAllCategory(), HttpStatus.OK);
     }
@@ -29,13 +29,13 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.findByName(name), HttpStatus.OK);
     }
 
-    @PostMapping("/add-category")
+    @PostMapping
     public ResponseEntity<?> addCategory(@RequestBody Category category) {
         categoryService.createCategory(category);
         return new ResponseEntity<>(category, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update-category")
+    @PutMapping
     public ResponseEntity<?> updateCategory(@RequestBody Category category) {
         categoryService.updateCategory(category);
         return new ResponseEntity<>(category, HttpStatus.ACCEPTED);

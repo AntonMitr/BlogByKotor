@@ -14,7 +14,7 @@ public class OptionController {
 
     private final OptionService optionService;
 
-    @GetMapping("/view-options")
+    @GetMapping("/all")
     public ResponseEntity<?> viewAllOption() {
         return new ResponseEntity<>(optionService.findAllOption(), HttpStatus.OK);
     }
@@ -29,13 +29,13 @@ public class OptionController {
         return new ResponseEntity<>(optionService.findOptionById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/add-option")
+    @PostMapping
     public ResponseEntity<?> addOption(@RequestBody Option option) {
         optionService.createOption(option);
         return new ResponseEntity<>(option, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update-option")
+    @PutMapping
     public ResponseEntity<?> updateOption(@RequestBody Option option) {
         optionService.updateOption(option);
         return new ResponseEntity<>(option, HttpStatus.OK);
