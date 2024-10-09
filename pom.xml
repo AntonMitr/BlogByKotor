@@ -15,9 +15,9 @@
     <modules>
         <module>starter</module>
         <module>dao-hibernate</module>
-        <module>service</module>
         <module>model</module>
-        <module>exception</module>
+        <module>service</module>
+        <module>spring</module>
     </modules>
 
     <dependencies>
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>8.0.33</version>
+            <version>8.4.0</version>
         </dependency>
 
         <dependency>
@@ -41,16 +41,30 @@
             <version>1.4.12</version>
         </dependency>
 
+        <!-- Hibernate Core dependency -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>6.5.2.Final</version>
         </dependency>
 
+        <!-- Spring dependencies -->
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.6.15.Final</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>6.1.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>6.1.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>6.1.12</version>
         </dependency>
 
     </dependencies>

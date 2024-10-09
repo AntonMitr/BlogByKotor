@@ -21,24 +21,17 @@
         </rollingPolicy>
 
         <encoder>
-            <pattern>%d %p %c [%t] %m%n</pattern>
+            <pattern>%d %p %c{1} [%t] %m%n</pattern>
         </encoder>
     </appender>
 
-    <logger name="com.mkyong" level="debug" additivity="false">
+    <logger name="com.blog.by.kotor.starter" level="debug" additivity="false">
         <appender-ref ref="FILE-ROLLING"/>
-    </logger>
-
-    <logger name="com.mkyong" level="debug" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
 
-    <root level="error">
+    <logger name="com.blog.by.kotor.spring.LoggingAspect" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
-    </root>
-
-    <root level="error">
-        <appender-ref ref="FILE-ROLLING"/>
-    </root>
+    </logger>
 
 </configuration>
