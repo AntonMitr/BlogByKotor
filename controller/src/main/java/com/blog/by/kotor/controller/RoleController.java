@@ -10,14 +10,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/roles")
+@RequestMapping("/v1/role")
 @RequiredArgsConstructor
 public class RoleController {
 
     private final RoleService roleService;
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR'))")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> getAllRoles() {
         return new ResponseEntity<>(roleService.findAllRole(), HttpStatus.OK);
     }

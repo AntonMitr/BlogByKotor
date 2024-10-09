@@ -14,7 +14,7 @@ public class TagController {
 
     private final TagService tagService;
 
-    @GetMapping("/view-tags")
+    @GetMapping("/all")
     public ResponseEntity<?> viewAllTags() {
         return new ResponseEntity<>(tagService.findAllTag(), HttpStatus.OK);
     }
@@ -29,13 +29,13 @@ public class TagController {
         return new ResponseEntity<>(tagService.findTagByName(name), HttpStatus.OK);
     }
 
-    @PostMapping("/add-tag")
+    @PostMapping
     public ResponseEntity<?> addTag(@RequestBody Tag tag) {
         tagService.createTag(tag);
         return new ResponseEntity<>(tag, HttpStatus.CREATED);
     }
 
-    @PutMapping("update-tag")
+    @PutMapping
     public ResponseEntity<?> updateTag(@RequestBody Tag tag) {
         tagService.updateTag(tag);
         return new ResponseEntity<>(tag, HttpStatus.OK);

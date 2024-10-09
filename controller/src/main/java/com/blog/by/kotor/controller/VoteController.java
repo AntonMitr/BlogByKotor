@@ -14,7 +14,7 @@ public class VoteController {
 
     private final VoteService voteService;
 
-    @GetMapping("/view-votes")
+    @GetMapping("/all")
     public ResponseEntity<?> getAllVotes() {
         return new ResponseEntity<>(voteService.findAllVote(), HttpStatus.OK);
     }
@@ -34,13 +34,13 @@ public class VoteController {
         return new ResponseEntity<>(voteService.findVotesByOptionId(optionId), HttpStatus.OK);
     }
 
-    @PostMapping("/add-vote")
+    @PostMapping
     public ResponseEntity<?> addVote(@RequestBody Vote vote) {
         voteService.createVote(vote);
         return new ResponseEntity<>(vote, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update-vote")
+    @PutMapping
     public ResponseEntity<?> updateVote(@RequestBody Vote vote) {
         voteService.updateVote(vote);
         return new ResponseEntity<>(vote, HttpStatus.OK);

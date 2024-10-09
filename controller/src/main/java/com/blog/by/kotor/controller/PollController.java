@@ -15,7 +15,7 @@ public class PollController {
 
     private final PollService pollService;
 
-    @GetMapping("/view-polls")
+    @GetMapping("/all")
     public ResponseEntity<?> viewAllPolls() {
         return new ResponseEntity<>(pollService.findAllPoll(), HttpStatus.OK);
     }
@@ -35,13 +35,13 @@ public class PollController {
         return new ResponseEntity<>(pollService.findPollByTitle(title), HttpStatus.OK);
     }
 
-    @PostMapping("/add-poll")
+    @PostMapping()
     public ResponseEntity<?> addPoll(@RequestBody Poll poll) {
         pollService.createPoll(poll);
         return new ResponseEntity<>(poll, HttpStatus.CREATED);
     }
 
-    @PutMapping("update-poll")
+    @PutMapping
     public ResponseEntity<?> updatePoll(@RequestBody Poll poll) {
         pollService.updatePoll(poll);
         return new ResponseEntity<>(poll, HttpStatus.OK);
