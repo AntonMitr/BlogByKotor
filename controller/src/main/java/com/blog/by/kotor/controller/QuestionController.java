@@ -1,10 +1,11 @@
 package com.blog.by.kotor.controller;
 
-import com.blog.by.kotor.model.Question;
+import com.blog.by.kotor.dto.model.QuestionDTO;
 import com.blog.by.kotor.service.question.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,15 +36,15 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addQuestion(@RequestBody Question question) {
-        questionService.createQuestion(question);
-        return new ResponseEntity<>(question, HttpStatus.CREATED);
+    public ResponseEntity<?> addQuestion(@RequestBody @Validated QuestionDTO questionDTO) {
+        questionService.createQuestion(questionDTO);
+        return new ResponseEntity<>(questionDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update-question")
-    public ResponseEntity<?> updateQuestion(@RequestBody Question question) {
-        questionService.updateQuestion(question);
-        return new ResponseEntity<>(question, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateQuestion(@RequestBody @Validated QuestionDTO questionDTO, @PathVariable Integer id) {
+        questionService.updateQuestion(questionDTO, id);
+        return new ResponseEntity<>(questionDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

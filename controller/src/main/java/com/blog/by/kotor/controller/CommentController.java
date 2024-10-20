@@ -1,10 +1,11 @@
 package com.blog.by.kotor.controller;
 
-import com.blog.by.kotor.model.Comment;
+import com.blog.by.kotor.dto.model.CommentDTO;
 import com.blog.by.kotor.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,31 +25,31 @@ public class CommentController {
         return new ResponseEntity<>(commentService.findCommentById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/post/{posId}")
+    @GetMapping("/post/{postId}")
     public ResponseEntity<?> viewCommentsByPostId(@PathVariable Integer postId) {
         return new ResponseEntity<>(commentService.findCommentByPostId(postId), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> addComment(@RequestBody Comment comment) {
-        commentService.createComment(comment);
-        return new ResponseEntity<>(comment, HttpStatus.CREATED);
+    public ResponseEntity<?> addComment(@RequestBody @Validated CommentDTO commentDTO) {
+        commentService.createComment(commentDTO);
+        return new ResponseEntity<>(commentDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/post/{postId}/order-by-created")
-    public ResponseEntity<?> viewByPostIdOrderByCreatedAt(@RequestParam Integer postId) {
+    public ResponseEntity<?> viewByPostIdOrderByCreatedAt(@PathVariable Integer postId) {
         return new ResponseEntity<>(commentService.findByPostIdOrderByCreatedAt(postId), HttpStatus.OK);
     }
 
     @GetMapping("/user/{userId}/order-by-created")
-    public ResponseEntity<?> viewByUserIdOrderByCreatedAt(@RequestParam Integer userId) {
+    public ResponseEntity<?> viewByUserIdOrderByCreatedAt(@PathVariable Integer userId) {
         return new ResponseEntity<>(commentService.findByUserIdOrderByCreatedAt(userId), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateComment(@RequestBody Comment comment) {
-        commentService.updateComment(comment);
-        return new ResponseEntity<>(comment, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateComment(@RequestBody @Validated CommentDTO commentDTO, @PathVariable Integer id) {
+        commentService.updateComment(commentDTO, id);
+        return new ResponseEntity<>(commentDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

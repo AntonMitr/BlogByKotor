@@ -1,13 +1,13 @@
 package com.blog.by.kotor.service.authentication;
 
 import com.blog.by.kotor.dto.JwtResponse;
-import com.blog.by.kotor.dto.SigninRequest;
-import com.blog.by.kotor.dto.SignupRequest;
+import com.blog.by.kotor.dto.authentication.LoginDTO;
+import com.blog.by.kotor.dto.authentication.RegistrationDTO;
 
 public interface AuthenticationService {
 
-    void signup(SignupRequest signupRequest);
+    void signup(RegistrationDTO registrationDTO);
 
-    JwtResponse signin(SigninRequest signinRequest);
+    JwtResponse signin(LoginDTO loginDTO);
 
 }

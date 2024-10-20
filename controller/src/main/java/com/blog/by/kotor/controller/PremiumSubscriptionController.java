@@ -1,11 +1,12 @@
 package com.blog.by.kotor.controller;
 
-import com.blog.by.kotor.model.PremiumSubscription;
+import com.blog.by.kotor.dto.model.PremiumSubscriptionDTO;
 import com.blog.by.kotor.service.premiumSubscription.PremiumSubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,16 +29,16 @@ public class PremiumSubscriptionController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
-    public ResponseEntity<?> addPremiumSubscription(@RequestBody PremiumSubscription premiumSubscription) {
-        premiumSubscriptionService.createPremiumSubscription(premiumSubscription);
-        return new ResponseEntity<>(premiumSubscription, HttpStatus.CREATED);
+    public ResponseEntity<?> addPremiumSubscription(@RequestBody @Validated PremiumSubscriptionDTO premiumSubscriptionDTO) {
+        premiumSubscriptionService.createPremiumSubscription(premiumSubscriptionDTO);
+        return new ResponseEntity<>(premiumSubscriptionDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
-    public ResponseEntity<?> updatePremiumSubscription(@RequestBody PremiumSubscription premiumSubscription) {
-        premiumSubscriptionService.updatePremiumSubscription(premiumSubscription);
-        return new ResponseEntity<>(premiumSubscription, HttpStatus.OK);
+    public ResponseEntity<?> updatePremiumSubscription(@RequestBody @Validated PremiumSubscriptionDTO premiumSubscriptionDTO, @PathVariable Integer id) {
+        premiumSubscriptionService.updatePremiumSubscription(premiumSubscriptionDTO, id);
+        return new ResponseEntity<>(premiumSubscriptionDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

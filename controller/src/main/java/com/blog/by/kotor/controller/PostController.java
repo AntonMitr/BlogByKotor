@@ -1,10 +1,11 @@
 package com.blog.by.kotor.controller;
 
-import com.blog.by.kotor.model.Post;
+import com.blog.by.kotor.dto.model.PostDTO;
 import com.blog.by.kotor.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,16 +40,16 @@ public class PostController {
         return new ResponseEntity<>(postService.findByTitleOrderByDatePublished(title), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<?> updatePost(@RequestBody Post post) {
-        postService.updatePost(post);
-        return new ResponseEntity<>(post, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePost(@RequestBody @Validated PostDTO postDTO, @PathVariable Integer id) {
+        postService.updatePost(postDTO, id);
+        return new ResponseEntity<>(postDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> addPost(@RequestBody Post post) {
-        postService.createPost(post);
-        return new ResponseEntity<>(post, HttpStatus.CREATED);
+    public ResponseEntity<?> addPost(@RequestBody @Validated PostDTO postDTO) {
+        postService.createPost(postDTO);
+        return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{postId}")

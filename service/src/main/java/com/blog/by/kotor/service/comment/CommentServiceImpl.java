@@ -1,10 +1,10 @@
 package com.blog.by.kotor.service.comment;
 
+import com.blog.by.kotor.CommentDTOMapper;
+import com.blog.by.kotor.dto.model.CommentDTO;
 import com.blog.by.kotor.exception.ErrorCode;
 import com.blog.by.kotor.exception.create.CreateException;
-import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
-import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Comment;
 import com.blog.by.kotor.repository.CommentRepository;
 import com.blog.by.kotor.service.post.PostService;
@@ -22,25 +22,24 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final PostService postService;
     private final UserService userService;
+    private final CommentDTOMapper commentDTOMapper;
 
     @Override
     @Transactional
-    public void createComment(Comment comment) {
-        if (comment.getId() == null) {
-            throw new CreateException(ErrorCode.COMMENT_ID);
-        }
-        if (comment.getContent() == null) {
+    public void createComment(CommentDTO commentDTO) {
+        if (commentDTO.getContent() == null) {
             throw new CreateException(ErrorCode.COMMENT_CONTENT);
         }
-        if (comment.getPost().getId() == null) {
+        if (commentDTO.getPostId() == null) {
             throw new CreateException(ErrorCode.COMMENT_POST_ID);
         }
-        if (comment.getUser().getId() == null) {
+        if (commentDTO.getUserId() == null) {
             throw new CreateException(ErrorCode.COMMENT_USER_ID);
         }
-        if (comment.getCreatedAt() == null) {
-            throw new CreateException(ErrorCode.COMMENT_CONTENT);
-        }
+
+        Comment comment = commentDTOMapper.toComment(commentDTO);
+        comment.setUser(userService.findUserById(commentDTO.getUserId()));
+        comment.setPost(postService.findPostById(commentDTO.getPostId()));
         commentRepository.save(comment);
     }
 
@@ -63,26 +62,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void updateComment(Comment comment) {
-        commentRepository.findById(comment.getId())
-                .orElseThrow(() -> new UpdateException(ErrorCode.COMMENT_NOT_FOUND, comment.getId()));
-        commentRepository.save(comment);
+    public void updateComment(CommentDTO commentDTO, Integer id) {
+        Comment comment = this.findCommentById(id);
+        commentRepository.save(commentDTOMapper.updateComment(commentDTO, comment));
     }
 
     @Override
     @Transactional
     public void deleteCommentById(Integer id) {
-        commentRepository.findById(id)
-                .orElseThrow(() -> new DeleteException(ErrorCode.COMMENT_NOT_FOUND, id));
+        this.findCommentById(id);
         commentRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional
-    public void deleteComment(Comment comment) {
-        commentRepository.findById(comment.getId())
-                .orElseThrow(() -> new DeleteException(ErrorCode.COMMENT_NOT_FOUND, comment.getId()));
-        commentRepository.delete(comment);
     }
 
     @Override

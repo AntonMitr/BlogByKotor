@@ -1,10 +1,11 @@
 package com.blog.by.kotor.controller;
 
-import com.blog.by.kotor.model.Vote;
+import com.blog.by.kotor.dto.model.VoteDTO;
 import com.blog.by.kotor.service.vote.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,20 +36,20 @@ public class VoteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addVote(@RequestBody Vote vote) {
-        voteService.createVote(vote);
-        return new ResponseEntity<>(vote, HttpStatus.CREATED);
+    public ResponseEntity<?> addVote(@RequestBody @Validated VoteDTO voteDTO) {
+        voteService.createVote(voteDTO);
+        return new ResponseEntity<>(voteDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateVote(@RequestBody Vote vote) {
-        voteService.updateVote(vote);
-        return new ResponseEntity<>(vote, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateVote(@RequestBody @Validated VoteDTO voteDTO, @PathVariable Integer id) {
+        voteService.updateVote(voteDTO, id);
+        return new ResponseEntity<>(voteDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteVoteById(@PathVariable Integer voteId) {
-        voteService.deleteVoteById(voteId);
+    public ResponseEntity<?> deleteVoteById(@PathVariable Integer id) {
+        voteService.deleteVoteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

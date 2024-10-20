@@ -1,11 +1,12 @@
 package com.blog.by.kotor.controller;
 
 
-import com.blog.by.kotor.model.Poll;
+import com.blog.by.kotor.dto.model.PollDTO;
 import com.blog.by.kotor.service.poll.PollService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,15 +37,15 @@ public class PollController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> addPoll(@RequestBody Poll poll) {
-        pollService.createPoll(poll);
-        return new ResponseEntity<>(poll, HttpStatus.CREATED);
+    public ResponseEntity<?> addPoll(@RequestBody @Validated PollDTO pollDTO) {
+        pollService.createPoll(pollDTO);
+        return new ResponseEntity<>(pollDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<?> updatePoll(@RequestBody Poll poll) {
-        pollService.updatePoll(poll);
-        return new ResponseEntity<>(poll, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePoll(@RequestBody @Validated PollDTO pollDTO, @PathVariable Integer id) {
+        pollService.updatePoll(pollDTO, id);
+        return new ResponseEntity<>(pollDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

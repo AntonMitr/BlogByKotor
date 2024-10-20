@@ -1,16 +1,16 @@
 package com.blog.by.kotor.service.authentication;
 
 import com.blog.by.kotor.dto.JwtResponse;
-import com.blog.by.kotor.dto.SigninRequest;
-import com.blog.by.kotor.dto.SignupRequest;
+import com.blog.by.kotor.dto.authentication.LoginDTO;
+import com.blog.by.kotor.dto.authentication.RegistrationDTO;
 import com.blog.by.kotor.model.ERole;
 import com.blog.by.kotor.model.Role;
-import com.blog.by.kotor.model.User;
 import com.blog.by.kotor.model.security.JwtCore;
 import com.blog.by.kotor.model.security.UserDetailsImpl;
 import com.blog.by.kotor.service.role.RoleService;
 import com.blog.by.kotor.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,9 +24,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
@@ -36,48 +36,44 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final RoleService roleService;
 
-    private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
 
     @Transactional
     @Override
-    public void signup(SignupRequest signupRequest) {
-        if (userService.existsByUsername(signupRequest.getUsername())) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chose different username");
+    public void signup(RegistrationDTO registrationDTO) {
+        if (userService.existsByUsername(registrationDTO.getUsername())) {
+            log.error(String.format("Пользователь с имене %s уже существует", registrationDTO.getUsername()));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Выберите другое имя пользователя");
         }
 
-        if (userService.existsByEmail(signupRequest.getEmail())) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chose different email");
+        if (userService.existsByEmail(registrationDTO.getEmail())) {
+            log.error(String.format("Пользователь с почтой %s уже существует", registrationDTO.getEmail()));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Выберите другую почту");
         }
 
-        User user = new User(signupRequest.getUsername(),
-            signupRequest.getEmail(),
-            passwordEncoder.encode(signupRequest.getPassword()));
+        List<String> stringRoles = registrationDTO.getStringRoles();
+        ArrayList<Role> roles = new ArrayList<>();
 
-        Set<ERole> enumRoles = signupRequest.getRoles();
-        List<Role> roles = new ArrayList<>();
-
-        if (enumRoles == null) {
-        Role userRole = roleService
-                .findRoleByName(ERole.ROLE_USER);
-        roles.add(userRole);
+        if (stringRoles == null) {
+            Role userRole = roleService
+                    .findRoleByName(ERole.ROLE_USER);
+            roles.add(userRole);
         } else {
-            enumRoles.forEach(role -> {
-                switch (role.name()) {
+            stringRoles.forEach(role -> {
+                switch (role) {
                     case "ROLE_ADMIN":
                         Role admin = roleService
                                 .findRoleByName(ERole.ROLE_ADMIN);
                         roles.add(admin);
 
-                    break;
+                        break;
 
                     case "ROLE_MODERATOR":
                         Role modRole = roleService
                                 .findRoleByName(ERole.ROLE_MODERATOR);
                         roles.add(modRole);
 
-                    break;
+                        break;
 
                     default:
                         Role userRole = roleService
@@ -86,17 +82,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 }
             });
         }
-        user.setRoles(roles);
-        userService.createUser(user);
+
+        registrationDTO.setRoles(roles);
+        userService.createUser(registrationDTO);
     }
 
     @Override
-    public JwtResponse signin(SigninRequest signinRequest) {
+    public JwtResponse signin(LoginDTO loginDTO) {
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(
-                        signinRequest.getUsername(),
-                        signinRequest.getPassword()
-                ));
+                    .authenticate(new UsernamePasswordAuthenticationToken(
+                            loginDTO.getUsername(),
+                            loginDTO.getPassword()
+                    ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtCore.generateToken(authentication);

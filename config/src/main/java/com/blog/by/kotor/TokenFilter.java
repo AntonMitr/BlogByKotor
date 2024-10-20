@@ -29,7 +29,6 @@ public class TokenFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
 
-
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
@@ -45,7 +44,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            LOGGER.info("Невозможно установить аутентификацию пользователя: {}", e.getMessage());
+            LOGGER.error("Невозможно установить аутентификацию пользователя: {}", e.getMessage());
         }
 
         filterChain.doFilter(request, response);

@@ -3,17 +3,17 @@ package com.blog.by.kotor.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "posts")
 public class Post {
@@ -34,7 +34,7 @@ public class Post {
     private String content;
 
     @Column(name = "date_published")
-    private Date datePublished;
+    private LocalDate datePublished;
 
     @Column(name = "is_premium")
     private boolean isPremium;
@@ -63,18 +63,5 @@ public class Post {
             joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")})
     private List<Tag> tags;
-
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", user=" + user +
-                ", content='" + content + '\'' +
-                ", title='" + title + '\'' +
-                ", isPremium=" + isPremium +
-                ", datePublished=" + datePublished +
-                ", isPublished=" + isPublished +
-                '}';
-    }
 
 }

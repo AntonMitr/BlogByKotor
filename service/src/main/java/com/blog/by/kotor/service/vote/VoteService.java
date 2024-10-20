@@ -1,12 +1,13 @@
 package com.blog.by.kotor.service.vote;
 
+import com.blog.by.kotor.dto.model.VoteDTO;
 import com.blog.by.kotor.model.Vote;
 
 import java.util.List;
 
 public interface VoteService {
 
-    void createVote(Vote vote);
+    void createVote(VoteDTO voteDTO);
 
     Vote findVoteById(Integer id);
 
@@ -16,10 +17,8 @@ public interface VoteService {
 
     List<Vote> findAllVote();
 
-    void updateVote(Vote vote);
+    void updateVote(VoteDTO voteDTO, Integer id);
 
     void deleteVoteById(Integer id);
-
-    void deleteVote(Vote vote);
 
 }

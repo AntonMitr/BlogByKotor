@@ -1,12 +1,13 @@
 package com.blog.by.kotor.service.poll;
 
+import com.blog.by.kotor.dto.model.PollDTO;
 import com.blog.by.kotor.model.Poll;
 
 import java.util.List;
 
 public interface PollService {
 
-    void createPoll(Poll poll);
+    void createPoll(PollDTO pollDto);
 
     Poll findPollById(Integer id);
 
@@ -16,10 +17,8 @@ public interface PollService {
 
     List<Poll> findPollByUserId(Integer userId);
 
-    void updatePoll(Poll poll);
+    void updatePoll(PollDTO pollDTO, Integer id);
 
     void deletePollById(Integer id);
-
-    void deletePoll(Poll poll);
 
 }

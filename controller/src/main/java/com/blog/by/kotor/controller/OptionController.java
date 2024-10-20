@@ -1,10 +1,11 @@
 package com.blog.by.kotor.controller;
 
-import com.blog.by.kotor.model.Option;
+import com.blog.by.kotor.dto.model.OptionDTO;
 import com.blog.by.kotor.service.option.OptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,19 +31,19 @@ public class OptionController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addOption(@RequestBody Option option) {
-        optionService.createOption(option);
-        return new ResponseEntity<>(option, HttpStatus.CREATED);
+    public ResponseEntity<?> addOption(@RequestBody @Validated OptionDTO optionDTO) {
+        optionService.createOption(optionDTO);
+        return new ResponseEntity<>(optionDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateOption(@RequestBody Option option) {
-        optionService.updateOption(option);
-        return new ResponseEntity<>(option, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateOption(@RequestBody @Validated OptionDTO optionDTO, @PathVariable Integer id) {
+        optionService.updateOption(optionDTO, id);
+        return new ResponseEntity<>(optionDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOption(@RequestBody Integer id) {
+    public ResponseEntity<?> deleteOption(@PathVariable Integer id) {
         optionService.deleteOptionById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

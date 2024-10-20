@@ -1,12 +1,13 @@
 package com.blog.by.kotor.service.question;
 
+import com.blog.by.kotor.dto.model.QuestionDTO;
 import com.blog.by.kotor.model.Question;
 
 import java.util.List;
 
 public interface QuestionService {
 
-    void createQuestion(Question question);
+    void createQuestion(QuestionDTO questionDTO);
 
     Question findQuestionById(Integer id);
 
@@ -14,11 +15,9 @@ public interface QuestionService {
 
     List<Question> findByQuestionTextContaining(String questionText);
 
-    void updateQuestion(Question question);
+    void updateQuestion(QuestionDTO questionDTO, Integer id);
 
     void deleteQuestionById(Integer id);
-
-    void deleteQuestion(Question question);
 
     Question findByPollId(Integer pollId);
 

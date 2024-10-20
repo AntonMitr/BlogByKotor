@@ -1,10 +1,11 @@
 package com.blog.by.kotor.controller;
 
-import com.blog.by.kotor.model.Tag;
+import com.blog.by.kotor.dto.model.TagDTO;
 import com.blog.by.kotor.service.tag.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,15 +31,15 @@ public class TagController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addTag(@RequestBody Tag tag) {
-        tagService.createTag(tag);
-        return new ResponseEntity<>(tag, HttpStatus.CREATED);
+    public ResponseEntity<?> addTag(@RequestBody @Validated TagDTO tagDTO) {
+        tagService.createTag(tagDTO);
+        return new ResponseEntity<>(tagDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateTag(@RequestBody Tag tag) {
-        tagService.updateTag(tag);
-        return new ResponseEntity<>(tag, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTag(@RequestBody @Validated TagDTO tagDTO, @PathVariable Integer id) {
+        tagService.updateTag(tagDTO, id);
+        return new ResponseEntity<>(tagDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -1,10 +1,11 @@
 package com.blog.by.kotor.service.post;
 
+import com.blog.by.kotor.PostDTOMapper;
+import com.blog.by.kotor.dto.model.PostDTO;
 import com.blog.by.kotor.exception.ErrorCode;
 import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
-import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Post;
 import com.blog.by.kotor.repository.PostRepository;
 import com.blog.by.kotor.service.user.UserService;
@@ -22,24 +23,23 @@ public class PostServiceImpl implements PostService {
 
     private final UserService userService;
 
+    private final PostDTOMapper postDTOMapper;
+
     @Override
     @Transactional
-    public void createPost(Post post) {
-        if (post.getId() == null) {
-            throw new CreateException(ErrorCode.POST_ID);
-        }
-        if (post.getUser().getId() == null) {
+    public void createPost(PostDTO postDTO) {
+        if (postDTO.getUserId() == null) {
             throw new CreateException(ErrorCode.POST_USER_ID);
         }
-        if (post.getContent() == null) {
+        if (postDTO.getContent() == null) {
             throw new CreateException(ErrorCode.POST_CONTENT);
         }
-        if (post.getTitle() == null) {
+        if (postDTO.getTitle() == null) {
             throw new CreateException(ErrorCode.POST_TITLE);
         }
-        if (post.getDatePublished() == null) {
-            throw new CreateException(ErrorCode.POST_DATE_PUBLISHED);
-        }
+
+        Post post = postDTOMapper.toPost(postDTO);
+        post.setUser(userService.findUserById(postDTO.getUserId()));
         postRepository.save(post);
     }
 
@@ -76,10 +76,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void updatePost(Post post) {
-        postRepository.findById(post.getId())
-                .orElseThrow(() -> new UpdateException(ErrorCode.POST_NOT_FOUND, post.getId()));
-        postRepository.save(post);
+    public void updatePost(PostDTO postDTO, Integer id) {
+        Post post = this.findPostById(id);
+        postRepository.save(postDTOMapper.updatePost(postDTO, post));
     }
 
     @Override
@@ -88,14 +87,6 @@ public class PostServiceImpl implements PostService {
         postRepository.findById(id)
                 .orElseThrow(() -> new DeleteException(ErrorCode.POST_NOT_FOUND, id));
         postRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional
-    public void deletePost(Post post) {
-        postRepository.findById(post.getId())
-                .orElseThrow(() -> new DeleteException(ErrorCode.POST_NOT_FOUND, post.getId()));
-        postRepository.delete(post);
     }
 
 }
