@@ -28,15 +28,19 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    @ApiResponse(responseCode = "404", description = "Пользователь не найден",
-            content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
+            @ApiResponse(responseCode = "400", description = "Ошибка валидации"),
+            @ApiResponse(responseCode = "409", description = "Username или email пользователя уже заняты")
+    })
     public ResponseEntity<?> signup(@RequestBody @Validated RegistrationDTO registrationDTO) {
         authenticationService.signup(registrationDTO);
         log.info(String.format("Пользователь с именем %s успешно зарегистрирован!", registrationDTO.getUsername()));
-        return ResponseEntity.ok("Пользователь усспешно зарегистрирован!");
+        return ResponseEntity.ok("Пользователь успешно зарегистрирован!");
     }
 
     @PostMapping("/signin")
+
     public ResponseEntity<?> signin(@RequestBody @Validated LoginDTO loginDTO) {
         return new ResponseEntity<>(authenticationService.signin(loginDTO), HttpStatus.OK);
     }

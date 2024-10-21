@@ -3,8 +3,6 @@ package com.blog.by.kotor.service.tag;
 import com.blog.by.kotor.TagDTOMapper;
 import com.blog.by.kotor.dto.model.TagDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
-import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.exception.find.by.name.FindByNameException;
 import com.blog.by.kotor.model.Tag;
@@ -26,9 +24,6 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void createTag(TagDTO tagDTO) {
-        if (tagDTO.getTagName() == null) {
-            throw new CreateException(ErrorCode.TAG_NAME);
-        }
         Tag tag = tagDTOMapper.toTag(tagDTO);
         tagRepository.save(tag);
     }
@@ -60,8 +55,7 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void deleteTagById(Integer id) {
-        tagRepository.findById(id)
-                .orElseThrow(() -> new DeleteException(ErrorCode.TAG_NOT_FOUND, id));
+        this.findTagById(id);
         tagRepository.deleteById(id);
     }
 

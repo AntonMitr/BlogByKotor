@@ -3,7 +3,6 @@ package com.blog.by.kotor.service.filter;
 import com.blog.by.kotor.FilterDTOMapper;
 import com.blog.by.kotor.dto.model.FilterDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.model.Category;
@@ -92,13 +91,6 @@ public class FilterServiceImpl implements FilterService {
     @Override
     @Transactional
     public void createFilter(FilterDTO filterDTO) {
-        if (filterDTO.getCriteria() == null) {
-            throw new CreateException(ErrorCode.FILTER_CRITERIA);
-        }
-        if (filterDTO.getName() == null) {
-            throw new CreateException(ErrorCode.FILTER_ID);
-        }
-
         Filter filter = filterDTOMapper.toFilter(filterDTO);
         filterRepository.save(filter);
     }
@@ -124,8 +116,7 @@ public class FilterServiceImpl implements FilterService {
     @Override
     @Transactional
     public void deleteFilterById(Integer id) {
-        filterRepository.findById(id)
-                .orElseThrow(() -> new DeleteException(ErrorCode.FILTER_NOT_FOUND, id));
+        this.findFilterById(id);
         filterRepository.deleteById(id);
     }
 

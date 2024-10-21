@@ -4,8 +4,6 @@ package com.blog.by.kotor.service.category;
 import com.blog.by.kotor.CategoryDTOMapper;
 import com.blog.by.kotor.dto.model.CategoryDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
-import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.exception.find.by.name.FindByNameException;
 import com.blog.by.kotor.model.Category;
@@ -44,9 +42,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void createCategory(CategoryDTO categoryDTO) {
-        if (categoryDTO.getName() == null) {
-            throw new CreateException(ErrorCode.CATEGORY_NAME);
-        }
         Category category = categoryDTOMapper.toCategory(categoryDTO);
         categoryRepository.save(category);
     }
@@ -61,8 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void deleteCategoryById(Integer id) {
-        categoryRepository.findById(id)
-                .orElseThrow(() -> new DeleteException(ErrorCode.CATEGORY_NOT_FOUND, id));
+        this.findCategoryById(id);
         categoryRepository.deleteById(id);
     }
 

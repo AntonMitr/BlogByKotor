@@ -97,7 +97,10 @@ public enum ErrorCode {
     VOTE_ID("Vote_id cannot be null"),
     VOTE_OPTION_ID("Vote_option_id cannot be null"),
     VOTE_POST_ID("Vote_post_id cannot be null"),
-    VOTE_USER_ID("Vote_user_id cannot be null");
+    VOTE_USER_ID("Vote_user_id cannot be null"),
+
+    SIGNUP_USERNAME("Пользователь с имене %s уже существует"),
+    SIGNUP_EMAIL("Пользователь с такой почтой %s уже существует");
 
     private final String message;
 

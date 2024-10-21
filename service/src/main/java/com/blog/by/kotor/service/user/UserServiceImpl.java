@@ -4,8 +4,6 @@ import com.blog.by.kotor.RegistrationDTOMapper;
 import com.blog.by.kotor.UserDTOMapper;
 import com.blog.by.kotor.dto.authentication.RegistrationDTO;
 import com.blog.by.kotor.dto.model.UserDTO;
-import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.exception.find.by.name.FindByNameException;
@@ -69,15 +67,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updateUser(UserDTO userDTO, Integer id) {
         User user = this.findUserById(id);
-
         userRepository.save(userDTOMapper.updateUser(userDTO, user));
     }
 
     @Override
     @Transactional
     public void deleteUserById(Integer id) {
-        userRepository.findById(id)
-                .orElseThrow(() -> new DeleteException((USER_NOT_FOUND), id));
+        this.findUserById(id);
         userRepository.deleteById(id);
     }
 

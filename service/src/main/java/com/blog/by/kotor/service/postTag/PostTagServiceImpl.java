@@ -1,7 +1,6 @@
 package com.blog.by.kotor.service.postTag;
 
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.model.postTag.PostTag;
 import com.blog.by.kotor.repository.PostTagRepository;
 import com.blog.by.kotor.service.post.PostService;
@@ -25,12 +24,6 @@ public class PostTagServiceImpl implements PostTagService {
     @Override
     @Transactional
     public void createPostTag(PostTag postTag) {
-        if (postTag.getId().getPostId() == null) {
-            throw new CreateException(ErrorCode.POST_TAG_POST_ID);
-        }
-        if (postTag.getId().getTagId() == null) {
-            throw new CreateException(ErrorCode.POST_TAG_TAG_ID);
-        }
         postTagRepository.save(postTag);
     }
 

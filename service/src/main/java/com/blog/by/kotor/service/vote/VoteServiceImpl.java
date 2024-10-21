@@ -3,7 +3,6 @@ package com.blog.by.kotor.service.vote;
 import com.blog.by.kotor.VoteDTOMapper;
 import com.blog.by.kotor.dto.model.VoteDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.model.Vote;
 import com.blog.by.kotor.repository.VoteRepository;
@@ -33,13 +32,6 @@ public class VoteServiceImpl implements VoteService {
     @Override
     @Transactional
     public void createVote(VoteDTO voteDTO) {
-        if (voteDTO.getOptionId() == null) {
-            throw new CreateException(ErrorCode.VOTE_OPTION_ID);
-        }
-        if (voteDTO.getUserId() == null) {
-            throw new CreateException(ErrorCode.VOTE_USER_ID);
-        }
-
         Vote vote = voteDTOMapper.toVote(voteDTO);
         vote.setPost(postService.findPostById(voteDTO.getPostId()));
         vote.setOption(optionService.findOptionById(voteDTO.getOptionId()));

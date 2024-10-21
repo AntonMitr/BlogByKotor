@@ -3,7 +3,6 @@ package com.blog.by.kotor.service.role;
 import com.blog.by.kotor.RoleDTOMapper;
 import com.blog.by.kotor.dto.model.RoleDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.exception.find.by.name.FindByNameException;
 import com.blog.by.kotor.model.ERole;
@@ -26,9 +25,6 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public void createRole(RoleDTO roleDTO) {
-        if (roleDTO.getRoleName() == null) {
-            throw new CreateException(ErrorCode.ROLE_NAME);
-        }
         Role role = roleDTOMapper.toRole(roleDTO);
         roleRepository.save(role);
     }
@@ -61,7 +57,6 @@ public class RoleServiceImpl implements RoleService {
     @Transactional
     public void deleteRoleById(Integer id) {
         this.findRoleById(id);
-
         roleRepository.deleteById(id);
     }
 

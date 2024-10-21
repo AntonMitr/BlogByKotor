@@ -3,6 +3,8 @@ package com.blog.by.kotor.service.authentication;
 import com.blog.by.kotor.dto.JwtResponse;
 import com.blog.by.kotor.dto.authentication.LoginDTO;
 import com.blog.by.kotor.dto.authentication.RegistrationDTO;
+import com.blog.by.kotor.exception.ErrorCode;
+import com.blog.by.kotor.exception.signup.SignupException;
 import com.blog.by.kotor.model.ERole;
 import com.blog.by.kotor.model.Role;
 import com.blog.by.kotor.model.security.JwtCore;
@@ -43,12 +45,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void signup(RegistrationDTO registrationDTO) {
         if (userService.existsByUsername(registrationDTO.getUsername())) {
             log.error(String.format("Пользователь с имене %s уже существует", registrationDTO.getUsername()));
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Выберите другое имя пользователя");
+            throw new SignupException(ErrorCode.SIGNUP_USERNAME, registrationDTO.getUsername());
         }
 
         if (userService.existsByEmail(registrationDTO.getEmail())) {
             log.error(String.format("Пользователь с почтой %s уже существует", registrationDTO.getEmail()));
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Выберите другую почту");
+            throw new SignupException(ErrorCode.SIGNUP_EMAIL, registrationDTO.getEmail());
         }
 
         List<String> stringRoles = registrationDTO.getStringRoles();

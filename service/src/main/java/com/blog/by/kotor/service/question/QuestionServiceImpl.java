@@ -3,7 +3,6 @@ package com.blog.by.kotor.service.question;
 import com.blog.by.kotor.QuestionDTOMapper;
 import com.blog.by.kotor.dto.model.QuestionDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.model.Question;
 import com.blog.by.kotor.repository.QuestionRepository;
@@ -27,13 +26,6 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public void createQuestion(QuestionDTO questionDTO) {
-        if (questionDTO.getPollId() == null) {
-            throw new CreateException(ErrorCode.QUESTION_POLL_ID);
-        }
-        if (questionDTO.getQuestion() == null) {
-            throw new CreateException(ErrorCode.QUESTION_TEXT);
-        }
-
         Question question = questionDTOMapper.toQuestion(questionDTO);
         question.setPoll(pollService.findPollById(questionDTO.getPollId()));
         questionRepository.save(question);

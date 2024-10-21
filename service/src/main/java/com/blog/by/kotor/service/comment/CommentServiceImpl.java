@@ -3,7 +3,6 @@ package com.blog.by.kotor.service.comment;
 import com.blog.by.kotor.CommentDTOMapper;
 import com.blog.by.kotor.dto.model.CommentDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.model.Comment;
 import com.blog.by.kotor.repository.CommentRepository;
@@ -27,16 +26,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void createComment(CommentDTO commentDTO) {
-        if (commentDTO.getContent() == null) {
-            throw new CreateException(ErrorCode.COMMENT_CONTENT);
-        }
-        if (commentDTO.getPostId() == null) {
-            throw new CreateException(ErrorCode.COMMENT_POST_ID);
-        }
-        if (commentDTO.getUserId() == null) {
-            throw new CreateException(ErrorCode.COMMENT_USER_ID);
-        }
-
         Comment comment = commentDTOMapper.toComment(commentDTO);
         comment.setUser(userService.findUserById(commentDTO.getUserId()));
         comment.setPost(postService.findPostById(commentDTO.getPostId()));

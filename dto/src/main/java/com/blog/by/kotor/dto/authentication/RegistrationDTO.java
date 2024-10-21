@@ -21,19 +21,20 @@ import java.util.List;
 public class RegistrationDTO {
 
     @Schema(description = "Имя пользователя", example = "user1")
-    @NotBlank
+    @NotBlank(message = "Имя пользователя не должно быть пустым")
     private String username;
 
     @Schema(description = "Электронная почта", example = "user1@gmail.com")
     @Email
-    @NotBlank
+    @NotBlank(message = "Электронная почта не должна быть пустой")
     private String email;
 
     @Schema(description = "Пароль должен содержать от 6 до 32 символов " +
             "и как минимум одну букву, одну цифру и один специальный символ")
     @Size(min = 6, max = 32)
-    @NotBlank
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\\\\\\\d)(?=.*[@$!%*#?^&amp;])[A-Za-z\\\\d@$!%*#?^&amp;]$")
+    @NotBlank(message = "Пароль не должен быть пустым")
+
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?^&])[A-Za-z\\d@$!%*#?^&]{6,32}$")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 

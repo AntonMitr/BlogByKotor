@@ -3,8 +3,6 @@ package com.blog.by.kotor.service.post;
 import com.blog.by.kotor.PostDTOMapper;
 import com.blog.by.kotor.dto.model.PostDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
-import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.model.Post;
 import com.blog.by.kotor.repository.PostRepository;
@@ -28,16 +26,6 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void createPost(PostDTO postDTO) {
-        if (postDTO.getUserId() == null) {
-            throw new CreateException(ErrorCode.POST_USER_ID);
-        }
-        if (postDTO.getContent() == null) {
-            throw new CreateException(ErrorCode.POST_CONTENT);
-        }
-        if (postDTO.getTitle() == null) {
-            throw new CreateException(ErrorCode.POST_TITLE);
-        }
-
         Post post = postDTOMapper.toPost(postDTO);
         post.setUser(userService.findUserById(postDTO.getUserId()));
         postRepository.save(post);
@@ -84,8 +72,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void deletePostById(Integer id) {
-        postRepository.findById(id)
-                .orElseThrow(() -> new DeleteException(ErrorCode.POST_NOT_FOUND, id));
+        this.findPostById(id);
         postRepository.deleteById(id);
     }
 

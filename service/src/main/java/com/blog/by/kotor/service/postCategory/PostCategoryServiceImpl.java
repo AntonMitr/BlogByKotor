@@ -1,7 +1,5 @@
 package com.blog.by.kotor.service.postCategory;
 
-import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.model.postCategory.PostCategory;
 import com.blog.by.kotor.repository.PostCategoryRepository;
 import com.blog.by.kotor.service.category.CategoryService;
@@ -25,12 +23,6 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     @Override
     @Transactional
     public void createPostCategory(PostCategory postCategory) {
-        if (postCategory.getId().getCategoryId() == null) {
-            throw new CreateException(ErrorCode.POST_CATEGORY_CATEGORY_ID);
-        }
-        if (postCategory.getId().getPostId() == null) {
-            throw new CreateException(ErrorCode.POST_CATEGORY_POST_ID);
-        }
         postCategoryRepository.save(postCategory);
     }
 
