@@ -44,24 +44,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public void signup(SignupRequest signupRequest) {
         if (userService.existsByUsername(signupRequest.getUsername())) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chose different username");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chose different username");
         }
 
         if (userService.existsByEmail(signupRequest.getEmail())) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chose different email");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chose different email");
         }
 
         User user = new User(signupRequest.getUsername(),
-            signupRequest.getEmail(),
-            passwordEncoder.encode(signupRequest.getPassword()));
+                signupRequest.getEmail(),
+                passwordEncoder.encode(signupRequest.getPassword()));
 
         Set<ERole> enumRoles = signupRequest.getRoles();
         List<Role> roles = new ArrayList<>();
 
         if (enumRoles == null) {
-        Role userRole = roleService
-                .findRoleByName(ERole.ROLE_USER);
-        roles.add(userRole);
+            Role userRole = roleService
+                    .findRoleByName(ERole.ROLE_USER);
+            roles.add(userRole);
         } else {
             enumRoles.forEach(role -> {
                 switch (role.name()) {
@@ -70,14 +70,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                                 .findRoleByName(ERole.ROLE_ADMIN);
                         roles.add(admin);
 
-                    break;
+                        break;
 
                     case "ROLE_MODERATOR":
                         Role modRole = roleService
                                 .findRoleByName(ERole.ROLE_MODERATOR);
                         roles.add(modRole);
 
-                    break;
+                        break;
 
                     default:
                         Role userRole = roleService
