@@ -5,7 +5,6 @@ import com.blog.by.kotor.model.Comment;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.function.Function;
 
 @Service
 public class CommentDTOMapper {
@@ -18,7 +17,7 @@ public class CommentDTOMapper {
     }
 
     public Comment updateComment(CommentDTO commentDTO, Comment comment) {
-        if(commentDTO.getContent() != null) {
+        if (commentDTO.getContent() != null) {
             comment.setContent(commentDTO.getContent());
         }
         return comment;

@@ -4,8 +4,6 @@ import com.blog.by.kotor.dto.model.QuestionDTO;
 import com.blog.by.kotor.model.Question;
 import org.springframework.stereotype.Service;
 
-import java.util.function.Function;
-
 @Service
 public class QuestionDTOMapper {
 

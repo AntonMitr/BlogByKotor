@@ -2,10 +2,7 @@ package com.blog.by.kotor.controller;
 
 import com.blog.by.kotor.dto.authentication.LoginDTO;
 import com.blog.by.kotor.dto.authentication.RegistrationDTO;
-import com.blog.by.kotor.dto.error.ErrorResponseDTO;
 import com.blog.by.kotor.service.authentication.AuthenticationService;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;

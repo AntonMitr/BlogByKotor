@@ -61,7 +61,7 @@ public class CommentController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Comment не найден")
     })
-    public ResponseEntity<?> viewByUserIdOrderByCreatedAt(@PathVariable  @Parameter(description = "Индентификатор пользователя", example = "1")Integer userId) {
+    public ResponseEntity<?> viewByUserIdOrderByCreatedAt(@PathVariable @Parameter(description = "Индентификатор пользователя", example = "1") Integer userId) {
         return new ResponseEntity<>(commentService.findByUserIdOrderByCreatedAt(userId), HttpStatus.OK);
     }
 

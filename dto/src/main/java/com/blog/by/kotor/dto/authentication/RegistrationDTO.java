@@ -12,7 +12,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -41,7 +40,7 @@ public class RegistrationDTO {
     @Schema(description = "Список ролей пользователя, где каждая роль является объектом типа String и начинается с ROLE_...", example = "[\"ROLE_USER\"]")
     private ArrayList<String> stringRoles;
 
-    @Schema(description = "Список ролей пользователя, где каждая роль является объектом типа Role (сюда ничего не передаём)", example ="[]")
+    @Schema(description = "Список ролей пользователя, где каждая роль является объектом типа Role (сюда ничего не передаём)", example = "[]")
     private ArrayList<Role> roles;
 
 }

@@ -4,7 +4,6 @@ import com.blog.by.kotor.RegistrationDTOMapper;
 import com.blog.by.kotor.UserDTOMapper;
 import com.blog.by.kotor.dto.authentication.RegistrationDTO;
 import com.blog.by.kotor.dto.model.UserDTO;
-import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.exception.find.by.name.FindByNameException;
 import com.blog.by.kotor.model.User;

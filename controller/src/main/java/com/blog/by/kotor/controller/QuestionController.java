@@ -33,7 +33,7 @@ public class QuestionController {
     }
 
     @GetMapping
-        public ResponseEntity<?> getQuestionTextContaining(@RequestParam @Parameter(description = "Текст вопроса", example = "Сколько лет вы ведете блог?") String title) {
+    public ResponseEntity<?> getQuestionTextContaining(@RequestParam @Parameter(description = "Текст вопроса", example = "Сколько лет вы ведете блог?") String title) {
         return new ResponseEntity<>(questionService.findByQuestionTextContaining(title), HttpStatus.OK);
     }
 

@@ -5,8 +5,6 @@ import com.blog.by.kotor.model.ERole;
 import com.blog.by.kotor.model.Role;
 import org.springframework.stereotype.Service;
 
-import java.util.function.Function;
-
 @Service
 public class RoleDTOMapper {
 

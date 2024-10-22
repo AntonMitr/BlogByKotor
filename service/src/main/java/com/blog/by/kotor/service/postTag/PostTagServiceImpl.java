@@ -1,6 +1,5 @@
 package com.blog.by.kotor.service.postTag;
 
-import com.blog.by.kotor.exception.ErrorCode;
 import com.blog.by.kotor.model.postTag.PostTag;
 import com.blog.by.kotor.repository.PostTagRepository;
 import com.blog.by.kotor.service.post.PostService;

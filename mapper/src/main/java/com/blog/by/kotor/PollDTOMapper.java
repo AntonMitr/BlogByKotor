@@ -5,7 +5,6 @@ import com.blog.by.kotor.model.Poll;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.function.Function;
 
 @Service
 public class PollDTOMapper {

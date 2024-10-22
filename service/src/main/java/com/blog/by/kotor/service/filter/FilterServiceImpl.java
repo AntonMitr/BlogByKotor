@@ -3,7 +3,6 @@ package com.blog.by.kotor.service.filter;
 import com.blog.by.kotor.FilterDTOMapper;
 import com.blog.by.kotor.dto.model.FilterDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.model.Category;
 import com.blog.by.kotor.model.Filter;

@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +33,7 @@ public class UserDTOMapper {
         if (userDTO.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
-        if(userDTO.getRoles() != null) {
+        if (userDTO.getRoles() != null) {
             user.setRoles(userDTO.getRoles());
         }
         return user;

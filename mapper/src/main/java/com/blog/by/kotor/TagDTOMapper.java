@@ -4,8 +4,6 @@ import com.blog.by.kotor.dto.model.TagDTO;
 import com.blog.by.kotor.model.Tag;
 import org.springframework.stereotype.Service;
 
-import java.util.function.Function;
-
 @Service
 public class TagDTOMapper {
 

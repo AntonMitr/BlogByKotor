@@ -4,8 +4,6 @@ import com.blog.by.kotor.dto.model.CategoryDTO;
 import com.blog.by.kotor.model.Category;
 import org.springframework.stereotype.Service;
 
-import java.util.function.Function;
-
 @Service
 public class CategoryDTOMapper {
 

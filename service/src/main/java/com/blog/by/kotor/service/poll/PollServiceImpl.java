@@ -3,7 +3,6 @@ package com.blog.by.kotor.service.poll;
 import com.blog.by.kotor.PollDTOMapper;
 import com.blog.by.kotor.dto.model.PollDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.model.Poll;
 import com.blog.by.kotor.repository.PollRepository;
