@@ -5,14 +5,20 @@ import jakarta.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
 @Entity
 @Table(name = "polls")
 public class Poll {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -26,51 +32,9 @@ public class Poll {
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "poll", fetch = FetchType.EAGER)
     private Question question;
-
-    public Poll() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     @Override
     public String toString() {
@@ -88,11 +52,12 @@ public class Poll {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Poll poll = (Poll) o;
-        return id == poll.id && Objects.equals(user, poll.user) && Objects.equals(title, poll.title) && Objects.equals(description, poll.description) && Objects.equals(createdAt, poll.createdAt);
+        return Objects.equals(id, poll.id) && Objects.equals(user, poll.user) && Objects.equals(title, poll.title) && Objects.equals(description, poll.description) && Objects.equals(createdAt, poll.createdAt) && Objects.equals(question, poll.question);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, title, description, createdAt);
+        return Objects.hash(id, user, title, description, createdAt, question);
     }
+
 }
