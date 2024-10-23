@@ -40,6 +40,7 @@ gradle-app.setting
 ##############################
 out/
 .idea/
+logs
 .idea_modules/
 *.iml
 *.ipr
