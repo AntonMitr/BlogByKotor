@@ -32,8 +32,8 @@ public class AuthenticationController {
     })
     public ResponseEntity<?> signup(@RequestBody @Validated RegistrationDTO registrationDTO) {
         authenticationService.signup(registrationDTO);
-        log.info(String.format("Пользователь с именем %s успешно зарегистрирован!", registrationDTO.getUsername()));
-        return ResponseEntity.ok("Пользователь успешно зарегистрирован!");
+        log.info(String.format("The user named %s has been successfully registered!", registrationDTO.getUsername()));
+        return ResponseEntity.ok("User successfully registered!");
     }
 
     @PostMapping("/signin")

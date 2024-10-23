@@ -50,7 +50,7 @@ public class FilterServiceImpl implements FilterService {
     @Override
     public Filter findByCriteria(String criteria) {
         return filterRepository.findByCriteria(criteria)
-                .orElseThrow(() -> new RuntimeException("Фильра по данной criteria не существует"));
+                .orElseThrow(() -> new RuntimeException("There is no filter for this criteria"));
     }
 
     @Override

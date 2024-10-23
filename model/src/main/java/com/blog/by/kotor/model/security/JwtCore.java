@@ -56,16 +56,16 @@ public class JwtCore {
             Jwts.parser().verifyWith(getSigningKey()).build().parse(authToken);
             return true;
         } catch (MalformedJwtException e) {
-            log.error("Неверный формат jwt токена {}", e.getMessage());
+            log.error("Invalid jwt token format {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         } catch (ExpiredJwtException e) {
-            log.error("Jwt токен истёк: {}", e.getMessage());
+            log.error("Jwt token expired: {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         } catch (UnsupportedJwtException e) {
-            log.error("Неподдерживаемый jwt токен: {}", e.getMessage());
+            log.error("Unsupported jwt token: {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         } catch (IllegalArgumentException e) {
-            log.error("Пустой jwt токен: {}", e.getMessage());
+            log.error("Empty jwt token: {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }

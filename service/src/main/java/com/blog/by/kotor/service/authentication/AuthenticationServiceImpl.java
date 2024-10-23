@@ -41,12 +41,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public void signup(RegistrationDTO registrationDTO) {
         if (userService.existsByUsername(registrationDTO.getUsername())) {
-            log.error(String.format("Пользователь с имене %s уже существует", registrationDTO.getUsername()));
+            log.error(String.format("The user with the name %s already exists", registrationDTO.getUsername()));
             throw new SignupException(ErrorCode.SIGNUP_USERNAME, registrationDTO.getUsername());
         }
 
         if (userService.existsByEmail(registrationDTO.getEmail())) {
-            log.error(String.format("Пользователь с почтой %s уже существует", registrationDTO.getEmail()));
+            log.error(String.format("User with mail %s already exists", registrationDTO.getEmail()));
             throw new SignupException(ErrorCode.SIGNUP_EMAIL, registrationDTO.getEmail());
         }
 

@@ -40,6 +40,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 )
 public class OpenApiConfig {
 
+    public final String ILLEGAL_STATE_EXCEPTION_MESSAGE = "Failed to generate a response for errors 4xx and 5xx because there is no error scheme";
+    public final String STATUS_FOUR = "4";
+    public final String STATUS_FIVE = "5";
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(
@@ -53,13 +57,12 @@ public class OpenApiConfig {
             var sharedErrorSchema = ModelConverters.getInstance()
                     .read(ErrorResponseDTO.class).get(ErrorResponseDTO.class.getSimpleName());
             if (sharedErrorSchema == null) {
-                throw new IllegalStateException(
-                        "Не удалось сгенерировать ответ для ошибок 4xx и 5xx, поскольку отсутствует схема ошибки");
+                throw new IllegalStateException(ILLEGAL_STATE_EXCEPTION_MESSAGE);
             }
 
             openApi.getPaths().values().forEach(pathItem -> pathItem.readOperations().forEach(operation ->
                     operation.getResponses().forEach((status, response) -> {
-                        if (status.startsWith("4") || status.startsWith("5")) {
+                        if (status.startsWith(STATUS_FOUR) || status.startsWith(STATUS_FIVE)) {
                             response.getContent().forEach((code, mediaType) -> mediaType.setSchema(sharedErrorSchema));
                         }
                     })));
