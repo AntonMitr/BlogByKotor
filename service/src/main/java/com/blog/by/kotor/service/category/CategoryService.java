@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface CategoryService {
 
+    void deleteCategory(Category category);
+
     Category findCategoryById(Integer id);
 
     Category findByName(String name);
@@ -17,7 +19,5 @@ public interface CategoryService {
     void updateCategory(Category category);
 
     void deleteCategoryById(Integer id);
-
-    void deleteCategory(Category category);
 
 }

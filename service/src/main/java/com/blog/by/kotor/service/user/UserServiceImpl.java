@@ -4,42 +4,64 @@ import com.blog.by.kotor.exception.ErrorCode;
 import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
+import com.blog.by.kotor.exception.find.by.name.FindByNameException;
 import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.User;
 import com.blog.by.kotor.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
+import static com.blog.by.kotor.exception.ErrorCode.USER_NAME_NOT_FOUND;
 import static com.blog.by.kotor.exception.ErrorCode.USER_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private final UserRepository userRepository;
 
     @Override
     @Transactional
     public void createUser(User user) {
-        if (user.getId() == null) {
-            throw new CreateException(ErrorCode.USER_ID);
-        }
         if (user.getEmail() == null) {
             throw new CreateException(ErrorCode.USER_EMAIL);
         }
-        if (user.getName() == null) {
+        if (user.getUsername() == null) {
             throw new CreateException(ErrorCode.USER_NAME);
         }
         if (user.getPassword() == null) {
             throw new CreateException(ErrorCode.USER_PASSWORD);
         }
         if (user.getCreatedAt() == null) {
-            throw new CreateException(ErrorCode.USER_CREATED_AT);
+            user.setCreatedAt(new Date());
         }
         userRepository.save(user);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+
+        User user1 = userRepository.findByUsername(username).orElseThrow(() -> new FindByNameException(USER_NAME_NOT_FOUND, username));
+        return user1;
+
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
     @Override

@@ -4,7 +4,9 @@ import com.blog.by.kotor.exception.ErrorCode;
 import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
+import com.blog.by.kotor.exception.find.by.name.FindByNameException;
 import com.blog.by.kotor.exception.update.UpdateException;
+import com.blog.by.kotor.model.ERole;
 import com.blog.by.kotor.model.Role;
 import com.blog.by.kotor.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +40,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role findRoleByName(String name) {
-        return roleRepository.findRoleByName(name);
+    public Role findRoleByName(ERole name) {
+        return roleRepository.findRoleByName(name)
+                .orElseThrow(() -> new FindByNameException(ErrorCode.ROLE_NAME_NOT_FOUND, name.name()));
     }
 
     @Override

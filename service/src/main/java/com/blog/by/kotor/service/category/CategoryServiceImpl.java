@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findByName(String name) {
         return categoryRepository.findByName(name)
-                .orElseThrow(() -> new FindByNameException(ErrorCode.CATEGORY_NOT_FOUND, name));
+                .orElseThrow(() -> new FindByNameException(ErrorCode.CATEGORY_NAME_NOT_FOUND, name));
     }
 
     @Override

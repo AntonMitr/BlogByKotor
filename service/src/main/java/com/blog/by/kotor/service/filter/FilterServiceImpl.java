@@ -46,7 +46,7 @@ public class FilterServiceImpl implements FilterService {
         List<Post> posts = new ArrayList<>();
         List<PostTag> postTags;
 
-        Filter filter = filterRepository.findByCriteria(criteria);
+        Filter filter = filterRepository.findByCriteria(criteria).orElseThrow(() -> new RuntimeException("Фильра по данной criteria не существует"));
 
         Tag tag = tagService.findTagByName(filter.getName());
 
@@ -63,7 +63,7 @@ public class FilterServiceImpl implements FilterService {
         List<Post> posts = new ArrayList<>();
         List<PostCategory> postCategories;
 
-        Filter filter = filterRepository.findByCriteria(criteria);
+        Filter filter = filterRepository.findByCriteria(criteria).orElseThrow(() -> new RuntimeException("Фильра по данной criteria не существует"));
 
         Category category = categoryService.findByName(filter.getName());
 
