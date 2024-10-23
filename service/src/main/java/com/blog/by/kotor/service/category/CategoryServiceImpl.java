@@ -41,10 +41,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void createCategory(Category category) {
-        if(category.getId() == null) {
+        if (category.getId() == null) {
             throw new CreateException(ErrorCode.CATEGORY_ID);
         }
-        if(category.getName() == null) {
+        if (category.getName() == null) {
             throw new CreateException(ErrorCode.CATEGORY_NAME);
         }
         categoryRepository.save(category);

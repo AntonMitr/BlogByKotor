@@ -45,4 +45,5 @@ drop table users_roles;
 drop table votes;
 drop table questions;
 
-drop database blog_by_kotor;
+drop
+database blog_by_kotor;

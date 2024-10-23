@@ -77,13 +77,13 @@ public class FilterServiceImpl implements FilterService {
     @Override
     @Transactional
     public void createFilter(Filter filter) {
-        if(filter.getId() == null){
+        if (filter.getId() == null) {
             throw new CreateException(ErrorCode.FILTER_ID);
         }
-        if(filter.getCriteria() == null){
+        if (filter.getCriteria() == null) {
             throw new CreateException(ErrorCode.FILTER_CRITERIA);
         }
-        if(filter.getName() == null){
+        if (filter.getName() == null) {
             throw new CreateException(ErrorCode.FILTER_ID);
         }
         filterRepository.save(filter);

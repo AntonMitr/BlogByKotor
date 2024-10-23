@@ -23,10 +23,10 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void createTag(Tag tag) {
-        if(tag.getId() == null){
+        if (tag.getId() == null) {
             throw new CreateException(ErrorCode.TAG_ID);
         }
-        if(tag.getName() == null){
+        if (tag.getName() == null) {
             throw new CreateException(ErrorCode.TAG_NAME);
         }
         tagRepository.save(tag);
@@ -35,7 +35,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag findTagByName(String tagName) {
         return tagRepository.findByName(tagName)
-                .orElseThrow(()-> new FindByNameException(ErrorCode.TAG_NOT_FOUND, tagName));
+                .orElseThrow(() -> new FindByNameException(ErrorCode.TAG_NOT_FOUND, tagName));
     }
 
     @Override

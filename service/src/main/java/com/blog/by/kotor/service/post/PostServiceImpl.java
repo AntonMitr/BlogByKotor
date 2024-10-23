@@ -25,19 +25,19 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void createPost(Post post) {
-        if(post.getId() == null){
+        if (post.getId() == null) {
             throw new CreateException(ErrorCode.POST_ID);
         }
-        if(post.getUser().getId() == null){
+        if (post.getUser().getId() == null) {
             throw new CreateException(ErrorCode.POST_USER_ID);
         }
-        if(post.getContent() == null){
+        if (post.getContent() == null) {
             throw new CreateException(ErrorCode.POST_CONTENT);
         }
-        if(post.getTitle() == null){
+        if (post.getTitle() == null) {
             throw new CreateException(ErrorCode.POST_TITLE);
         }
-        if(post.getDatePublished() == null){
+        if (post.getDatePublished() == null) {
             throw new CreateException(ErrorCode.POST_DATE_PUBLISHED);
         }
         postRepository.save(post);

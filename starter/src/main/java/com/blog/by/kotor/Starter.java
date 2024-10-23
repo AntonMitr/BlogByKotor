@@ -15,7 +15,7 @@ public class Starter {
 
     static final Logger log = LoggerFactory.getLogger(Starter.class);
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(Starter.class, args);
 
         UserService userService = context.getBean(UserService.class);

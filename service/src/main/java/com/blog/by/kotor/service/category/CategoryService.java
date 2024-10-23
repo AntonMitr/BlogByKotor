@@ -7,7 +7,7 @@ import java.util.List;
 public interface CategoryService {
 
     Category findCategoryById(Integer id);
-    
+
     Category findByName(String name);
 
     List<Category> findAllCategory();

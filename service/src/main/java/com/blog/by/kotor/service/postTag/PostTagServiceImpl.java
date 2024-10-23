@@ -25,10 +25,10 @@ public class PostTagServiceImpl implements PostTagService {
     @Override
     @Transactional
     public void createPostTag(PostTag postTag) {
-        if(postTag.getId().getPostId() == null){
+        if (postTag.getId().getPostId() == null) {
             throw new CreateException(ErrorCode.POST_TAG_POST_ID);
         }
-        if(postTag.getId().getTagId() == null){
+        if (postTag.getId().getTagId() == null) {
             throw new CreateException(ErrorCode.POST_TAG_TAG_ID);
         }
         postTagRepository.save(postTag);

@@ -25,16 +25,16 @@ public class PollServiceImpl implements PollService {
     @Override
     @Transactional
     public void createPoll(Poll poll) {
-        if(poll.getId() == null){
+        if (poll.getId() == null) {
             throw new CreateException(ErrorCode.POLL_ID);
         }
-        if(poll.getUser().getId() == null){
+        if (poll.getUser().getId() == null) {
             throw new CreateException(ErrorCode.POLL_USER_ID);
         }
-        if(poll.getTitle() == null){
+        if (poll.getTitle() == null) {
             throw new CreateException(ErrorCode.POLL_TITLE);
         }
-        if(poll.getCreatedAt() == null){
+        if (poll.getCreatedAt() == null) {
             throw new CreateException(ErrorCode.POLL_CREATED_AT);
         }
         pollRepository.save(poll);

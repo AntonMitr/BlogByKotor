@@ -22,10 +22,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public void createRole(Role role) {
-        if(role.getId() == null){
+        if (role.getId() == null) {
             throw new CreateException(ErrorCode.ROLE_ID);
         }
-        if(role.getName() == null){
+        if (role.getName() == null) {
             throw new CreateException(ErrorCode.ROLE_NAME);
         }
         roleRepository.save(role);

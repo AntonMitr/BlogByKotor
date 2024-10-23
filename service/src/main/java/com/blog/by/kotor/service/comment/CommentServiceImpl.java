@@ -26,19 +26,19 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void createComment(Comment comment) {
-        if(comment.getId() == null){
+        if (comment.getId() == null) {
             throw new CreateException(ErrorCode.COMMENT_ID);
         }
-        if(comment.getContent() == null){
+        if (comment.getContent() == null) {
             throw new CreateException(ErrorCode.COMMENT_CONTENT);
         }
-        if(comment.getPost().getId() == null){
+        if (comment.getPost().getId() == null) {
             throw new CreateException(ErrorCode.COMMENT_POST_ID);
         }
-        if(comment.getUser().getId() == null){
-                throw new CreateException(ErrorCode.COMMENT_USER_ID);
+        if (comment.getUser().getId() == null) {
+            throw new CreateException(ErrorCode.COMMENT_USER_ID);
         }
-        if(comment.getCreatedAt() == null){
+        if (comment.getCreatedAt() == null) {
             throw new CreateException(ErrorCode.COMMENT_CONTENT);
         }
         commentRepository.save(comment);

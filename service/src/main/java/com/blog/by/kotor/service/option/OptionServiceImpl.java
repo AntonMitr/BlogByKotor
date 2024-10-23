@@ -25,13 +25,13 @@ public class OptionServiceImpl implements OptionService {
     @Override
     @Transactional
     public void createOption(Option option) {
-        if(option.getId() == null){
+        if (option.getId() == null) {
             throw new CreateException(ErrorCode.OPTION_ID);
         }
-        if(option.getOptionText() == null){
+        if (option.getOptionText() == null) {
             throw new CreateException(ErrorCode.OPTION_TEXT);
         }
-        if(option.getQuestion().getId() == null){
+        if (option.getQuestion().getId() == null) {
             throw new CreateException(ErrorCode.OPTION_QUESTION_ID);
         }
         optionRepository.save(option);

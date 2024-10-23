@@ -34,10 +34,10 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     @Transactional
     public void createUserRole(UserRole userRole) {
-        if(userRole.getUserRoleId().getUserId() == null){
+        if (userRole.getUserRoleId().getUserId() == null) {
             throw new CreateException(ErrorCode.USER_ROLE_USER_ID);
         }
-        if(userRole.getUserRoleId().getRoleId() == null){
+        if (userRole.getUserRoleId().getRoleId() == null) {
             throw new CreateException(ErrorCode.USER_ROLE_ROLE_ID);
         }
         userRoleRepository.save(userRole);

@@ -25,10 +25,10 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     @Override
     @Transactional
     public void createPostCategory(PostCategory postCategory) {
-        if(postCategory.getId().getCategoryId() == null){
+        if (postCategory.getId().getCategoryId() == null) {
             throw new CreateException(ErrorCode.POST_CATEGORY_CATEGORY_ID);
         }
-        if(postCategory.getId().getPostId() == null){
+        if (postCategory.getId().getPostId() == null) {
             throw new CreateException(ErrorCode.POST_CATEGORY_POST_ID);
         }
         postCategoryRepository.save(postCategory);

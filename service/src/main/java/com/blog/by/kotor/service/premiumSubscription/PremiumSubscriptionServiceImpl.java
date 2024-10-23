@@ -22,16 +22,16 @@ public class PremiumSubscriptionServiceImpl implements PremiumSubscriptionServic
     @Override
     @Transactional
     public void createPremiumSubscription(PremiumSubscription premiumSubscription) {
-        if(premiumSubscription.getId() == null){
+        if (premiumSubscription.getId() == null) {
             throw new CreateException(ErrorCode.PREMIUM_SUBSCRIPTION_ID);
         }
-        if(premiumSubscription.getUser().getId() == null){
+        if (premiumSubscription.getUser().getId() == null) {
             throw new CreateException(ErrorCode.PREMIUM_SUBSCRIPTION_USER_ID);
         }
-        if(premiumSubscription.getStartDate() == null){
+        if (premiumSubscription.getStartDate() == null) {
             throw new CreateException(ErrorCode.PREMIUM_SUBSCRIPTION_START_DATE);
         }
-        if(premiumSubscription.getEndDate() == null){
+        if (premiumSubscription.getEndDate() == null) {
             throw new CreateException(ErrorCode.PREMIUM_SUBSCRIPTION_START_DATE);
         }
         premiumSubscriptionRepository.save(premiumSubscription);
