@@ -1,0 +1,21 @@
+services:
+  blog-by-kotor:
+    image: 'fa2b1ef1ab2f'
+    container_name: 'blog-by-kotor'
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: admin
+      DATABASE_URL: jdbc:mysql://db:3306/blog_by_kotor
+    depends_on:
+      - db
+  db:
+    image: 'mysql'
+    container_name: db
+    expose:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_ROOT_USER: root
+      MYSQL_DATABASE: blog_by_kotor
