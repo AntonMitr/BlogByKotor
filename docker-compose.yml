@@ -1,6 +1,6 @@
 services:
   blog-by-kotor:
-    image: 'fa2b1ef1ab2f'
+    image: 'f09ada3edb26'
     container_name: 'blog-by-kotor'
     ports:
       - "8080:8080"
@@ -16,6 +16,6 @@ services:
     expose:
       - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: admin
       MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: blog_by_kotor

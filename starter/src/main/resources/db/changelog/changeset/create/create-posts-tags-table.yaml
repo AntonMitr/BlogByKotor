@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-posts-tags
+      author: Kotor
+      changes:
+        - createTable:
+            tableName: posts_tags
+            columns:
+              - column:
+                  name: post_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag_id
+                  type: int
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: post_id, tag_id
+            constraintName: pk_posts_tags
+            tableName: posts_tags
+        - addForeignKeyConstraint:
+            baseTableName: posts_tags
+            baseColumnNames: post_id
+            constraintName: post_post_tag_fk
+            referencedTableName: posts
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        - addForeignKeyConstraint:
+            baseTableName: posts_tags
+            baseColumnNames: tag_id
+            constraintName: tag_post_tag_fk
+            referencedTableName: tags
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
