@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-posts
+      author: Kotor
+      changes:
+        - createTable:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: content
+                  type: varchar(8000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_premium
+                  type: bit
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable:
+                      false
+              - column:
+                  name: is_published
+                  type: bit
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable:
+                      false
+              - column:
+                  name: date_published
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: posts
+            baseColumnNames: user_id
+            constraintName: user_post_fk
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: RESTRICT

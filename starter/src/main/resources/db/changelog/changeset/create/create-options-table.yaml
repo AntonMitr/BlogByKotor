@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-options
+      author: Kotor
+      changes:
+        - createTable:
+            tableName: options
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: option_text
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: question_id
+                  type: int
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: options
+            baseColumnNames: question_id
+            constraintName: question_option_fk
+            referencedTableName: questions
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: RESTRICT

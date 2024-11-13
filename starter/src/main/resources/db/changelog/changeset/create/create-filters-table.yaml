@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-filters
+      author: Kotor
+      changes:
+        - createTable:
+            tableName: filters
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(55)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: criteria
+                  type: varchar(55)
+                  constraints:
+                    nullable: false

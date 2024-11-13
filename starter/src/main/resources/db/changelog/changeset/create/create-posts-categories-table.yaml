@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-posts-categories
+      author: Kotor
+      changes:
+        - createTable:
+            tableName: posts_categories
+            columns:
+              - column:
+                  name: category_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: post_id
+                  type: int
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: post_id, category_id
+            constraintName: pk_posts_categories
+            tableName: posts_categories
+        - addForeignKeyConstraint:
+            baseTableName: posts_categories
+            baseColumnNames: category_id
+            constraintName: category_post_category_fk
+            referencedTableName: categories
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        - addForeignKeyConstraint:
+            baseTableName: posts_categories
+            baseColumnNames: post_id
+            constraintName: post_post_category_fk
+            referencedTableName: posts
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: RESTRICT

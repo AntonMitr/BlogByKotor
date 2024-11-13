@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-votes
+      author: Kotor
+      changes:
+        - createTable:
+            tableName: votes
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: option_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: post_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: votes
+            baseColumnNames: user_id
+            constraintName: user_vote_fk
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        - addForeignKeyConstraint:
+            baseTableName: votes
+            baseColumnNames: post_id
+            constraintName: post_vote_fk
+            referencedTableName: roles
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        - addForeignKeyConstraint:
+            baseTableName: votes
+            baseColumnNames: option_id
+            constraintName: options_vote_fk
+            referencedTableName: options
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: RESTRICT

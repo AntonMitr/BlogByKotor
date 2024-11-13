@@ -26,6 +26,6 @@ public class Role {
     @ToString.Exclude
     @JsonIgnore
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private Set<User> users = new HashSet<>();
+    private Set<User> users;
 
 }

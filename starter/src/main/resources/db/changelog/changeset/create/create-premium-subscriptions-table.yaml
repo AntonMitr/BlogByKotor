@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-premium-subscriptions
+      author: Kotor
+      changes:
+        - createTable:
+            tableName: premium_subscriptions
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: date
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: premium_subscriptions
+            baseColumnNames: user_id
+            constraintName: user_premium_subscriptions_fk
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
