@@ -6,8 +6,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -17,10 +16,9 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtCore {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(JwtCore.class);
 
     @Value("${jwt.secret}")
     private String secret;
@@ -39,7 +37,7 @@ public class JwtCore {
         return Jwts.builder()
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date((new Date()).getTime() + lifetime))
+                .expiration(new Date(System.currentTimeMillis() + lifetime))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -58,16 +56,16 @@ public class JwtCore {
             Jwts.parser().verifyWith(getSigningKey()).build().parse(authToken);
             return true;
         } catch (MalformedJwtException e) {
-            LOGGER.error("Неверный формат jwt токена {}", e.getMessage());
+            log.error("Invalid jwt token format {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         } catch (ExpiredJwtException e) {
-            LOGGER.error("Jwt токен истёк: {}", e.getMessage());
+            log.error("Jwt token expired: {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         } catch (UnsupportedJwtException e) {
-            LOGGER.error("Неподдерживаемый jwt токен: {}", e.getMessage());
+            log.error("Unsupported jwt token: {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         } catch (IllegalArgumentException e) {
-            LOGGER.error("Пустой jwt токен: {}", e.getMessage());
+            log.error("Empty jwt token: {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }

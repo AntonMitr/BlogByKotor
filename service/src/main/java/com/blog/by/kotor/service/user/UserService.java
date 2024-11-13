@@ -1,12 +1,14 @@
 package com.blog.by.kotor.service.user;
 
+import com.blog.by.kotor.dto.authentication.RegistrationDTO;
+import com.blog.by.kotor.dto.model.UserDTO;
 import com.blog.by.kotor.model.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    void createUser(User user);
+    void createUser(RegistrationDTO registrationDTO);
 
     User findByUsername(String username);
 
@@ -18,10 +20,8 @@ public interface UserService {
 
     List<User> findAllUser();
 
-    void updateUser(User user);
+    void updateUser(UserDTO userDTO, Integer id);
 
     void deleteUserById(Integer id);
-
-    void deleteUser(User user);
 
 }

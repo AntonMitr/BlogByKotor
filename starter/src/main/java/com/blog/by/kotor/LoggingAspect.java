@@ -1,5 +1,6 @@
 package com.blog.by.kotor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.After;
@@ -7,18 +8,15 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
 
 @Aspect
+@Slf4j
 @Component
 public class LoggingAspect {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoggingAspect.class);
 
     @Pointcut("execution(* com.blog.by.kotor.service..*(..))")
     public void serviceLayer() {
@@ -31,13 +29,13 @@ public class LoggingAspect {
             String methodName = methodSignature.getName();
             Class<?> returnType = methodSignature.getReturnType();
             Class<?>[] parameterTypes = methodSignature.getParameterTypes();
-            LOGGER.info("Метод {} начал свою работу, возращает {}, параметры: {} ", methodName, returnType.getSimpleName(), Arrays.toString(parameterTypes));
+            log.info("The {} method has started its work, returns {}, parameters: {} ", methodName, returnType.getSimpleName(), Arrays.toString(parameterTypes));
         }
     }
 
     @After("serviceLayer()")
     public void loggingAfter(JoinPoint joinPoint) {
-        LOGGER.info("Метод {} закончил свою работу", joinPoint.getSignature().getName());
+        log.info("The {} method has finished its work", joinPoint.getSignature().getName());
     }
 
 }

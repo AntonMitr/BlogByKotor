@@ -3,16 +3,16 @@ package com.blog.by.kotor.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "options")
 public class Option {
@@ -32,15 +32,5 @@ public class Option {
     @JsonIgnore
     @OneToMany(mappedBy = "option", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Vote> votes;
-
-    @Override
-    public String toString() {
-        return "Option{" +
-                "id=" + id +
-                ", question=" + question +
-                ", optionText='" + optionText + '\'' +
-                ", votes=" + votes +
-                '}';
-    }
 
 }

@@ -1,11 +1,10 @@
 package com.blog.by.kotor.service.tag;
 
+import com.blog.by.kotor.TagDTOMapper;
+import com.blog.by.kotor.dto.model.TagDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
-import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
 import com.blog.by.kotor.exception.find.by.name.FindByNameException;
-import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Tag;
 import com.blog.by.kotor.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +19,12 @@ public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
 
+    private final TagDTOMapper tagDTOMapper;
+
     @Override
     @Transactional
-    public void createTag(Tag tag) {
-        if (tag.getId() == null) {
-            throw new CreateException(ErrorCode.TAG_ID);
-        }
-        if (tag.getName() == null) {
-            throw new CreateException(ErrorCode.TAG_NAME);
-        }
+    public void createTag(TagDTO tagDTO) {
+        Tag tag = tagDTOMapper.toTag(tagDTO);
         tagRepository.save(tag);
     }
 
@@ -51,26 +47,16 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional
-    public void updateTag(Tag tag) {
-        tagRepository.findById(tag.getId())
-                .orElseThrow(() -> new UpdateException(ErrorCode.TAG_NOT_FOUND, tag.getId()));
-        tagRepository.save(tag);
+    public void updateTag(TagDTO tagDTO, Integer id) {
+        Tag tag = this.findTagById(id);
+        tagRepository.save(tagDTOMapper.updateTag(tagDTO, tag));
     }
 
     @Override
     @Transactional
     public void deleteTagById(Integer id) {
-        tagRepository.findById(id)
-                .orElseThrow(() -> new DeleteException(ErrorCode.TAG_NOT_FOUND, id));
+        this.findTagById(id);
         tagRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional
-    public void deleteTag(Tag tag) {
-        tagRepository.findById(tag.getId())
-                .orElseThrow(() -> new DeleteException(ErrorCode.TAG_NOT_FOUND, tag.getId()));
-        tagRepository.deleteById(tag.getId());
     }
 
 }

@@ -3,8 +3,7 @@ package com.blog.by.kotor.model.security;
 import com.blog.by.kotor.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,13 +14,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@Slf4j
 @AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsImpl.class);
 
     private Integer id;
     private String username;

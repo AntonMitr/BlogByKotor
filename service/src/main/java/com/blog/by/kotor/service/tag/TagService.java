@@ -1,12 +1,13 @@
 package com.blog.by.kotor.service.tag;
 
+import com.blog.by.kotor.dto.model.TagDTO;
 import com.blog.by.kotor.model.Tag;
 
 import java.util.List;
 
 public interface TagService {
 
-    void createTag(Tag tag);
+    void createTag(TagDTO tagDTO);
 
     Tag findTagByName(String tagName);
 
@@ -14,10 +15,8 @@ public interface TagService {
 
     List<Tag> findAllTag();
 
-    void updateTag(Tag tag);
+    void updateTag(TagDTO tagDTO, Integer id);
 
     void deleteTagById(Integer id);
-
-    void deleteTag(Tag tag);
 
 }

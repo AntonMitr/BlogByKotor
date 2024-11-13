@@ -1,10 +1,9 @@
 package com.blog.by.kotor.service.filter;
 
+import com.blog.by.kotor.FilterDTOMapper;
+import com.blog.by.kotor.dto.model.FilterDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
-import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
-import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Category;
 import com.blog.by.kotor.model.Filter;
 import com.blog.by.kotor.model.Post;
@@ -40,13 +39,27 @@ public class FilterServiceImpl implements FilterService {
 
     private final PostCategoryService postCategoryService;
 
+    private final FilterDTOMapper filterDTOMapper;
+
+    @Override
+    public Filter findById(Integer id) {
+        return filterRepository.findById(id)
+                .orElseThrow(() -> new FindByIdException(ErrorCode.FILTER_NOT_FOUND, id));
+    }
+
+    @Override
+    public Filter findByCriteria(String criteria) {
+        return filterRepository.findByCriteria(criteria)
+                .orElseThrow(() -> new RuntimeException("There is no filter for this criteria"));
+    }
+
     @Override
     @Transactional
     public List<Post> findByTagCriteria(String criteria) {
         List<Post> posts = new ArrayList<>();
         List<PostTag> postTags;
 
-        Filter filter = filterRepository.findByCriteria(criteria).orElseThrow(() -> new RuntimeException("Фильра по данной criteria не существует"));
+        Filter filter = this.findByCriteria(criteria);
 
         Tag tag = tagService.findTagByName(filter.getName());
 
@@ -63,7 +76,7 @@ public class FilterServiceImpl implements FilterService {
         List<Post> posts = new ArrayList<>();
         List<PostCategory> postCategories;
 
-        Filter filter = filterRepository.findByCriteria(criteria).orElseThrow(() -> new RuntimeException("Фильра по данной criteria не существует"));
+        Filter filter = this.findByCriteria(criteria);
 
         Category category = categoryService.findByName(filter.getName());
 
@@ -76,16 +89,8 @@ public class FilterServiceImpl implements FilterService {
 
     @Override
     @Transactional
-    public void createFilter(Filter filter) {
-        if (filter.getId() == null) {
-            throw new CreateException(ErrorCode.FILTER_ID);
-        }
-        if (filter.getCriteria() == null) {
-            throw new CreateException(ErrorCode.FILTER_CRITERIA);
-        }
-        if (filter.getName() == null) {
-            throw new CreateException(ErrorCode.FILTER_ID);
-        }
+    public void createFilter(FilterDTO filterDTO) {
+        Filter filter = filterDTOMapper.toFilter(filterDTO);
         filterRepository.save(filter);
     }
 
@@ -102,26 +107,16 @@ public class FilterServiceImpl implements FilterService {
 
     @Override
     @Transactional
-    public void updateFilter(Filter filter) {
-        filterRepository.findById(filter.getId())
-                .orElseThrow(() -> new UpdateException(ErrorCode.FILTER_NOT_FOUND, filter.getId()));
-        filterRepository.save(filter);
+    public void updateFilter(FilterDTO filterDTO, Integer id) {
+        Filter filter = this.findFilterById(id);
+        filterRepository.save(filterDTOMapper.updateFilter(filterDTO, filter));
     }
 
     @Override
     @Transactional
     public void deleteFilterById(Integer id) {
-        filterRepository.findById(id)
-                .orElseThrow(() -> new DeleteException(ErrorCode.FILTER_NOT_FOUND, id));
+        this.findFilterById(id);
         filterRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional
-    public void deleteFilter(Filter filter) {
-        filterRepository.findById(filter.getId())
-                .orElseThrow(() -> new DeleteException(ErrorCode.FILTER_NOT_FOUND, filter.getId()));
-        filterRepository.delete(filter);
     }
 
 }

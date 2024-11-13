@@ -1,7 +1,5 @@
 package com.blog.by.kotor.service.userRole;
 
-import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
 import com.blog.by.kotor.model.userRole.UserRole;
 import com.blog.by.kotor.repository.UserRoleRepository;
 import com.blog.by.kotor.service.role.RoleService;
@@ -25,12 +23,6 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     @Transactional
     public void createUserRole(UserRole userRole) {
-        if (userRole.getUserRoleId().getUserId() == null) {
-            throw new CreateException(ErrorCode.USER_ROLE_USER_ID);
-        }
-        if (userRole.getUserRoleId().getRoleId() == null) {
-            throw new CreateException(ErrorCode.USER_ROLE_ROLE_ID);
-        }
         userRoleRepository.save(userRole);
     }
 

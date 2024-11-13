@@ -1,12 +1,13 @@
 package com.blog.by.kotor.service.comment;
 
+import com.blog.by.kotor.dto.model.CommentDTO;
 import com.blog.by.kotor.model.Comment;
 
 import java.util.List;
 
 public interface CommentService {
 
-    void createComment(Comment comment);
+    void createComment(CommentDTO commentDTO);
 
     List<Comment> findCommentByPostId(Integer postId);
 
@@ -14,11 +15,9 @@ public interface CommentService {
 
     List<Comment> findAllComment();
 
-    void updateComment(Comment comment);
+    void updateComment(CommentDTO commentDTO, Integer id);
 
     void deleteCommentById(Integer id);
-
-    void deleteComment(Comment comment);
 
     List<Comment> findByPostIdOrderByCreatedAt(Integer postId);
 

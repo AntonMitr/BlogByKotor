@@ -1,12 +1,13 @@
 package com.blog.by.kotor.service.post;
 
+import com.blog.by.kotor.dto.model.PostDTO;
 import com.blog.by.kotor.model.Post;
 
 import java.util.List;
 
 public interface PostService {
 
-    void createPost(Post post);
+    void createPost(PostDTO postDTO);
 
     Post findPostById(Integer postId);
 
@@ -16,14 +17,12 @@ public interface PostService {
 
     List<Post> findByTitleOrderByDatePublished(String title);
 
-    List<Post> findByContentContainsOrderByDatePublished(String content);
-
     List<Post> findAllPost();
 
-    void updatePost(Post post);
+    void updatePost(PostDTO postDTO, Integer id);
+
+    List<Post> findByContentContainsOrderByDatePublished(String content);
 
     void deletePostById(Integer id);
-
-    void deletePost(Post post);
 
 }

@@ -1,12 +1,14 @@
 package com.blog.by.kotor.service.vote;
 
+import com.blog.by.kotor.VoteDTOMapper;
+import com.blog.by.kotor.dto.model.VoteDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
-import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
-import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Vote;
 import com.blog.by.kotor.repository.VoteRepository;
+import com.blog.by.kotor.service.option.OptionService;
+import com.blog.by.kotor.service.post.PostService;
+import com.blog.by.kotor.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,21 +21,21 @@ public class VoteServiceImpl implements VoteService {
 
     private final VoteRepository voteRepository;
 
+    private final PostService postService;
+
+    private final OptionService optionService;
+
+    private final UserService userService;
+
+    private final VoteDTOMapper voteDTOMapper;
+
     @Override
     @Transactional
-    public void createVote(Vote vote) {
-        if (vote.getId() == null) {
-            throw new CreateException(ErrorCode.VOTE_ID);
-        }
-        if (vote.getPost().getId() == null) {
-            throw new CreateException(ErrorCode.VOTE_POST_ID);
-        }
-        if (vote.getOption().getId() == null) {
-            throw new CreateException(ErrorCode.VOTE_OPTION_ID);
-        }
-        if (vote.getUser().getId() == null) {
-            throw new CreateException(ErrorCode.VOTE_USER_ID);
-        }
+    public void createVote(VoteDTO voteDTO) {
+        Vote vote = voteDTOMapper.toVote(voteDTO);
+        vote.setPost(postService.findPostById(voteDTO.getPostId()));
+        vote.setOption(optionService.findOptionById(voteDTO.getOptionId()));
+        vote.setUser(userService.findUserById(voteDTO.getUserId()));
         voteRepository.save(vote);
     }
 
@@ -58,28 +60,27 @@ public class VoteServiceImpl implements VoteService {
         return voteRepository.findAll();
     }
 
+    //Доработать или убрать...
+    @Deprecated
     @Override
     @Transactional
-    public void updateVote(Vote vote) {
-        voteRepository.findById(vote.getId())
-                .orElseThrow(() -> new UpdateException(ErrorCode.VOTE_NOT_FOUND, vote.getId()));
+    public void updateVote(VoteDTO voteDTO, Integer id) {
+        this.findVoteById(id);
+
+        Vote vote = voteDTOMapper.toVote(voteDTO);
+        vote.setPost(postService.findPostById(voteDTO.getPostId()));
+        vote.setOption(optionService.findOptionById(voteDTO.getOptionId()));
+        vote.setUser(userService.findUserById(voteDTO.getUserId()));
+        vote.setId(id);
         voteRepository.save(vote);
     }
 
     @Override
     @Transactional
     public void deleteVoteById(Integer id) {
-        voteRepository.findById(id)
-                .orElseThrow(() -> new DeleteException(ErrorCode.VOTE_NOT_FOUND, id));
-        voteRepository.deleteById(id);
-    }
+        this.findVoteById(id);
 
-    @Override
-    @Transactional
-    public void deleteVote(Vote vote) {
-        voteRepository.findById(vote.getId())
-                .orElseThrow(() -> new DeleteException(ErrorCode.VOTE_NOT_FOUND, vote.getId()));
-        voteRepository.delete(vote);
+        voteRepository.deleteById(id);
     }
 
 }

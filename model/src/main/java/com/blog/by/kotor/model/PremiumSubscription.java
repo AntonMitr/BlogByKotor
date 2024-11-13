@@ -3,16 +3,16 @@ package com.blog.by.kotor.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "premium_subscriptions")
 public class PremiumSubscription {
@@ -27,18 +27,9 @@ public class PremiumSubscription {
     private User user;
 
     @Column(name = "start_date")
-    private Date startDate;
+    private LocalDate startLocalDate;
 
     @Column(name = "end_date")
-    private Date endDate;
-
-    @Override
-    public String toString() {
-        return "PremiumSubscription{" +
-                "id=" + id +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
-    }
+    private LocalDate endLocalDate;
 
 }

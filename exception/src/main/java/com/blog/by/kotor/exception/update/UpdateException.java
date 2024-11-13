@@ -10,4 +10,6 @@ public class UpdateException extends RuntimeException {
         super(String.format(errorCode.getMessage(), id));
     }
 
+    public UpdateException(ErrorCode errorCode, String name) {
+    }
 }

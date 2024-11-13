@@ -1,12 +1,11 @@
 package com.blog.by.kotor.service.category;
 
+import com.blog.by.kotor.dto.model.CategoryDTO;
 import com.blog.by.kotor.model.Category;
 
 import java.util.List;
 
 public interface CategoryService {
-
-    void deleteCategory(Category category);
 
     Category findCategoryById(Integer id);
 
@@ -14,9 +13,9 @@ public interface CategoryService {
 
     List<Category> findAllCategory();
 
-    void createCategory(Category category);
+    void createCategory(CategoryDTO categoryDTO);
 
-    void updateCategory(Category category);
+    void updateCategory(CategoryDTO categoryDTO, Integer id);
 
     void deleteCategoryById(Integer id);
 

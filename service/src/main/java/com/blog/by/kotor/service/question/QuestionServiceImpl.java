@@ -1,10 +1,9 @@
 package com.blog.by.kotor.service.question;
 
+import com.blog.by.kotor.QuestionDTOMapper;
+import com.blog.by.kotor.dto.model.QuestionDTO;
 import com.blog.by.kotor.exception.ErrorCode;
-import com.blog.by.kotor.exception.create.CreateException;
-import com.blog.by.kotor.exception.delete.DeleteException;
 import com.blog.by.kotor.exception.find.by.id.FindByIdException;
-import com.blog.by.kotor.exception.update.UpdateException;
 import com.blog.by.kotor.model.Question;
 import com.blog.by.kotor.repository.QuestionRepository;
 import com.blog.by.kotor.service.poll.PollService;
@@ -22,18 +21,13 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final PollService pollService;
 
+    private final QuestionDTOMapper questionDTOMapper;
+
     @Override
     @Transactional
-    public void createQuestion(Question question) {
-        if (question.getId() == null) {
-            throw new CreateException(ErrorCode.QUESTION_ID);
-        }
-        if (question.getPoll().getId() == null) {
-            throw new CreateException(ErrorCode.QUESTION_POLL_ID);
-        }
-        if (question.getQuestionText() == null) {
-            throw new CreateException(ErrorCode.QUESTION_TEXT);
-        }
+    public void createQuestion(QuestionDTO questionDTO) {
+        Question question = questionDTOMapper.toQuestion(questionDTO);
+        question.setPoll(pollService.findPollById(questionDTO.getPollId()));
         questionRepository.save(question);
     }
 
@@ -41,7 +35,6 @@ public class QuestionServiceImpl implements QuestionService {
     public Question findQuestionById(Integer id) {
         return questionRepository.findById(id)
                 .orElseThrow(() -> new FindByIdException(ErrorCode.QUESTION_NOT_FOUND, id));
-
     }
 
     @Override
@@ -56,32 +49,21 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    public void updateQuestion(Question question) {
-        questionRepository.findById(question.getId())
-                .orElseThrow(() -> new UpdateException(ErrorCode.QUESTION_NOT_FOUND, question.getId()));
-        questionRepository.save(question);
+    public void updateQuestion(QuestionDTO questionDTO, Integer id) {
+        Question question = this.findQuestionById(id);
+        questionRepository.save(questionDTOMapper.update(questionDTO, question));
     }
 
     @Override
     @Transactional
     public void deleteQuestionById(Integer id) {
-        questionRepository.findById(id)
-                .orElseThrow(() -> new DeleteException(ErrorCode.QUESTION_NOT_FOUND, id));
+        this.findQuestionById(id);
         questionRepository.deleteById(id);
     }
 
     @Override
-    @Transactional
-    public void deleteQuestion(Question question) {
-        questionRepository.findById(question.getId())
-                .orElseThrow(() -> new DeleteException(ErrorCode.QUESTION_NOT_FOUND, question.getId()));
-        questionRepository.delete(question);
-    }
-
-    @Override
     public Question findByPollId(Integer pollId) {
-        pollService.findPollById(pollId);
-        return questionRepository.findByPollId(pollId);
+        return questionRepository.findByPollId(pollId).orElseThrow(() -> new FindByIdException(ErrorCode.POLL_NOT_FOUND, pollId));
     }
 
 }

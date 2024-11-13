@@ -19,18 +19,18 @@ public enum ErrorCode {
     USER_NOT_FOUND("User with id %d not found"),
     VOTE_NOT_FOUND("Vote with id %d not found"),
 
-    CATEGORY_NAME_NOT_FOUND("Category with name %d not found"),
-    COMMENT_NAME_NOT_FOUND("Comment with name %d not found"),
-    FILTER_NAME_NOT_FOUND("Filter with name %d not found"),
-    OPTION_NAME_NOT_FOUND("Option with name %d not found"),
-    POLL_NAME_NOT_FOUND("Poll with name %d not found"),
-    POST_NAME_NOT_FOUND("Post with name %d not found"),
-    PREMIUM_SUBSCRIPTION_NAME_NOT_FOUND("PremiumSubscription with name %d not found"),
-    QUESTION_NAME_NOT_FOUND("Question with name %d not found"),
-    ROLE_NAME_NOT_FOUND("Role with name %d not found"),
-    TAG_NAME_NOT_FOUND("Tag with name %d not found"),
-    USER_NAME_NOT_FOUND("User with name %d not found"),
-    VOTE_NAME_NOT_FOUND("Vote with name %d not found"),
+    CATEGORY_NAME_NOT_FOUND("Category with name %s not found"),
+    COMMENT_NAME_NOT_FOUND("Comment with name %s not found"),
+    FILTER_NAME_NOT_FOUND("Filter with name %s not found"),
+    OPTION_NAME_NOT_FOUND("Option with name %s not found"),
+    POLL_NAME_NOT_FOUND("Poll with name %s not found"),
+    POST_NAME_NOT_FOUND("Post with name %s not found"),
+    PREMIUM_SUBSCRIPTION_NAME_NOT_FOUND("PremiumSubscription with name %s not found"),
+    QUESTION_NAME_NOT_FOUND("Question with name %s not found"),
+    ROLE_NAME_NOT_FOUND("Role with name %s not found"),
+    TAG_NAME_NOT_FOUND("Tag with name %s not found"),
+    USER_NAME_NOT_FOUND("User with name %s not found"),
+    VOTE_NAME_NOT_FOUND("Vote with name %s not found"),
 
 
     CATEGORY_ID("Category_id cannot be null"),
@@ -97,7 +97,10 @@ public enum ErrorCode {
     VOTE_ID("Vote_id cannot be null"),
     VOTE_OPTION_ID("Vote_option_id cannot be null"),
     VOTE_POST_ID("Vote_post_id cannot be null"),
-    VOTE_USER_ID("Vote_user_id cannot be null");
+    VOTE_USER_ID("Vote_user_id cannot be null"),
+
+    SIGNUP_USERNAME("Пользователь с имене %s уже существует"),
+    SIGNUP_EMAIL("Пользователь с такой почтой %s уже существует");
 
     private final String message;
 
